@@ -1,0 +1,23 @@
+/*********************************************************************
+
+  cheat.h
+
+*********************************************************************/
+
+#ifndef CHEAT_H
+#define CHEAT_H
+
+extern int he_did_cheat;
+
+void InitCheat(void);
+void StopCheat(void);
+
+int cheat_menu(struct mame_bitmap *bitmap, int selection);
+void DoCheat(struct mame_bitmap *bitmap);
+
+void DisplayWatches(struct mame_bitmap * bitmap);
+
+// Show_CHEATLIST_START
+int EnableDisableCheatMenu(struct mame_bitmap * bitmap, int selection, int firstTime, int shortcut);
+
+#endif
