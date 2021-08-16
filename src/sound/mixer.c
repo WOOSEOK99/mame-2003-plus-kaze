@@ -1027,7 +1027,8 @@ void mixer_load_config(const struct mixer_config *config)
 		config_default_mixing_level[i] = config->default_levels[i];
 		config_mixing_level[i] = config->mixing_levels[i];
 	}
-
+	is_config_invalid = 0;
+	
 #ifdef USE_VOLUME_AUTO_ADJUST
 	volume_multiplier = config->volume_multiplier;
 #endif /* USE_VOLUME_AUTO_ADJUST */

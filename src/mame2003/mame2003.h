@@ -55,17 +55,18 @@ extern "C" {
 
 ***************************************************************************/
 
-#define APPNAME         "mame2003-plus"
+#define APPNAME           "mame2003-plus"
 
-#define FRAMES_PER_FPS_UPDATE		12
-#define MAX_GFX_ELEMENTS        32
-#define MAX_MEMORY_REGIONS      32
+#define FRAMES_PER_FPS_UPDATE         12
+#define MAX_GFX_ELEMENTS              32
+#define MAX_MEMORY_REGIONS            32
+
+#define LIBRETRO_ANALOG_MIN       -32768
+#define LIBRETRO_ANALOG_MAX        32767
+#define MAME_ANALOG_MIN             -128
+#define MAME_ANALOG_MAX              128
 
 #define INPUT_BUTTON_AXIS_THRESHOLD   64
-#define LIBRETRO_ANALOG_MIN -32768
-#define LIBRETRO_ANALOG_MAX 32767
-#define ANALOG_MIN -128
-#define ANALOG_MAX 128
 
 enum
 {
@@ -79,10 +80,9 @@ enum
 enum
 {
   IDX_CLASSIC = 0,
-  IDX_MODERN,
+  IDX_FIGHTSTICK,
   IDX_8BUTTON,
   IDX_6BUTTON,
-  IDX_LIGHTGUN,
   IDX_NUMBER_OF_INPUT_TYPES
 };
 
@@ -93,10 +93,12 @@ enum /* the "display numbers" for each player, as opposed to their array index *
   DISP_PLAYER3,
   DISP_PLAYER4,
   DISP_PLAYER5,
-  DISP_PLAYER6
+  DISP_PLAYER6,
+  DISP_PLAYER7,
+  DISP_PLAYER8
 };
 
-#define MAX_PLAYER_COUNT  DISP_PLAYER6   /* We currently support a maximum of six simultaneous players */
+#define MAX_PLAYER_COUNT  DISP_PLAYER8   /* We currently support a maximum of eight simultaneous players */
 
 /******************************************************************************
 
@@ -395,37 +397,12 @@ void osd_joystick_end_calibration(void);
 
 /******************************************************************************
 
-	Trackball, Spinner, Mouse
+	Trackball, Spinner, Mouse, Pointer, Lightgun
 
 ******************************************************************************/
 
-/* osd_track_read expects the OSD to return the relative change in mouse or trackball
- * coordinates since the last reading. If the user has set their mouse type to
- * `pointer` in the core options, its coordinates are translated from absolute to
- * relative coordinates before being stored in `mouse_x[]`.
- */
-void osd_trak_read(int player, int *deltax, int *deltay);
-
-
-/******************************************************************************
-
-	Lightgun
-
-******************************************************************************/
-
-/******************************************************************************
-    The osd_lightgun_read call should return the delta from the middle of the screen
-		when the gun is fired (not the absolute pixel value), and 0 when the gun is
-		inactive.
-
-    When osd_lightgun_read returns 0, control passes through to the analog joystick,
-    and mouse, in that order. In other words, when osd_lightgun_read returns a
-    value it overrides both mouse & analog joystick.
-
-		The value returned by the OSD layer should be -128 to 128, same as analog
-		joysticks. (yes, 128, not 127).
-*******************************************************************************/
-void osd_lightgun_read(int player, int *deltax, int *deltay);
+/*** TO DO: notes ***/
+void osd_xy_device_read(int player, int *deltax, int *deltay);
 
 
 /******************************************************************************

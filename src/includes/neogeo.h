@@ -50,6 +50,7 @@ int neogeo_memcard_create(int);
 extern int neogeo_rng;
 extern int neogeo_fix_bank_type;
 
+void cmc42_neogeo_gfx_decrypt(int extra_xor);
 void kof99_neogeo_gfx_decrypt(int extra_xor);
 void kof2000_neogeo_gfx_decrypt(int extra_xor);
 void cmc50_neogeo_gfx_decrypt(int extra_xor);

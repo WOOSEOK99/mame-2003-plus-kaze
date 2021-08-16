@@ -254,6 +254,11 @@ struct GameOptions
   bool     cheat_input_ports;     /*cheat input ports enable/disable */
   bool     machine_timing;
   bool     digital_joy_centering; /* center digital joysticks enable/disable */
+  double   cpu_clock_scale;
+  bool     autosave_hiscore;      /* default saves on exit / recursively saves every number of frames defined in hiscore.c */
+#if (HAS_CYCLONE || HAS_DRZ80)
+  int      cyclone_mode;
+#endif
  #ifdef AUTO_FIRE // AUTO_FIRE
 	UINT32		autofiredelay;
 #endif	 

@@ -6220,6 +6220,42 @@ ROM_START( xmvsfb )
 	ROM_LOAD16_WORD_SWAP( "xvs.12",   0x200000, 0x200000, CRC(7b11e460) SHA1(a581c84acaaf0ce056841c15a6f36889e88be68d) )
 ROM_END
 
+//hack
+ROM_START( ddsomk )
+	ROM_REGION( CODE_SIZE, REGION_CPU1, 0 )      /* 68000 code */
+	ROM_LOAD16_WORD_SWAP( "dd2k.03g", 0x000000, 0x80000, CRC(CE684DD4) )
+	ROM_LOAD16_WORD_SWAP( "dd2k.04g", 0x080000, 0x80000, CRC(64212C8D) )
+	ROM_LOAD16_WORD_SWAP( "dd2.05g",  0x100000, 0x80000, CRC(5EB1991C) SHA1(429a60b5396ff4192904867fbe0524268f0edbcb) )
+	ROM_LOAD16_WORD_SWAP( "dd2k.06g",  0x180000, 0x80000, CRC(14C46332))
+	ROM_LOAD16_WORD_SWAP( "dd2k.07",   0x200000, 0x80000, CRC(9C6706D7))
+	ROM_LOAD16_WORD_SWAP( "dd2.08",   0x280000, 0x80000, CRC(e53c4d01) SHA1(bad872e4e793a39f68bc0e580772e982714b5876) )
+	ROM_LOAD16_WORD_SWAP( "dd2.09",   0x300000, 0x80000, CRC(5f86279f) SHA1(c2a454e5f821b1cdd49f2cf0602e9bfb7ba63340) )
+	ROM_LOAD16_WORD_SWAP( "dd2.10",   0x380000, 0x80000, CRC(ad954c26) SHA1(468c01735dbdb1114b37060546a660678290a97f) )
+
+	ROM_REGION16_BE( CODE_SIZE, REGION_USER1, 0 )
+	ROM_LOAD16_WORD_SWAP( "dd2jx.03g", 0x000000, 0x80000, CRC(f6abe885) SHA1(dbc4409cb84591c4b65a2e4d76c5000b6d38155d) )
+	ROM_LOAD16_WORD_SWAP( "dd2jx.04g", 0x080000, 0x80000, CRC(3abd7f79) SHA1(f4e6cc98e04ba8f7dfdd15c7ed2b40fb0933ab8f) )
+
+	ROM_REGION( 0x1800000, REGION_GFX1, 0 )
+	ROMX_LOAD( "dd2k.13",   0x0000000, 0x400000, CRC(2ED06031) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "dd2k.15",   0x0000002, 0x400000, CRC(1CA4F74E) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "dd2k.17",   0x0000004, 0x400000, CRC(6471AEA9) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "dd2k.19",   0x0000006, 0x400000, CRC(61456D14) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "dd2k.14",   0x1000000, 0x200000, CRC(FCA8F094) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "dd2k.16",   0x1000002, 0x200000, CRC(AA1A1481) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "dd2k.18",   0x1000004, 0x200000, CRC(B278079A) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "dd2k.20",   0x1000006, 0x200000, CRC(60540DA9) , ROM_GROUPWORD | ROM_SKIP(6) )
+
+	ROM_REGION( QSOUND_SIZE, REGION_CPU2, 0 ) /* 64k for the audio CPU (+banks) */
+	ROM_LOAD( "dd2.01",   0x00000, 0x08000, CRC(99d657e5) SHA1(1528dd6b07a0e79951a35c0457c8a9c9770e9c78) )
+	ROM_CONTINUE(         0x10000, 0x18000 )
+	ROM_LOAD( "dd2.02",   0x28000, 0x20000, CRC(117a3824) SHA1(14f3a12170b601c5466c93af9d2f24e0b386b4e4) )
+
+	ROM_REGION( 0x400000, REGION_SOUND1, 0 ) /* QSound samples */
+	ROM_LOAD16_WORD_SWAP( "dd2.11",   0x000000, 0x200000, CRC(98d0c325) SHA1(7406e8d943d77c468eb418c4113261f4ab973bbf) )
+	ROM_LOAD16_WORD_SWAP( "dd2.12",   0x200000, 0x200000, CRC(5ea2e7fa) SHA1(0e6a9fd007f637adcb2226c902394f07de45e803) )
+ROM_END
+
 GAME( 1993, ssf2,     0,       cps2, ssf2,    cps2, ROT0,   "Capcom", "Super Street Fighter 2: The New Challengers (World 930911)" )
 GAME( 1993, ssf2u,    ssf2,    cps2, ssf2,    cps2, ROT0,   "Capcom", "Super Street Fighter 2: The New Challengers (USA 930911)" )
 GAME( 1993, ssf2a,    ssf2,    cps2, ssf2,    cps2, ROT0,   "Capcom", "Super Street Fighter 2: The New Challengers (Asia 931005)" )
@@ -6301,6 +6337,7 @@ GAMEC( 1996, ddsomr1,  ddsom,   cps2, ddtod,   cps2, ROT0,   "Capcom", "Dungeons
 GAMEC( 1996, ddsomu,   ddsom,   cps2, ddtod,   cps2, ROT0,   "Capcom", "Dungeons and Dragons: Shadow over Mystara (USA 960619)", &ddsom_ctrl, &ddsomu_bootstrap )
 GAMEC( 1996, ddsomur1, ddsom,   cps2, ddtod,   cps2, ROT0,   "Capcom", "Dungeons and Dragons: Shadow over Mystara (USA 960209)", &ddsom_ctrl, &ddsomu_bootstrap )
 GAMEC( 1996, ddsomj,   ddsom,   cps2, ddtod,   cps2, ROT0,   "Capcom", "Dungeons and Dragons: Shadow over Mystara (Japan 960619)", &ddsom_ctrl, &ddsomj_bootstrap )
+GAMEC( 1996, ddsomk,   ddsom,   cps2, ddtod,   cps2, ROT0,   "Capcom", "Dungeons and Dragons: Shadow over Mystara (Korean)", &ddsom_ctrl, &ddsomj_bootstrap )
 GAMEC( 1996, ddsomjr1, ddsom,   cps2, ddtod,   cps2, ROT0,   "Capcom", "Dungeons and Dragons: Shadow over Mystara (Japan 960206)", &ddsom_ctrl, &ddsomj_bootstrap )
 GAMEC( 1996, ddsoma,   ddsom,   cps2, ddtod,   cps2, ROT0,   "Capcom", "Dungeons and Dragons: Shadow over Mystara (Asia 960619)", &ddsom_ctrl, &ddsoma_bootstrap )
 GAME( 1996, megaman2, 0,       cps2, sgemf,   cps2, ROT0,   "Capcom", "Mega Man 2: The Power Fighters (USA 960708)" )

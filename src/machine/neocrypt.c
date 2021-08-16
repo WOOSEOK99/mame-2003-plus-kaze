@@ -724,6 +724,22 @@ void neogeo_cmc50_m1_decrypt( void )
 }
 
 /* CMC42 protection chip */
+void cmc42_neogeo_gfx_decrypt(int extra_xor)
+{
+	type0_t03 =          kof99_type0_t03;
+	type0_t12 =          kof99_type0_t12;
+	type1_t03 =          kof99_type1_t03;
+	type1_t12 =          kof99_type1_t12;
+	address_8_15_xor1 =  kof99_address_8_15_xor1;
+	address_8_15_xor2 =  kof99_address_8_15_xor2;
+	address_16_23_xor1 = kof99_address_16_23_xor1;
+	address_16_23_xor2 = kof99_address_16_23_xor2;
+	address_0_7_xor =    kof99_address_0_7_xor;
+	neogeo_gfx_decrypt_for_mc50(extra_xor);
+
+}
+
+/* CMC42 protection chip */
 void kof99_neogeo_gfx_decrypt(int extra_xor)
 {
 	type0_t03 =          kof99_type0_t03;

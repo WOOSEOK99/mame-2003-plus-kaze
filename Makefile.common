@@ -267,8 +267,7 @@ SOURCES_C += \
 	$(CORE_DIR)/machine/theglobp.c \
 	$(CORE_DIR)/machine/acitya.c \
 	$(CORE_DIR)/drivers/jrpacman.c \
-	$(CORE_DIR)/vidhrdw/jrpacman_vidhrdw.c \
-	$(CORE_DIR)/vidhrdw/pengo_vidhrdw.c \
+	$(CORE_DIR)/vidhrdw/pacman_vidhrdw.c \
 	$(CORE_DIR)/drivers/pengo.c \
 	$(CORE_DIR)/drivers/epos.c \
 	$(CORE_DIR)/vidhrdw/epos_vidhrdw.c \
@@ -409,6 +408,7 @@ SOURCES_C += \
 	$(CORE_DIR)/vidhrdw/gladiatr_vidhrdw.c $(CORE_DIR)/drivers/gladiatr.c \
 	$(CORE_DIR)/machine/nycaptor_machine.c $(CORE_DIR)/vidhrdw/nycaptor_vidhrdw.c $(CORE_DIR)/drivers/nycaptor.c \
 	$(CORE_DIR)/drivers/halleys.c \
+	$(CORE_DIR)/drivers/jollyjgr.c \
 	$(CORE_DIR)/machine/lsasquad_machine.c $(CORE_DIR)/vidhrdw/lsasquad_vidhrdw.c $(CORE_DIR)/drivers/lsasquad.c \
 	$(CORE_DIR)/machine/bublbobl_machine.c $(CORE_DIR)/vidhrdw/bublbobl_vidhrdw.c $(CORE_DIR)/drivers/bublbobl.c \
 	$(CORE_DIR)/drivers/missb2.c \
@@ -521,8 +521,8 @@ SOURCES_C += \
 	$(CORE_DIR)/vidhrdw/firetrap_vidhrdw.c $(CORE_DIR)/drivers/firetrap.c \
 	$(CORE_DIR)/vidhrdw/brkthru_vidhrdw.c $(CORE_DIR)/drivers/brkthru.c \
 	$(CORE_DIR)/vidhrdw/metlclsh_vidhrdw.c $(CORE_DIR)/drivers/metlclsh.c \
-	$(CORE_DIR)/drivers/compgolf.c \
-	$(CORE_DIR)/drivers/tryout.c \
+	$(CORE_DIR)/vidhrdw/compgolf_vidhrdw.c $(CORE_DIR)/drivers/compgolf.c \
+	$(CORE_DIR)/vidhrdw/tryout_vidhrdw.c $(CORE_DIR)/drivers/tryout.c \
 	$(CORE_DIR)/vidhrdw/shootout_vidhrdw.c $(CORE_DIR)/drivers/shootout.c \
 	$(CORE_DIR)/vidhrdw/sidepckt_vidhrdw.c $(CORE_DIR)/drivers/sidepckt.c \
 	$(CORE_DIR)/vidhrdw/exprraid_vidhrdw.c $(CORE_DIR)/drivers/exprraid.c \
@@ -1039,9 +1039,11 @@ SOURCES_C += \
 	$(CORE_DIR)/drivers/n8080.c \
 	$(CORE_DIR)/drivers/mirax.c \
 	$(CORE_DIR)/machine/model1_machine.c $(CORE_DIR)/vidhrdw/model1_vidhrdw.c $(CORE_DIR)/drivers/model1.c \
+	$(CORE_DIR)/drivers/calorie.c \
+	$(CORE_DIR)/machine/mc8123.c \
 	$(CORE_DIR)/machine/namcoio_machine.c \
-	$(CORE_DIR)/drivers/nmg5.c
-
+	$(CORE_DIR)/drivers/nmg5.c \
+	$(CORE_DIR)/machine/fd1094.c
 
 # List of CPU core (and, for a debug build, disassembler) object files
 #

@@ -102,6 +102,7 @@ const struct GameDriver *test_drivers[] =
 	DRIVER( mspacpls )	/* hack */
 	DRIVER( pacgal )	/* hack */
 	DRIVER( mschamp )	/* hack */
+	DRIVER( mspactwin )	/* hack */
 	DRIVER( maketrax )	/* (c) 1981 Williams, high score table says KRL (fur Kural) */
 	DRIVER( maketrxb )	/* (c) 1981 [Kural] (Williams license) */
 	DRIVER( korosuke )	/* (c) 1981 Kural Electric */
@@ -768,6 +769,8 @@ const struct GameDriver *test_drivers[] =
 	DRIVER( cavenger )	/* (c) 1981 */
 	DRIVER( dorodon )	/* Falcon */
 	DRIVER( dorodon2 )	/* Falcon */
+	DRIVER( sraider )	/* (c) 1982 */
+	DRIVER( mrsdyna )	/* (c) 1982 */
 	DRIVER( mrdo )		/* (c) 1982 */
 	DRIVER( mrdoy )		/* (c) 1982 */
 	DRIVER( mrdot )		/* (c) 1982 + Taito license */
@@ -1365,6 +1368,8 @@ const struct GameDriver *test_drivers[] =
 	DRIVER( sbowling )	/* KB  (c) 1982 Taito Corporation */
 	DRIVER( grchamp )	/* GM  (c) 1981 Taito Corporation */
 	DRIVER( marinedt )	/* ??? (c) 1981 Taito Corporation */
+	DRIVER( fspiderb )	/* bootleg */
+	DRIVER( jollyjgr )	/* KD  (c) 1982 Taito Corporation */
 	DRIVER( bking )		/* DM  (c) 1982 Taito Corporation */
 	DRIVER( bking2 )	/* AD6 (c) 1983 Taito Corporation */
 	DRIVER( bking3 )	/* A24 (c) 1984 Taito Corporation */
@@ -1826,6 +1831,7 @@ const struct GameDriver *test_drivers[] =
 	/* More Toaplan Games */
 	DRIVER( tekipaki )	/* TP-020 (c) 1991 Toaplan */
 	DRIVER( ghox )		/* TP-021 (c) 1991 Toaplan */
+	DRIVER( ghoxj )		/* TP-021 (c) 1991 Toaplan */
 	DRIVER( dogyuun )	/* TP-022 (c) 1992 Toaplan */
 	DRIVER( kbash )		/* TP-023 (c) 1993 Toaplan */
 	DRIVER( kbash2 )	/* TP-023 */
@@ -2276,6 +2282,7 @@ V-V                           TP-027
 	DRIVER( ddsomur1 )	/* 09/02/1996 (c) 1996 (US) */
 	DRIVER( ddsomjr1 )	/* 06/02/1996 (c) 1996 (Japan) */
 	DRIVER( ddsomj )	/* 19/06/1996 (c) 1996 (Japan) */
+	DRIVER( ddsomk )	/* 19/06/1996 (c) 1996 (Japan) */
 	DRIVER( ddsoma )	/* 19/06/1996 (c) 1996 (Asia) */
 	DRIVER( sfa2 )		/* 06/03/1996 (c) 1996 (US) */
 	DRIVER( sfz2j )		/* 27/02/1996 (c) 1996 (Japan) */
@@ -2749,6 +2756,8 @@ DokiDoki Penguin Land *not confirmed
   DRIVER( dotriman )
 	DRIVER( spcpostn )	/* (c) 1986 Sega / Nasco" */
 	DRIVER( angelkds )	/* 833-6599 (c) 1988 Sega / Nasco? */
+	DRIVER( calorie )   /* (c) 1986 Sega */
+	DRIVER( calorieb )  /* bootleg */
 
 	/* Sega System 16 games */
 	/* Not working */
@@ -2796,8 +2805,6 @@ DokiDoki Penguin Land *not confirmed
 	DRIVER( suprleag )  /* (protected) */
 	DRIVER( thndrbld )	/* (protected) */
 	DRIVER( thndrbdj )  /* (protected?) */
-	DRIVER( toutrun )	/* (protected) */
-	DRIVER( toutruna )	/* (protected) */
 
 	/* Working */
 	DRIVER( aburner )	/* (c) 1987 */
@@ -2850,6 +2857,8 @@ DokiDoki Penguin Land *not confirmed
 	DRIVER( tetrisbl )	/* (c) 1988 (but bootleg) */
 	DRIVER( timscanr )	/* (c) 1987 */
 	DRIVER( toryumon )	/* (c) 1995 */
+	DRIVER( toutrun )	  /* (c) 1989 */
+	DRIVER( toutrun3 )  /* (c) 1989 */
 	DRIVER( tturf )		/* (c) 1989 Sega / Sunsoft */
 	DRIVER( tturfbl )	/* (c) 1989 (Datsu bootleg) */
 	DRIVER( tturfu )	/* (c) 1989 Sega / Sunsoft */
@@ -3034,6 +3043,9 @@ BOMULEUL CHAJARA SEGA ST-V  1997/04/11
 
 	/* Genie Hardware (uses Genesis VDP) also has 'Sun Mixing Co' put into tile ram */
 	DRIVER( puckpkmn )	/* (c) 2000 Genie */
+	DRIVER( jzth )		/* (c) 2000 <unknown> */
+	DRIVER( sbubsm )	/* (c) 1996 Sun Mixing */
+  DRIVER( barek3mb ) /* (c) 1994 bootleg / Sega */  
 
 	/* Sega MegaTech, the number shown ia on the label of the instruction rom */
 	DRIVER( mt_beast )	/* 01 */
@@ -3184,7 +3196,8 @@ BOMULEUL CHAJARA SEGA ST-V  1997/04/11
 	DRIVER( karatedo )	/* (c) 1984 Data East Corporation (Japan) */
 	DRIVER( kchampvs )	/* (c) 1984 Data East USA (US) */
 	DRIVER( karatevs )	/* (c) 1984 Data East Corporation (Japan) */
-	DRIVER( compgolf )	/* (c) 1985 Data East Corporation (Japan) */
+	DRIVER( compgolf )	/* (c) 1986 Data East Corporation (Japan) */
+	DRIVER( compglfo )	/* (c) 1985 Data East Corporation (Japan) */
 	DRIVER( tryout )	/* (c) 1985 Data East Corporation (Japan) */
 	DRIVER( firetrap )	/* (c) 1986 Data East USA (US) */
 	DRIVER( firetpbl )	/* bootleg */
@@ -3319,7 +3332,8 @@ BOMULEUL CHAJARA SEGA ST-V  1997/04/11
 	DRIVER( tumblepb )	/* bootleg */
 	DRIVER( tumblep2 )	/* bootleg */
 	DRIVER( jumpkids )	/* (c) 1993 Comad */
-	DRIVER( fncywld )	/* (c) 1996 Unico */
+	DRIVER( fncywld )	  /* (c) 1996 Unico */
+  DRIVER( magipur )	  /* (c) 1996 Unico */
 	DRIVER( suprtrio )  /* (c) 1994 GameAce */
 	DRIVER( lemmings )	/* prototype (c) 1991 Data East USA (US) */
 	/* MAQ ?? */
@@ -4658,19 +4672,7 @@ BOMULEUL CHAJARA SEGA ST-V  1997/04/11
 
 
 	DRIVER( raiden2 )
-	DRIVER( raiden2a)
-	DRIVER( raiden2b)
-	DRIVER( raiden2c)
-	DRIVER( raiden2e)
-	DRIVER( raidndx)
-	DRIVER( raidndxa)
-	DRIVER( raidndxm)
-	DRIVER( raidndxb)
-	DRIVER( raidndxj)
-	DRIVER( zeroteam)
-	DRIVER( zeroteaa)
-	DRIVER( zeroteab)	
-	DRIVER( nzerotea)
+
 /* Seibu STI System games:
 	Viper: Phase 1 					(c) 1995
 	Viper: Phase 1 (New version)	(c) 1996
@@ -5875,6 +5877,7 @@ Other Sun games
 	DRIVER( mslug3hek04 )	/* 0261 (c) 2001 SNK */
 	DRIVER( mslug4ek01 )	/* 0261 (c) 2001 SNK */
 	DRIVER( mslug5dh72 )	/* 0261 (c) 2001 SNK */
+	DRIVER( mslug5ek02 )	/* 0261 (c) 2001 SNK */
 	DRIVER( mslugxsp2 )	/* 0261 (c) 2001 SNK */
 	DRIVER( s1945ps01 )	/* 0261 (c) 2001 SNK */
 	DRIVER( wbmlkb )	/* System1 */
@@ -5896,5 +5899,35 @@ Other Sun games
 	DRIVER( searchey )	/* 0261 (c) 2001 SNK */
 	DRIVER( searcheya )	/* 0261 (c) 2001 SNK */
 	DRIVER( searchp2 )	/* 0261 (c) 2001 SNK */
+	DRIVER( garogun )	/* 0261 (c) 2001 SNK */
+	DRIVER( pclubys )	/* 0261 (c) 2001 SNK */
+	DRIVER( nmg5 )	/* 0261 (c) 2001 SNK */
+	
+	DRIVER( gaias01 )	/* 0261 (c) 2001 SNK */	
+	DRIVER( kovpluss125 )	/* 0261 (c) 2001 PGM */
+	DRIVER( aofkt)     
+	DRIVER( kof94kt)   
+	DRIVER( kof95kt)
+	DRIVER( kof96kt)   
+	DRIVER( kof97kt)   
+	DRIVER( kof97plskt)
+	DRIVER( kof98hkt)
+	DRIVER( kof99ndkt) 
+	DRIVER( kof2kkt) 
+	DRIVER( kof94r) 
+	DRIVER( kof94sri) 
+	DRIVER( kof94s20) 
+	DRIVER( kof95seh) 
+	DRIVER( kof96s20) 
+	DRIVER( mslugpro) 
+	DRIVER( mslug2pro) 
+	DRIVER( mslug3hpro) 
+	DRIVER( mslug4pro) 
+	DRIVER( mslug5dpro) 
+	DRIVER( mslugxpro) 
+	DRIVER( orlegndcf) 
+	DRIVER( ms6boot) 
+	DRIVER( ms6sre6px01) 
+
 
 #endif	/* DRIVER_RECURSIVE */

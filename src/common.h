@@ -166,6 +166,7 @@ enum
 #define ROMENTRYTYPE_FILL			5					/* this entry fills an area with a constant value */
 #define ROMENTRYTYPE_COPY			6					/* this entry copies data from another region/offset */
 #define ROMENTRYTYPE_COUNT			7
+#define ROMENTRYTYPE_IGNORE			8			        /* this entry continues loading the previous ROM but throws the data away */
 
 #define ROMENTRY_REGION				((const char *)ROMENTRYTYPE_REGION)
 #define ROMENTRY_END				((const char *)ROMENTRYTYPE_END)
@@ -173,6 +174,7 @@ enum
 #define ROMENTRY_CONTINUE			((const char *)ROMENTRYTYPE_CONTINUE)
 #define ROMENTRY_FILL				((const char *)ROMENTRYTYPE_FILL)
 #define ROMENTRY_COPY				((const char *)ROMENTRYTYPE_COPY)
+#define ROMENTRY_IGNORE				((const char *)ROMENTRYTYPE_IGNORE)
 
 /* ----- per-entry macros ----- */
 #define ROMENTRY_GETTYPE(r)			((FPTR)(r)->_name)
@@ -337,6 +339,8 @@ enum
 #define ROM_FILL(offset,length,value)                ROM_LOAD(ROMENTRY_FILL, offset, length, (const char*)value)
 #define ROM_COPY(rgn,srcoffset,offset,length)        ROMX_LOAD(ROMENTRY_COPY, offset, length, (const char*)srcoffset, (rgn) << 24)
 
+#define ROM_IGNORE(length) 							 ROMX_LOAD(ROMENTRY_IGNORE | ROM_INHERITFLAGS,0,length,0,ROM_INHERITFLAGS)
+
 /* ----- nibble loading macros ----- */
 #define ROM_LOAD_NIB_HIGH(name,offset,length,hash)   ROMX_LOAD(name, offset, length, hash, ROM_NIBBLE | ROM_SHIFT_NIBBLE_HI)
 #define ROM_LOAD_NIB_LOW(name,offset,length,hash)    ROMX_LOAD(name, offset, length, hash, ROM_NIBBLE | ROM_SHIFT_NIBBLE_LO)
@@ -383,8 +387,7 @@ enum
 /* ----- ROM region macros ----- */
 #define SYSTEM_BIOS_ADD(value,name,description)		{ (int)value, (const char*)name, (const char*)description },
 #define BIOS_DEFAULT			"default"
-
-
+#define ROM_DEFAULT_BIOS(name) 						{	0		, (const char*)name, NULL},
 /***************************************************************************
 
 	Function prototypes

@@ -654,7 +654,8 @@ static void neogeo_custom_memory(void)
 	if (!strcmp(Machine->gamedrv->name,"mslug3")  ||
 		!strcmp(Machine->gamedrv->name,"mslug3n") ||
 		!strcmp(Machine->gamedrv->name,"mslug3d") ||
-		!strcmp(Machine->gamedrv->name,"mslug3hek04") )
+		!strcmp(Machine->gamedrv->name,"mslug3hek04") ||
+		!strcmp(Machine->gamedrv->name,"mslug3hpro") )
 	{
 		/* the game hangs after a while without this patch */
 		data16_t *mem16 = (data16_t *)memory_region(REGION_CPU1);
@@ -674,7 +675,8 @@ static void neogeo_custom_memory(void)
 	
 	if (!strcmp(Machine->gamedrv->name,"mslug4") ||
 		!strcmp(Machine->gamedrv->name,"mslug4n") ||
-		!strcmp(Machine->gamedrv->name,"mslug4ek01") )
+		!strcmp(Machine->gamedrv->name,"mslug4ek01") ||
+		!strcmp(Machine->gamedrv->name,"mslug4pro"))
 	{
 		/* Patch out loop to disable console mode */
 		data16_t *mem16 = (data16_t *)memory_region(REGION_CPU1);
@@ -774,23 +776,31 @@ static void neogeo_custom_memory(void)
 			!strcmp(Machine->gamedrv->name,"rbff1") ||
 			!strcmp(Machine->gamedrv->name,"rbffspec") ||
 			!strcmp(Machine->gamedrv->name,"kof95") ||
+			!strcmp(Machine->gamedrv->name,"kof95seh") ||
 			!strcmp(Machine->gamedrv->name,"kof96") ||
+			!strcmp(Machine->gamedrv->name,"kof96s20") ||
+			!strcmp(Machine->gamedrv->name,"kof96kt") ||
 			!strcmp(Machine->gamedrv->name,"kof96h") ||
 			!strcmp(Machine->gamedrv->name,"kof97") ||
+			!strcmp(Machine->gamedrv->name,"kof97kt") ||
 			!strcmp(Machine->gamedrv->name,"kof97a") ||
 			!strcmp(Machine->gamedrv->name,"kof97pls") ||
+			!strcmp(Machine->gamedrv->name,"kof97plskt") ||
 			!strcmp(Machine->gamedrv->name,"kog") ||
 			!strcmp(Machine->gamedrv->name,"kof98") ||
 			!strcmp(Machine->gamedrv->name,"kof98n") ||
 			!strcmp(Machine->gamedrv->name,"kof98k") ||
 			!strcmp(Machine->gamedrv->name,"kof98") ||
 			!strcmp(Machine->gamedrv->name,"kof98n") ||
+			!strcmp(Machine->gamedrv->name,"kof98hkt") ||
 			!strcmp(Machine->gamedrv->name,"kof99") ||
 			!strcmp(Machine->gamedrv->name,"kof99a") ||
 			!strcmp(Machine->gamedrv->name,"kof99e") ||
 			!strcmp(Machine->gamedrv->name,"kof99n") ||
 			!strcmp(Machine->gamedrv->name,"kof99p") ||
+			!strcmp(Machine->gamedrv->name,"kof99ndkt") ||
 			!strcmp(Machine->gamedrv->name,"kof2000") ||
+			!strcmp(Machine->gamedrv->name,"kof2kkt") ||
 			!strcmp(Machine->gamedrv->name,"kof2000n") ||
 			!strcmp(Machine->gamedrv->name,"kizuna") ||
 			!strcmp(Machine->gamedrv->name,"lastblad") ||
@@ -799,6 +809,7 @@ static void neogeo_custom_memory(void)
 			!strcmp(Machine->gamedrv->name,"rbff2") ||
 			!strcmp(Machine->gamedrv->name,"rbff2a") ||
 			!strcmp(Machine->gamedrv->name,"mslug2") ||
+			!strcmp(Machine->gamedrv->name,"mslug2pro") ||			
       		!strcmp(Machine->gamedrv->name,"mslug2t") ||	  
       		!strcmp(Machine->gamedrv->name,"mslug2tsp") ||	 
 			!strcmp(Machine->gamedrv->name,"mslug3") ||
@@ -846,7 +857,8 @@ static void neogeo_custom_memory(void)
 	}
 
 	if (!strcmp(Machine->gamedrv->name,"mslugx") ||
-		!strcmp(Machine->gamedrv->name,"mslugxsp2") )
+		!strcmp(Machine->gamedrv->name,"mslugxsp2") ||
+		!strcmp(Machine->gamedrv->name,"mslugxpro") )
 	{
 		/* patch out protection checks */
 		int i;
