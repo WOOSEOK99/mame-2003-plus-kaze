@@ -14,11 +14,14 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * Action Hollywood
 * Air Attack
 * Air Rescue
+* Aladdin (bootleg of Megadrive version)
 * Argus (Gottlieb, prototype)
 * Astropal
 * Asura Buster
 * Backfire!
 * Bang Bang Busters
+* Bare Knuckle II (chinese bootleg of Megadrive version)
+* Bare Knuckle III (bootleg of Megadrive version)
 * Baryon: Future Assault
 * Bomb Kick
 * Boogie Wings
@@ -27,6 +30,7 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * Bronx (Cycle Shooting bootleg)
 * Bubble Bobble 2 - The Return Of Super Drunk (prototype)
 * Cabal (World, Joystick version)
+* Calorie Kun vs Moguranian
 * Chain Reaction
 * Charlie Ninja
 * Chase Bombers
@@ -40,6 +44,7 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * Crossed Swords 2
 * Cute Fighter
 * Daikaiju no Gyakushu
+* Danger Express (prototype)
 * Deluxe 5
 * Denjin Makai 
 * Deer Hunting
@@ -56,6 +61,7 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * F1 Super Lap (World)
 * FixEight (bootleg)
 * Flying Tiger
+* Frog & Spiders (bootleg)
 * Gaia: The Last Choice Of Earth
 * Galactica - Batalha Espacial
 * Ghostlop
@@ -81,6 +87,8 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * Indian Battle
 * Invasion
 * Joe & Mac Returns
+* Jolly Jogger
+* Juezhan Tianhuang
 * Jump Kun
 * Kabuki-Z (World)
 * Ketsui: Kizuna Jigoku Tachi
@@ -90,6 +98,7 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * Lethal Enforcers
 * Mad Alien
 * Mad Ball V2.0 * Mature * - Romset `madballn`
+* Magic Purple 
 * Match It II * Mature *
 * Metal Slug 4
 * Metal Slug 5
@@ -98,6 +107,8 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * Mobile Suit Gundam Final Shooting
 * Monster Maulers
 * Mouse Shooter GoGo
+* Ms. Pacman Twin
+* Mrs. Dynamite
 * Multi Champ Deluxe * Mature *
 * Oo Parts (Japan, Prototype)
 * Opa Opa (Rev A Unprotected)
@@ -139,11 +150,13 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * Sonic Boom
 * Space Fever High Splitter
 * Space Launcher
+* Space Raider
 * Squash
 * Star Fire 2
 * Steel Worker
 * Success Joe
 * Super Bishi Bashi Championship (ver JAA, 2 Players)
+* Super Bubble Bobble (Sun Mixing, Megadrive clone hardware)
 * Super Rider
 * Super Trio
 * SWAT Police
@@ -165,7 +178,7 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * Trophy Hunting Bear & Moose
 * Turkey Hunting
 * Tylz
-* Ufo Senshi Yohko Chan (not encrypted)
+* Ufo Senshi Yohko Chan
 * Varia Metal
 * Vasara 2
 * Virtua Bowling
@@ -184,7 +197,9 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * Battle Shark (Japan, Joystick)
 * Botanic (French version)
 * Bubble Bobble (prototype on tokio hardware)
+* Calorie Kun vs Moguranian (bootleg)
 * Cannon Dancer
+* Competition Golf Final Round (old version) - `compglfo`
 * Crouching Tiger Hidden Dragon 2003
 * Crouching Tiger Hidden Dragon 2003 Super Plus
 * Crystal Castles (Joystick Version)
@@ -192,8 +207,10 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * Double Dragon 3 - The Rosetta Stone (Japan)
 * Dunk Dream '95
 * Escape Kids (Asia 4 Players)
+* Flower (bootleg)
 * Fujiyama Buster
 * Gals Panic DX * Mature *
+* Ghox (Joystick)
 * Ganbare! Gonta!! 2 / Party Time: Gonta the Diver II * Mature *
 * GunNail (Location Test)
 * Guwange Special Version
@@ -235,6 +252,7 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * The King of Fighters 2004 Plus / Hero
 * The King of Fighters 2004 Ultra Plus
 * The King of Fighters Special Edition 2004
+* Ufo Senshi Yohko Chan (not encrypted)
 * Undercover Cops (Alpha Renewal Version)
 * World Cup Volley 95 Extra Version
 * X-men (6 Players ver UCB)
@@ -281,6 +299,7 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * Blood Warrior - Romset `bloodwar` - Playable with minor remaining graphical issues
 * Bonk's Adventure - Romset `bonkadv` - Playable with minor remaining graphical issues
 * Cheeky Mouse - Romset `cheekyms` - colors fixed
+* Competition Golf Final Round (revision 3) - `compgolf`
 * Crater Raider - Romset `crater`
 * Crazy Climber 2 - Romset `cclimbr2`
 * Demolition Derby - Romset `demoderb`
@@ -298,8 +317,10 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * Fighters History - Romsets `fghthist`, `fghthsta`, and `fghthstw` - Playable with minor remaining unemulated protection
 * Find Out - Romset `findout` - colors fixed
 * Fire Barrel - Romset `firebarr`
+* Flower - Romset `flower`
 * Funky Jet - Romset `funkyjet`
 * Gardia - Romset `gardia`
+* Get Star / Guardian - Romsets `getstar` and `getstarj`
 * Great 1000 Miles Rally - Romsets `gtmr`, `gtmr2`, `gtmre`, and `gtmrusa`
 * Green Beret - Romset `greenber`
 * Hacha Mecha Figher - Romsets `hachamf` and `hachamfb` - `hachamf` is playable but has remaining unemulated protection
@@ -313,6 +334,7 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * Journey - Romset `journey`
 * Juno First - Romset `junofrst`
 * Kick - Romset `kick`
+* Kick'N Run- Romset `kicknrun`
 * Kozmik Kroozr - Romset `kroozr`
 * Macho Mouse - Romset `machomou` - colors fixed
 * Mario's Open Golf (Playchoice 10) - Romset `pc_moglf`
@@ -327,6 +349,7 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * Photo Y2k - Romset `photoy2k`
 * Pigskin 621AD - Romset `pigskin`
 * Power Drive - Romset `powerdrv`
+* Pro Baseball Skill Tryout - `tryout`
 * Rampage - Romsets `rampage` and `rampage2`
 * Risky Challenge - Romset `riskchal` - Playable but dont press any buttons during the score calc screen between the levels 
 * Rohga Armor Force - Romsets `rohga`, `rohgah`, `rohgau`
@@ -361,7 +384,7 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * Thunder Strike - Romset `tstrike` 
 * Tri-Sports - Romset `trisport`
 * Tron - Romset `tron`
-* Turbo Out Run - Romsets `toutrun` and `toutruna`
+* Turbo Out Run - Romsets `toutrun` and `toutrun3`
 * Turbo Tag - Romset `turbotag`
 * Twin Eagle 2 - Romsets `twineagl` and `twineag2`
 * Two Tigers - Romset `twotiger`
@@ -371,11 +394,13 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * Xenophobe - Romset `xenophob`
 * X-men (6 players) - Romset `xmen6p` and `xmen6pu`
 * Wacko - Romset `wacko`
+* Whizz - Romset `whizz`
 * Zwackery - Romset `zwackery`
 
 ## Games now with sound
 
 * Acrobat Mission
+* Altered Beast (version 2)
 * Asura Blade
 * Balloon Bomber
 * Batsugun (Partial)
@@ -385,7 +410,7 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * Daitoride
 * Dharma Doujou
 * Fire Shark
-* Ghox (via Toaplan samples)
+* Ghox
 * GunNail
 * Hacha Mecha Fighter
 * Invader's Revenge
@@ -397,6 +422,7 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * Last Fortress - Toride
 * Lupin III
 * Mustache Boy
+* Ninja Kid II
 * Oriental Legend / Xi Yo Gi Shi Re Zuang
 * Pang Poms
 * Poitto!
@@ -417,6 +443,7 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * The Karate Tournament
 * Thunder Dragon
 * Toride II Adauchi Gaiden
+* Truco-Tron
 * US AAF Mustang
 * Vandyke
 * Vimana
@@ -437,13 +464,18 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * Dig Dug II
 * Diver Boy
 * Final Fight - Added OST soundtrack (via KMFDManic)
+* Flower
 * Funny Bubble - `funybubl` * Mature *
 * Galaga
 * Galaga 3
 * Galaxy Rescue - (Added lrescue.zip sample support)
 * Gaplus
 * Grobda
+* Hit The Ice
+* Horizon
 * Journey (Added sepways.wav sample)
+* Kaiketsu Yanchamaru
+* Kid Niki - Radical Ninja (US)
 * Legion
 * Libble Rabble
 * Lunar Rescue - (Added lrescue.zip sample support)
@@ -471,9 +503,13 @@ The list of direct contributors to the MAME 2003-Plus github repository can be f
 * Space Fever High Splitter
 * Space Launcher
 * Steel Force
+* Spelunker
+* Spelunker (Japan)
+* Spelunker II
 * Super Pacman
 * Super Spacefortress Macross II
 * Super Xevious
+* Tecmo Bowl
 * Thief
 * Tower Of Druaga
 * Toypop
@@ -704,3 +740,46 @@ Gun & Fronter, Metal Black, Ninja Kids, and Pulirula [arcadez]
 * Added missing color proms and decoding for U.S. Classic [mahoneyt944]
 * Added Konami 007452 multiplier/divider fixes which sorts rolling mines and bullet trajectories in contra during the 3D Sections of the game [arcadez]
 * Updated outrun.c to MAME89 and then fixed the sound and graphical road drawing plus hooked up the inputs so that Turbo Out Run can now be played in this core [arcadez]
+* Added support for rare, Ms. Pacman Twin (mspactwin) simultaneous 2 player play [arcadez, grant2258, mahoneyt944]
+* Hooked up HD647180 MCU sound support for Ghox removing the need for hacked samples plus added a dedicated joystick version of the game [grant2258, arcadez]
+* Added support for Mrs. Dynamite and Space Raider to ladybug.c also updated the SN76496 sound core to allow for 5 chips to be used for both of these games [arcadez]
+* Fixed gardia in system1.c by updating the Sega decryption to support the newer 317 routines then added a non encrypted version of Ufo Senshi Yohko Chan [arcadez]
+* Added a new driver for Calorie Kun vs Moguranian then added support for Space Position to angelkds.c and hooked both games upto the Sega 317 Decryption [arcadez]
+* Added support for the English Virtual console version of Wonder Boy in Monster Land and added the mc8123 decryption so that the Japanese versions work [arcadez]
+* Fixed missing enemies level 2 onwards for Noboranka in the Sega system1.c driver [arcadez]
+* Hooked up missing MSM5205 sample sounds which are for crowd cheers, game sfx and speech in Tecmo Bowl [arcadez]
+* Improved the C-Chip mcu simulation for Bonze Adventure so the game no longer has respawn issues after you die on level 6 [arcadez]
+* Added support for using the libretro lightgun [markwkidd, mahoneyt944]
+* Refactor libretro input code, add new lightgun joycodes for libretro and MAME [markwkidd, mahoneyt944]
+* Coordinate with RetroArch on mouse and lightgun input driver fixes [grant2258, mahoneyt944, markwkidd]
+* Filled out the dip switches and hooked up the protection mcu for Kick N Run which makes the game 100% in the emulation dept and now fully playable [arcadez]
+* Removed the Knight Boy bootleg mcu from Kiki Kai Kai and replaced it with a simulation of the proper mcu fixing some game logic problems [arcadez]
+* Removed simulation code and hooked up the proper protection mcu for Daikaiju no Gyakushu [arcadez]
+* Updated the retofinv.c driver to MAME94 fixing some gfx niggles "lives left" display etc etc and hooked up the proper mcu for Return Of The Invaders [arcadez]
+* Fixed some graphical problems "dragon attacks" in the final level of The Fairyland Story [arcadez]
+* Removed a bootleg mcu and some fake mcu simulation code and hooked up the proper Taito mcu's for both The Fairyland Story and Onna Sansirou - Typhoon Gal [arcadez]
+* Fixed up Pro Baseball Skill Tryout drivers, now fully playable [arcadez, grant2258, mahoneyt944]
+* Updated drivers to support Competition Golf Final Round and new clone [mahoneyt944]
+* Added web app core support for mame2003-plus at web.libretro.com [mahoneyt944]
+* Updated the mc8123 decryption and hooked it upto Altered Beast, Ninja Kid II, Ufo Senshi Yohko Chan and Wonderboy In Monsterland [arcadez]
+* Altered Beast (version 2) and Ninja Kid II now have sound plus some graphical problems on levels 2 and 6 in Ninja Kid II are now sorted [arcadez]
+* The original version of Ufo Senshi Yohko Chan now works as per the above update [arcadez]
+* Added tr606drumkit.zip sample support used in FBNeo to Irem titles improving game sounds [arcadez, grant2258, KMFDManic, mahoneyt944] - special thanks to FBNeo Team
+* Improved the C-Chip simulation for Volfied fixing the sprite and background colours and in game level timers and logic [arcadez]
+* Added new driver jollyjgr.c to the MAME2003+ core supporting new games, Jolly Jogger and Frog & Spiders [arcadez, mahoneyt944]
+* Core option created to autosave hiscores recursively during gameplay, recommended default will save on exit. [LuoZhongYao, mahoneyt944]
+* Added Aladdin, Bare Knuckle II, Bare Knuckle III, Juezhan Tianhuang and Super Bubble Bobble (Sun Mixing version) to the segac2.c driver [arcadez, mahoneyt944]
+* Fixed SN76496 sound in Super Bubble Bobble (Sun Mixing) and ported across from MESS extra genesis input code so that Aladdin, Bare Knuckle II + III are playable [arcadez, dink]
+* Added Magic Purple to the Tumble Pop driver [arcadez]
+* Fixed game timers removed simulation code and hooked up the proper protection mcu for Chack'n Pop [arcadez]
+* Isolated the core options into its own file `core_options.c` in preparation to update to new V2 structuring [mahoneyt944]
+* Updated the core options structure to V2. Can now use sublabels and categories when supported by the frontend [mahoneyt944]
+* Core options are now created dynamically based on the core options version supported by the frontend for backwards compatibility [jdgleaver, mahoneyt944]
+* Fixed missing OKIM6295 sound speech samples in Hit The Ice [arcadez]
+* Added Danger Express a super rare Atari prototype to the atarig42 driver [arcadez, mahoneyt944]
+* Filled out dip switch options for Head On Channel, OOPArts and SegaSonic Bros and updated the romsets to latest MAME [arcadez, mahoneyt944]
+* Updated some parts of flower.c to later MAME fixing some major graphical problems also sorted an issue where the game wouldn't always start [arcadez]
+* Filled out dips and enabled a little hack in the Flower sound core which prevents certain sound samples playing constantly [arcadez]
+* Hooked up the Taito M68705 protection mcu for Get Star / Guardian both versions are now playable [arcadez]
+* Fixed the tile layers in Flower which were incorrectly reversed causing numerous gfx niggles throughout the game [dink]
+* Updated sidearms drivers to allow Whizz to be fully playable [mahoneyt944]

@@ -2546,3 +2546,33 @@ GAME( 1993, psoldier, ssoldier, psoldier,  psoldier, psoldier, ROT0,   "Irem",  
 GAME( 1994, dsccr94j, dsoccr94, psoldier,  dsccr94j, dsccr94j, ROT0,   "Irem",         "Dream Soccer '94 (Japan)" )
 GAME( 1994, gunforc2, 0,        raster,    gunforc2, gunforc2, ROT0,   "Irem",         "Gunforce 2 (US)" )
 GAME( 1994, geostorm, gunforc2, raster,    gunforc2, gunforc2, ROT0,   "Irem",         "Geostorm (Japan)" )
+
+// hack
+ROM_START( uccopsk )
+	ROM_REGION( 0x100000, REGION_CPU1, 0 )
+	ROM_LOAD16_BYTE( "uca-h0.bin", 0x000001, 0x040000, CRC(9e17cada) SHA1(086bb9c1ab851cab3734c2f9188d8ff3c5f98913) )
+	ROM_LOAD16_BYTE( "uca-l0.bin", 0x000000, 0x040000, CRC(4a4e3208) SHA1(d61c74d46584e2c15e70f7a17b598e51981da9e8) )
+	ROM_LOAD16_BYTE( "uca-h1k.bin", 0x080001, 0x020000, CRC(B96E6276)  )
+	ROM_LOAD16_BYTE( "uca-l1k.bin", 0x080000, 0x020000, CRC(6795DD15)  )
+
+	ROM_REGION( 0x100000 * 2, REGION_CPU2, 0 )	/* 1MB for the audio CPU - encrypted V30 = NANAO custom D80001 (?) */
+	ROM_LOAD16_BYTE( "uca-sh0.bin", 0x000001, 0x010000, CRC(f0ca1b03) SHA1(07154a2c747091f8be23587c109d91ed1672da6e) )
+	ROM_LOAD16_BYTE( "uca-sl0.bin", 0x000000, 0x010000, CRC(d1661723) SHA1(bdc00196aa2074e7b21e5949f73e9f2b93d76fd9) )
+
+	ROM_REGION( 0x200000, REGION_GFX1, ROMREGION_DISPOSE ) /* Tiles */
+	ROM_LOAD( "uca-c0k.bin", 0x000000, 0x080000, CRC(DC672F1B) )
+	ROM_LOAD( "uca-c1k.bin", 0x080000, 0x080000, CRC(BB73CA75) )
+	ROM_LOAD( "uca-c2.bin", 0x100000, 0x080000, CRC(96397ac6) SHA1(6dfe507bd9f41b5d46d85ef5f46a368745593b52) )
+	ROM_LOAD( "uca-c3.bin", 0x180000, 0x080000, CRC(5d07d10d) SHA1(ee1a928b37043c476346f189f75d2bfcc44bffe6) )
+
+	ROM_REGION( 0x400000, REGION_GFX2, ROMREGION_DISPOSE ) /* Sprites */
+	ROM_LOAD( "uca-o3.bin", 0x000000, 0x100000, CRC(97f7775e) SHA1(5cd147fd940b1ab6eba8e6c6f803bdcc5da5a563) )
+	ROM_LOAD( "uca-o2.bin", 0x100000, 0x100000, CRC(5e0b1d65) SHA1(9e45753d10b2d7b580cd11cef74181209a424189) )
+	ROM_LOAD( "uca-o1.bin", 0x200000, 0x100000, CRC(bdc224b3) SHA1(09477ec39890d954fac6ff653b9f46c9adea56b6) )
+	ROM_LOAD( "uca-o0.bin", 0x300000, 0x100000, CRC(7526daec) SHA1(79431d711deb6ed09dc52be753b7b0f2c5588dc3) )
+
+	ROM_REGION( 0x80000, REGION_SOUND1, ROMREGION_SOUNDONLY )
+	ROM_LOAD( "uca-da.bin", 0x000000, 0x080000, CRC(0b2855e9) SHA1(70f9decd78eab679a2ccad69e01cb303b61e0d38) )
+ROM_END
+
+GAME( 1992, uccopsk,  0,   raster,    uccops,   uccops,   ROT0,   "Irem",         "Undercover Cops (Korean)" )

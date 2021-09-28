@@ -219,8 +219,22 @@ else ifeq ($(platform), rpi3)
 	CPU_ARCH := arm
 	ARM = 1
 
+# Raspberry Pi 3 (AArch64)
+else ifeq ($(platform), rpi3_64)
+	TARGET = $(TARGET_NAME)_libretro.so
+	fpic = -fPIC
+	CFLAGS += $(fpic)
+	LDFLAGS += $(fpic) -shared -Wl,--version-script=link.T
+	PLATCFLAGS += -mcpu=cortex-a53 -mtune=cortex-a53
+	PLATCFLAGS += -fomit-frame-pointer -ffast-math
+	CXXFLAGS = $(CFLAGS) -fno-rtti -fno-exceptions
+	CPU_ARCH := arm64
+
 # Raspberry Pi 4
 else ifeq ($(platform), rpi4)
+	CC = arm-linux-gnueabihf-gcc
+	CXX = arm-linux-gnueabihf-g++
+	AR = arm-linux-gnueabihf-ar
 	TARGET = $(TARGET_NAME)_libretro.so
 	fpic = -fPIC
 	CFLAGS += $(fpic)

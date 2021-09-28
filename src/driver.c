@@ -3046,7 +3046,9 @@ BOMULEUL CHAJARA SEGA ST-V  1997/04/11
 	DRIVER( jzth )		/* (c) 2000 <unknown> */
 	DRIVER( sbubsm )	/* (c) 1996 Sun Mixing */
   DRIVER( barek3mb ) /* (c) 1994 bootleg / Sega */  
-
+  DRIVER( aladmdb ) /*  (c) 1993 bootleg / Sega */
+  DRIVER( barek2ch ) /* (c) 1994 bootleg / Sega */ 
+    
 	/* Sega MegaTech, the number shown ia on the label of the instruction rom */
 	DRIVER( mt_beast )	/* 01 */
 	DRIVER( mt_shar2 )	/* 02 */
@@ -4202,6 +4204,7 @@ BOMULEUL CHAJARA SEGA ST-V  1997/04/11
 	DRIVER( offtwall )	/* 136090			(c) 1991 */
 	DRIVER( offtwalc )	/* 136090			(c) 1991 */
 	DRIVER( guardian )	/* 136092			(c) 1992 */
+	DRIVER( dangerex )	/* (proto)			(c) 1992 */
 	DRIVER( relief )	/* 136093			(c) 1992 */
 	DRIVER( relief2 )	/* 136093			(c) 1992 */
 	DRIVER( arcadecl )	/* (proto)			(c) 1992 */
@@ -5546,6 +5549,7 @@ Other Sun games
 	DRIVER( histryma )	/* bootleg of Fighter's History */
 	DRIVER( bbprot )
 	DRIVER( flower )	/* (c) 1986 Komax */
+  DRIVER( flowerbl )	/* (c) 1986 bootleg */
 	DRIVER( diverboy )	/* (c) 1992 Electronic Devices */
 	DRIVER( beaminv )	/* Tekunon Kougyou */
 	DRIVER( mcatadv )	/* (c) 1993 Wintechno */
@@ -5928,6 +5932,9 @@ Other Sun games
 	DRIVER( orlegndcf) 
 	DRIVER( ms6boot) 
 	DRIVER( ms6sre6px01) 
+	DRIVER( wofchk )		/* korean Ura-mode */
+	DRIVER( knightsk )		/* Korean */
+	DRIVER( uccopsk )	/* (c) 1992 Irem (Japan) */
 
 
 #endif	/* DRIVER_RECURSIVE */
