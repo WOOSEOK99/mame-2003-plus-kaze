@@ -691,7 +691,7 @@ static void neogeo_custom_memory(void)
 	}
 
 	if (!strcmp(Machine->gamedrv->name,"sengoku3") ||
-    	!strcmp(Machine->gamedrv->name,"sengoku3s09") ||
+    	!strcmp(Machine->gamedrv->name,"sengoku3e3") ||
 		!strcmp(Machine->gamedrv->name,"sengok3d"))
 	{
 		/* Patch out loop to disable console mode */

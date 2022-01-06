@@ -2282,7 +2282,6 @@ V-V                           TP-027
 	DRIVER( ddsomur1 )	/* 09/02/1996 (c) 1996 (US) */
 	DRIVER( ddsomjr1 )	/* 06/02/1996 (c) 1996 (Japan) */
 	DRIVER( ddsomj )	/* 19/06/1996 (c) 1996 (Japan) */
-	DRIVER( ddsomk )	/* 19/06/1996 (c) 1996 (Japan) */
 	DRIVER( ddsoma )	/* 19/06/1996 (c) 1996 (Asia) */
 	DRIVER( sfa2 )		/* 06/03/1996 (c) 1996 (US) */
 	DRIVER( sfz2j )		/* 27/02/1996 (c) 1996 (Japan) */
@@ -2892,11 +2891,11 @@ Sep.1994 Quiz Ghost Hunter
 	DRIVER( quizmeku )	/* (c) 1994 */
 	DRIVER( qrouka )	/* (c) 1994 */
 	DRIVER( mahmajn2 )	/* (c) 1994 */
-	/* not working */
 	DRIVER( sspirits )
+	DRIVER( gground )
+	/* not working */
 	DRIVER( sgmast )
 	DRIVER( qsww )
-	DRIVER( gground )
 	DRIVER( crkdown )
 
 	/* Sega System 32 games */
@@ -3188,6 +3187,7 @@ BOMULEUL CHAJARA SEGA ST-V  1997/04/11
 	DRIVER( boomrang )	/* (c) 1983 */
 	DRIVER( kamikcab )	/* (c) 1984 */
 	DRIVER( liberate )	/* (c) 1984 */
+	DRIVER( dualaslt )	/* (c) 1984  Data East USA (US) */
 	DRIVER( liberatb )	/* bootleg */
 	DRIVER( bwing )		/* (c) 1984 */
 	DRIVER( bwings )	/* (c) 1984 */
@@ -4735,6 +4735,7 @@ BOMULEUL CHAJARA SEGA ST-V  1997/04/11
 	DRIVER( bigrun )	/* (c) 1989 Jaleco */
 	DRIVER( cischeat )	/* (c) 1990 Jaleco */
 	DRIVER( f1gpstar )	/* (c) 1991 Jaleco */
+	DRIVER( wildplt )	/* (c) 1992 Jaleco */
 	DRIVER( f1gpstr2 )	/* (c) 1993 Jaleco */
 	DRIVER( scudhamm )	/* (c) 1994 Jaleco */
 	DRIVER( tetrisp2 )	/* (c) 1997 Jaleco */
@@ -5380,6 +5381,9 @@ Other Sun games
 	DRIVER( orlegend )	/* (c) 1997 */
 	DRIVER( orlegnde )	/* (c) 1997 */
 	DRIVER( orlegndc )	/* (c) 1997 */
+	DRIVER( orld111c )	/* (c) 1997 */
+	DRIVER( orld105k )	/* (c) 1997 */
+
 	DRIVER( olds )          /* (c) 1998 */
 	DRIVER( olds103t )      /* (c) 1998 */
 	DRIVER( dragwld2 )	/* (c) 1997 */
@@ -5875,7 +5879,9 @@ Other Sun games
 	DRIVER( miraxa )  /* (c) Current Technologies */
     
 	//hack
-	DRIVER( sengoku3s09 )	/* 0261 (c) 2001 SNK */
+	
+	DRIVER( sengoku3e3 )	/* 0261 (c) 2001 SNK */
+	//DRIVER( sengoku3s09 )	/* 0261 (c) 2001 SNK, bug remove */
 	DRIVER( mslugrmpl02 )	/* 0261 (c) 2001 SNK */
 	DRIVER( mslug2tsp )	/* 0261 (c) 2001 SNK */
 	DRIVER( mslug3hek04 )	/* 0261 (c) 2001 SNK */
@@ -5934,7 +5940,24 @@ Other Sun games
 	DRIVER( ms6sre6px01) 
 	DRIVER( wofchk )		/* korean Ura-mode */
 	DRIVER( knightsk )		/* Korean */
-	DRIVER( uccopsk )	/* (c) 1992 Irem (Japan) */
-
+	DRIVER( uccopsk )	/* (c) 1992 Irem (Japan) korean patch*/
+	DRIVER( wofk )		/* korean */
+	DRIVER( ddsomak )	/* 19/06/1996 (c) 1996 (Japan) korean patch */
+	DRIVER( ddsomjk )	/* 19/06/1996 (c) 1996 (Japan) korean patch*/
+	DRIVER( area88rk )	/* 19/06/1996 (c) 1996 (Japan) korean patch*/
+	DRIVER( area88rka )	/* 19/06/1996 (c) 1996 (Japan) korean patch*/
+	DRIVER( captcomjk )	/* 19/06/1996 (c) 1996 (Japan) korean patch*/
+	DRIVER( kodjk )
+	DRIVER( daimakaik )
+	DRIVER( striderjrk )
+	DRIVER( ffightaek )
+	DRIVER( ffightjk )
+	DRIVER( puzzldpk )
+	DRIVER( puzldprk )
+	DRIVER( tophuntrk )
+	DRIVER( sfzjk )
+	//DRIVER( sfz2jk )
+	DRIVER( sfz2jr1k )
+	DRIVER( sfz2aljk )
 
 #endif	/* DRIVER_RECURSIVE */
