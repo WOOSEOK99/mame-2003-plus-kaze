@@ -129,7 +129,7 @@ WRITE_HANDLER( m92_videocontrol_w )
 	if (offset==0)
 	{
 		/* Access to upper palette bank */
-		if ((data & 0x2) == 0x2 && m92_game_kludge!=3) m92_palette_bank = 1;
+    if ((data & 0x2) == 0x2 && (m92_game_kludge!=3 && m92_game_kludge!=1)) m92_palette_bank = 1;
 		else                     m92_palette_bank = 0;
 	}
 /*	log_cb(RETRO_LOG_DEBUG, LOGPRE "%04x: m92_videocontrol_w %d = %02x\n",activecpu_get_pc(),offset,data);*/
@@ -590,6 +590,7 @@ static void m92_drawsprites(struct mame_bitmap *bitmap, const struct rectangle *
 
 VIDEO_UPDATE( m92 )
 {
+#ifdef MAME_DEBUG
 	/* Screen refresh is handled by raster interrupt routine, here
 		we just check the keyboard */
 	if (keyboard_pressed_memory(KEYCODE_F1)) {
@@ -599,6 +600,7 @@ VIDEO_UPDATE( m92 )
 		else
 			usrintf_showmessage("Raster IRQ disabled");
 	}
+#endif
 
 	/* Flipscreen appears hardwired to the dipswitch - strange */
 	if (readinputport(5)&1)

@@ -3527,12 +3527,13 @@ GAME( 1995, twinqix,  0,        f3_224a, f3, twinqix,  ROT0,   "Taito America Co
 GAME( 1995, gekirido, 0,        f3,      f3, gekirido, ROT270, "Taito Corporation",         "Gekirindan (Japan)" )
 GAME( 1995, tcobra2,  0,        f3,      f3, ktiger2,  ROT270, "Taito Corporation Japan",   "Twin Cobra II (Ver 2.1O 1995/11/30)" )
 GAME( 1995, tcobra2u, tcobra2,  f3,      f3, ktiger2,  ROT270, "Taito America Corporation", "Twin Cobra II (Ver 2.1A 1995/11/30)" )
-GAME( 1995, ktiger2,  tcobra2,  f3,      f3, ktiger2,  ROT270, "Taito Corporation",         "Kyukyoku Tiger 2 (Japan)" )
+
 GAME( 1995, quizhuhu, 0,        f3,      f3, quizhuhu, ROT0,   "Taito Corporation",         "Moriguchi Hiroko no Quiz de Hyuu!Hyuu! (Japan)" )
 GAME( 1995, pbobble2, 0,        f3,      f3, pbobble2, ROT0,   "Taito Corporation Japan",   "Puzzle Bobble 2 (World)" )
 GAME( 1995, pbobbl2j, pbobble2, f3,      f3, pbobble2, ROT0,   "Taito Corporation",         "Puzzle Bobble 2 (Japan)" )
 GAME( 1995, pbobbl2u, pbobble2, f3,      f3, pbobble2, ROT0,   "Taito America Corporation", "Bust-A-Move Again (US)" )
 GAME( 1995, pbobbl2x, pbobble2, f3,      f3, pbobbl2x, ROT0,   "Taito Corporation",         "Puzzle Bobble 2X (Japan)" )
+GAME( 1995, ktiger2,  0,        f3,      f3, ktiger2,  ROT270, "Taito Corporation",         "Kyukyoku Tiger 2 (Japan)" )
 /* Twin Cobra 2 (US & World) is known to exist */
 GAMEC(1995, bubblem,  0,        f3_224a, f3, bubblem,  ROT0,   "Taito Corporation Japan",   "Bubble Memories - The Story Of Bubble Bobble 3 (World)", &generic_ctrl, &bubblem_bootstrap )
 GAME( 1995, bubblemj, bubblem,  f3_224a, f3, bubblem,  ROT0,   "Taito Corporation",         "Bubble Memories - The Story Of Bubble Bobble 3 (Japan)" )

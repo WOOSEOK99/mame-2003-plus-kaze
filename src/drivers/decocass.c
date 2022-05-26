@@ -658,6 +658,13 @@ static MACHINE_DRIVER_START( cscrtry )
 	MDRV_MACHINE_INIT(cscrtry)
 MACHINE_DRIVER_END
 
+static MACHINE_DRIVER_START( czeroize )
+
+	/* basic machine hardware */
+	MDRV_IMPORT_FROM(decocass)
+	MDRV_MACHINE_INIT(czeroize)
+	MDRV_VISIBLE_AREA(1*8, 32*8-1, 1*8, 31*8-1)
+MACHINE_DRIVER_END
 
 
 #define DECOCASS_COMMON_ROMS	\
@@ -852,6 +859,27 @@ ROM_END
 
 /* The Following use Dongle Type 3 (unknown part number?)
     (dongle data differs for each game)		 */
+	
+/* Fishing / Angler Dangler */
+ROM_START( cadanglr ) /* version 5-B-0 */
+	DECOCASS_COMMON_ROMS
+
+	ROM_REGION( 0x01000, REGION_USER1, 0 )	  /* dongle data */
+	ROM_LOAD( "dp-1250-a-0.dgl", 0x0000, 0x1000, CRC(92a3b387) SHA1(e17a155d02e9ed806590b23a845dc7806b6720b1) )
+
+	ROM_REGION( 0x10000, REGION_USER2, 0 )	  /* (max) 64k for cassette image */
+	ROM_LOAD( "dt-1255-b-0.cas", 0x0000, 0x7400, CRC(eb985257) SHA1(1285724352a59c96cc4edf4f43e89dd6d8c585b2) )
+ROM_END
+
+ROM_START( cfishing )
+	DECOCASS_COMMON_ROMS
+
+	ROM_REGION( 0x01000, REGION_USER1, 0 )	  /* dongle data */
+	ROM_LOAD( "dp-1250-a-0.dgl", 0x0000, 0x1000, CRC(92a3b387) SHA1(e17a155d02e9ed806590b23a845dc7806b6720b1) )
+
+	ROM_REGION( 0x10000, REGION_USER2, 0 )	  /* (max) 64k for cassette image */
+	ROM_LOAD( "dt-1250-a-0.cas", 0x0000, 0x7500, CRC(d4a16425) SHA1(25afaabdc8b2217d5e73606a36ea9ba408d7bc4b) )
+ROM_END
 
 ROM_START( cburnrub )
 	DECOCASS_COMMON_ROMS
@@ -1063,7 +1091,8 @@ ROM_END
 ROM_START( czeroize )
 	DECOCASS_COMMON_ROMS
 
-	/* no dumped dongle data */
+	ROM_REGION( 0x01000, REGION_USER1, 0 )	  /* dongle data */
+	/* missing dongle data */
 
 	ROM_REGION( 0x10000, REGION_USER2, 0 )	  /* (max) 64k for cassette image */
 	ROM_LOAD( "czeroize.cas",   0x0000, 0x10000, CRC(3ef0a406) SHA1(645b34cd477e0bb5539c8fe937a7a2dbd8369003) )
@@ -1104,10 +1133,13 @@ GAME ( 1982, cburnrub, decocass, cburnrub, decocass, decocass, ROT270, "DECO", "
 GAME ( 1982, cburnrb2, cburnrub, cburnrub, decocass, decocass, ROT270, "DECO", "Cassette: Burnin' Rubber (set 2)" )
 GAME ( 1982, cbnj,	   cburnrub, cbnj,	   decocass, decocass, ROT270, "DECO", "Cassette: Bump N Jump" )
 GAME ( 1983, cbtime,   decocass, cbtime,   decocass, decocass, ROT270, "DECO", "Cassette: Burger Time" )
+GAME ( 1982, cadanglr, decocass, cppicf,   decocass, decocass, ROT270, "DECO", "Cassette: Angler Dangler" )
+GAME ( 1982, cfishing, cadanglr, cppicf,   decocass, decocass, ROT270, "DECO", "Cassette: Fishing" )
 GAME ( 1983, cgraplop, decocass, cgraplop, decocass, decocass, ROT270, "DECO", "Cassette: Graplop (aka Cluster Buster) (set 1)" )
 GAMEX( 1983, cgraplp2, cgraplop, cgraplop, decocass, decocass, ROT270, "DECO", "Cassette: Graplop (aka Cluster Buster) (set 2)", GAME_NOT_WORKING ) /* Different Protection / Bitswap? */
 GAME ( 1983, clapapa,  decocass, clapapa,  decocass, decocass, ROT270, "DECO", "Cassette: Rootin' Tootin' (aka La.Pa.Pa)" ) /* Displays 'LaPaPa during attract */
 GAME ( 1983, clapapa2, clapapa,  clapapa,  decocass, decocass, ROT270, "DECO", "Cassette: Rootin' Tootin'" )				/* Displays 'Rootin' Tootin' during attract */
+GAME ( 1983, czeroize, decocass, czeroize, decocass, decocass, ROT270, "DECO", "Cassette: Zeroize" )
 GAME ( 1984, cfghtice, decocass, cfghtice, decocass, decocass, ROT270, "DECO", "Cassette: Fighting Ice Hockey" )
 GAME ( 1983, cprobowl, decocass, cprobowl, decocass, decocass, ROT270, "DECO", "Cassette: Pro Bowling" )
 GAME ( 1983, cnightst, decocass, cnightst, decocass, decocass, ROT270, "DECO", "Cassette: Night Star (set 1)" )
@@ -1122,4 +1154,3 @@ GAME ( 1985, cbdash,   decocass, cbdash,   decocass, decocass, ROT270, "DECO", "
 /* The following may be missing dongle data if they're not Type 1 */
 GAMEX( 1985, chwy,     decocass, decocass,   decocass, decocass, ROT270, "DECO", "Cassette: Highway Chase[Q]", GAME_NOT_WORKING )
 GAMEX( 1985, cflyball, decocass, decocass,   decocass, decocass, ROT270, "DECO", "Cassette: Flying Ball[Q]", GAME_NOT_WORKING )
-GAMEX( 1985, czeroize, decocass, decocass,   decocass, decocass, ROT270, "DECO", "Cassette: Zeroize[Q]", GAME_NOT_WORKING )

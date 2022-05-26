@@ -13,7 +13,7 @@
 
 #define UI_COLOR_DISPLAY
 #define CMD_PLUS
-// MBOX32_FIX: °ø·«ÆùÆ®ÀÇ »ö ÁöÁ¤ ¹× ÀüÃ¼ ÆùÆ®¼ö(17,631ÀÚ)
+// MBOX32_FIX: ê³µëµí°íŠ¸ì˜ ìƒ‰ ì§€ì • ë° ì „ì²´ í°íŠ¸ìˆ˜(17,631ì)
 #define MAX_FONT_DATA	(17631)
 
 static  UINT16 _uifonttable[65536];		
@@ -69,7 +69,7 @@ INLINE void ui_markdirty(const struct rectangle *rect)
 }
 
 /*
-// ¿Ï¼ºÇü(KSC5601) ÄÚµå ¿µ¿ª : 8366ÀÚ		c1: (0xa1-0xfd)  c2: (0xa1-0xfe)
+// ì™„ì„±í˜•(KSC5601) ì½”ë“œ ì˜ì—­ : 8366ì		c1: (0xa1-0xfd)  c2: (0xa1-0xfe)
 		
 		a1a1 ~ a1fe : 94
 		...
@@ -77,11 +77,11 @@ INLINE void ui_markdirty(const struct rectangle *rect)
 		-----------
 		93          = 93 * 94 = 8742
 		
-		(Æ¯¼ö¹®ÀÚ¿µ¿ª°ú ÇÑ±ÛÆùÆ®¿µ¿ª»çÀÌÀÇ 376°³ÀÇ °ø°£ÀÌ ºñ¾îÀÖÀ½. µû¶ó¼­ 8742 - 376 = 8366)
-		376°³ÀÇ ºó °ø°£Àº °ø·«ÆùÆ®¿ëÀ¸·Î »ç¿ë
+		(íŠ¹ìˆ˜ë¬¸ìì˜ì—­ê³¼ í•œê¸€í°íŠ¸ì˜ì—­ì‚¬ì´ì˜ 376ê°œì˜ ê³µê°„ì´ ë¹„ì–´ìˆìŒ. ë”°ë¼ì„œ 8742 - 376 = 8366)
+		376ê°œì˜ ë¹ˆ ê³µê°„ì€ ê³µëµí°íŠ¸ìš©ìœ¼ë¡œ ì‚¬ìš©
 
 		
-// È®Àå¿µ¿ªA: 5696ÀÚ	c1: (0x81-0xa0)  c2: (0x41-0x5a,0x61-0x7a,0x81-0xfe)
+// í™•ì¥ì˜ì—­A: 5696ì	c1: (0x81-0xa0)  c2: (0x41-0x5a,0x61-0x7a,0x81-0xfe)
 
 		8141 ~ 815a, 8161 ~ 817a, 818a ~ 81fe : 26 + 26 + 126 = 178
 		8241 ~ 82fe
@@ -91,7 +91,7 @@ INLINE void ui_markdirty(const struct rectangle *rect)
 		32			= 32 * 178 = 5696
 
 
-// È®Àå¿µ¿ªB: 3192ÀÚ	c1: (0xa1-0xc6)  c2: (0x41-0x5a,0x61-0x7a,0x81-0xa0)
+// í™•ì¥ì˜ì—­B: 3192ì	c1: (0xa1-0xc6)  c2: (0x41-0x5a,0x61-0x7a,0x81-0xa0)
 		
 		a141 ~ a15a, a161 ~ a17a, a181 ~ a1a0 : 26 + 26 + 32 = 84
 		...
@@ -108,29 +108,29 @@ static UINT16 uifont_buildtable(UINT16 code)
 	c2 = code & 0xff;
 	
 	/*
-	   KSC-5601 ¿Ï¼ºÇü ÄÚµå
+	   KSC-5601 ì™„ì„±í˜• ì½”ë“œ
 	   --------------------------------------------------------------------------------------------
-	 	ºÎÈ£: hi:0xa1 - 0xac	lo:0xa1 - 0xfe (http://cs.sungshin.ac.kr/~shim/demo/ksc5601-a.htm)
-	 	ÇÑ±Û: hi:0xb0 - 0xc8	lo:0xa1 - 0xfe (http://cs.sungshin.ac.kr/~shim/demo/ksc5601-b.htm)
-	 	ÇÑÀÚ: hi:0xca - 0xfd	lo:0xa1 - 0xfe (http://cs.sungshin.ac.kr/~shim/demo/ksc5601-c.htm)
+	 	ë¶€í˜¸: hi:0xa1 - 0xac	lo:0xa1 - 0xfe (http://cs.sungshin.ac.kr/~shim/demo/ksc5601-a.htm)
+	 	í•œê¸€: hi:0xb0 - 0xc8	lo:0xa1 - 0xfe (http://cs.sungshin.ac.kr/~shim/demo/ksc5601-b.htm)
+	 	í•œì: hi:0xca - 0xfd	lo:0xa1 - 0xfe (http://cs.sungshin.ac.kr/~shim/demo/ksc5601-c.htm)
 	*/
-	// ¼³¸í : ** ¹®ÀÚÄÚµå Ã³¸®ºÎºĞ **
-	// ¼³¸í : ¿Ï¼ºÇü(KSC5601) ÄÚµå ¿µ¿ª : c1: (0xa1-0xfd)  c2: (0xa1-0xfe)
+	// ì„¤ëª… : ** ë¬¸ìì½”ë“œ ì²˜ë¦¬ë¶€ë¶„ **
+	// ì„¤ëª… : ì™„ì„±í˜•(KSC5601) ì½”ë“œ ì˜ì—­ : c1: (0xa1-0xfd)  c2: (0xa1-0xfe)
 	if ((0xa1 <= c1 && c1 <= 0xfd) && (c2 >= 0xa1))
 	{
-		if(0xa1 <= c1 && c1 <= 0xac)		// Æ¯¼ö¹®ÀÚ ¿µ¿ª
+		if(0xa1 <= c1 && c1 <= 0xac)		// íŠ¹ìˆ˜ë¬¸ì ì˜ì—­
 			code = (c1 - 0xa1 + 4) * 94 + (c2 - 0xa1);
-		else if(0xad <= c1 && c1 <= 0xaf)	// °ø·«ÆùÆ® ¿µ¿ª: 3ºí·°
+		else if(0xad <= c1 && c1 <= 0xaf)	// ê³µëµí°íŠ¸ ì˜ì—­: 3ë¸”ëŸ­
 			code = (c1 - 0xad) * 94 + (c2 - 0xa1);
-		else if(0xb0 <= c1 && c1 <= 0xc8)	// ÇÑ±Û 2,350ÀÚ ¿µ¿ª
+		else if(0xb0 <= c1 && c1 <= 0xc8)	// í•œê¸€ 2,350ì ì˜ì—­
 			code = (c1 - 0xa1 + 1) * 94 + (c2 - 0xa1);
-		else if(c1 == 0xc9)					// °ø·«ÆùÆ® ¿µ¿ª: 1ºí·°
+		else if(c1 == 0xc9)					// ê³µëµí°íŠ¸ ì˜ì—­: 1ë¸”ëŸ­
 			code = (c1 - 0xc9 + 3) * 94 + (c2 - 0xa1);
-		else if(0xca <= c1 && c1 <= 0xfe )	// ÇÑÀÚ 4,888ÀÚ ¿µ¿ª
+		else if(0xca <= c1 && c1 <= 0xfe )	// í•œì 4,888ì ì˜ì—­
 			code = (c1 - 0xa1) * 94 + (c2 - 0xa1);
 	}
 	
-	// ¼³¸í : È®Àå¿µ¿ªA : c1: (0x81-0xa0)  c2: (0x41-0x5a,0x61-0x7a,0x81-0xfe)
+	// ì„¤ëª… : í™•ì¥ì˜ì—­A : c1: (0x81-0xa0)  c2: (0x41-0x5a,0x61-0x7a,0x81-0xfe)
 	else if (0x81 <= c1 && c1 <= 0xa0)
 	{
 		if(0x41 <= c2 && c2 <= 0x5a)
@@ -141,7 +141,7 @@ static UINT16 uifont_buildtable(UINT16 code)
 			code = (c1 - 0x81) * 178 + (c2 - 0x81 + 0x34) + 8742;
 	}
 	
-	// ¼³¸í : È®Àå¿µ¿ªB : c1: (0xa1-0xc6)  c2: (0x41-0x5a,0x61-0x7a,0x81-0xa0)
+	// ì„¤ëª… : í™•ì¥ì˜ì—­B : c1: (0xa1-0xc6)  c2: (0x41-0x5a,0x61-0x7a,0x81-0xa0)
 	else if ((0xa1 <= c1 && c1 <= 0xc6) && (c2 <= 0xa0))
 	{
 		if( 0x41 <= c2 && c2 <= 0x5a )
@@ -187,11 +187,11 @@ int uifont_buildfont(void)
 	
 	static unsigned char fontdata12x12[] =
 	{
-#include "font/raw/cmd12x12.dat"		// °ø·«ÆùÆ®:  376
-#include "font/raw/ksc_sp12x12.dat"		// KSC5601:  1128(Æ¯¼ö¹®ÀÚ)
-#include "font/raw/ksc_han12x12.dat"	// KSC5601:  2350(ÇÑ±Û)
-#include "font/raw/ksc_hj12x12.dat"		// KSC5601:  4888(ÇÑÀÚ)
-#include "font/raw/kse_han12x12.dat"	// È®ÀåÇÑ±Û: 8888 = 5696(A¿µ¿ª) + 3192(B¿µ¿ª)
+#include "font/raw/cmd12x12.dat"		// ê³µëµí°íŠ¸:  376
+#include "font/raw/ksc_sp12x12.dat"		// KSC5601:  1128(íŠ¹ìˆ˜ë¬¸ì)
+#include "font/raw/ksc_han12x12.dat"	// KSC5601:  2350(í•œê¸€)
+#include "font/raw/ksc_hj12x12.dat"		// KSC5601:  4888(í•œì)
+#include "font/raw/kse_han12x12.dat"	// í™•ì¥í•œê¸€: 8888 = 5696(Aì˜ì—­) + 3192(Bì˜ì—­)
 #include "font/raw/end12x12.dat"		// EndofData:   1
 									// ----------------
 									//		    17631
@@ -284,7 +284,7 @@ int uifont_buildfont(void)
 			fclose(fp);	
 		}
 
-		// °³ºÎ±âº»ÆùÆ®¸¦ ÀÌ¿ëÇÒ°ÍÀÎÁö ¾Æ´Ï¸é ·ÎµåÇØ¾ß ÇÏ´ÂÁö ÆÇ´Ü		
+		// ê°œë¶€ê¸°ë³¸í°íŠ¸ë¥¼ ì´ìš©í• ê²ƒì¸ì§€ ì•„ë‹ˆë©´ ë¡œë“œí•´ì•¼ í•˜ëŠ”ì§€ íŒë‹¨		
 		if( (options.gmui_font != NULL) && stricmp(options.gmui_font, "none") ) {
 			// Decode font name
 			DecodeFontName(options.gmui_font, szFontName );
@@ -546,7 +546,7 @@ int uifont_decodechar(unsigned char *s, unsigned short *code)
 	if (c1 == NULL_SPACE1)
 		return 3;
 		
-	// ¼³¸í : È®Àå¿Ï¼ºÇü ÄÚµå¿µ¿ª ¹üÀ§
+	// ì„¤ëª… : í™•ì¥ì™„ì„±í˜• ì½”ë“œì˜ì—­ ë²”ìœ„
 	isDBC = ((c1 >= 0x81 && c1 <= 0xfe) && ((c2 >= 0x41 && c2 <= 0x5a) || (c2 >= 0x61 && c2 <= 0x7a) || (c2 >= 0x81 && c2 <= 0xfe)));
 	
 	if (isDBC)
@@ -574,12 +574,12 @@ int uifont_drawfont(struct mame_bitmap *bitmap, const char *s, int sx,
 #endif
 	unsigned short code;
 
-	/* °ø·«ÆùÆ®:·Î°í ÆùÆ® À§Ä¡ ÁöÁ¤ */
+	/* ê³µëµí°íŠ¸:ë¡œê³  í°íŠ¸ ìœ„ì¹˜ ì§€ì • */
 	int btn_line = 9 * 94;
 	int btn_logo = 188;
 	int btn_deco = btn_logo + 16;
 
-	/* °ø·«ÆùÆ®:·Î°í ÆùÆ® »ö ÁöÁ¤ */
+	/* ê³µëµí°íŠ¸:ë¡œê³  í°íŠ¸ ìƒ‰ ì§€ì • */
 	#define MBOX32_LOGO_COLOR	BUTTON_COLOR_BLUE
 	#define SECOND_LOGO_COLOR	BUTTON_COLOR_BLUE
 	#define DECO_COLOR			BUTTON_COLOR_YELLOW
@@ -600,7 +600,7 @@ int uifont_drawfont(struct mame_bitmap *bitmap, const char *s, int sx,
 		Machine->uifont->colortable[FONT_COLOR_NORMAL] = Machine->uifont->colortable[FONT_COLOR_SPECIAL];
 	}
 
-	/* ±ÛÀÚ¸¦ ¶Ç·ÇÇÏ°Ô ÇÏ±âÀ§ÇØ °ËÀº»ö±ÛÀÚ¸¦ Ãâ·ÂÇÏ±â À§ÇÑ ¿ÀÇÁ¼Â */
+	/* ê¸€ìë¥¼ ë˜ë ·í•˜ê²Œ í•˜ê¸°ìœ„í•´ ê²€ì€ìƒ‰ê¸€ìë¥¼ ì¶œë ¥í•˜ê¸° ìœ„í•œ ì˜¤í”„ì…‹ */
 	xinc = 1;
 	yinc = 1;
 	
@@ -664,13 +664,13 @@ int uifont_drawfont(struct mame_bitmap *bitmap, const char *s, int sx,
 				if (code > 0 && code < COLOR_BUTTONS)
 					col = cmd_colortable[code];
 
-				else if (code >= btn_line && code <= btn_line + 68)			// ¼±¹®ÀÚ
+				else if (code >= btn_line && code <= btn_line + 68)			// ì„ ë¬¸ì
 					col = BUTTON_COLOR_BLUE;
-				else if (code >= (btn_logo) && code <= (btn_logo + 7))		// ¿¥¹Ú½º32 ·Î°í ¹®ÀÚ
+				else if (code >= (btn_logo) && code <= (btn_logo + 7))		// ì— ë°•ìŠ¤32 ë¡œê³  ë¬¸ì
 					col = MBOX32_LOGO_COLOR;
-				else if (code >= (btn_logo + 8) && code <= (btn_logo + 15))	// 2Â÷ °ÔÀÓ ·Î°í ¹®ÀÚ
+				else if (code >= (btn_logo + 8) && code <= (btn_logo + 15))	// 2ì°¨ ê²Œì„ ë¡œê³  ë¬¸ì
 					col = SECOND_LOGO_COLOR;
-				else if (code >= btn_deco && code <= btn_deco + 2)			// °³¹ßÀÚ ¹®ÀÚ
+				else if (code >= btn_deco && code <= btn_deco + 2)			// ê°œë°œì ë¬¸ì
 					col = DECO_COLOR;
 				
 				if (col)

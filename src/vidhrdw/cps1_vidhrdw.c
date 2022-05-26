@@ -413,22 +413,35 @@ static struct CPS1config cps1_config_table[]=
 
 	//hack
 	{"tk2h10",  QSOUND_1, 0,0,0, 0x0000,0xffff,0x0000,0xffff },	/* bootleg? */
+	{"tk2h10k", QSOUND_1, 0,0,0, 0x0000,0xffff,0x0000,0xffff },	/* bootleg? */
+	{"tk2h10dk", QSOUND_1, 0,0,0, 0x0000,0xffff,0x0000,0xffff },	/* bootleg? */
+
+	
 	{"tk2h142", QSOUND_1, 0,0,0, 0x0000,0xffff,0x0000,0xffff },	/* bootleg? */
+	{"tk2h142k",QSOUND_1, 0,0,0, 0x0000,0xffff,0x0000,0xffff },	/* bootleg? */
 	{"tk2c21",  QSOUND_1, 0,0,0, 0x0000,0xffff,0x0000,0xffff },	/* bootleg? */
+	{"tk2c21k", QSOUND_1, 0,0,0, 0x0000,0xffff,0x0000,0xffff },	/* bootleg? */
 	{"tk2h65",  QSOUND_1, 0,0,0, 0x0000,0xffff,0x0000,0xffff },	/* bootleg? */
+	{"tk2h65k", QSOUND_1, 0,0,0, 0x0000,0xffff,0x0000,0xffff },	/* bootleg? */
 	{"tk2h71",  QSOUND_1, 0,0,0, 0x0000,0xffff,0x0000,0xffff },	/* bootleg? */
+	{"tk2h71k", QSOUND_1, 0,0,0, 0x0000,0xffff,0x0000,0xffff },	/* bootleg? */
 	{"tk2hek06",QSOUND_1, 0,0,0, 0x0000,0xffff,0x0000,0xffff },	/* bootleg? */
+	{"tk2hek06k",QSOUND_1, 0,0,0, 0x0000,0xffff,0x0000,0xffff },	/* bootleg? */
+
 	//dino
 	{"dinos209",  QSOUND_2, 0,0,0, 0x0000,0xffff,0x0000,0xffff },	/* layer enable never used */
 	{"dinoslice", QSOUND_2, 0,0,0, 0x0000,0xffff,0x0000,0xffff },	/* layer enable never used */
 	{"dinos145",  QSOUND_2, 0,0,0, 0x0000,0xffff,0x0000,0xffff },	/* layer enable never used */
 	//captcomm
 	{"captcommek1",BATTRY_3, 0,0,0, 0x0000,0xffff,0x0000,0xffff },
+	{"captcomek1k",BATTRY_3, 0,0,0, 0x0000,0xffff,0x0000,0xffff },
+
 	//ffight
 	{"ffightb",  CPS_B_01, 0,0,0, 0x0001,0xffff,0x0001,0xffff },
 	{"wofchk",   NOBATTRY, 0,0,0, 0x0000,0xffff,0x0000,0xffff },
 	{"knightsk", BATTRY_4, 0,0,0, 0x0000,0xffff,0x0000,0xffff, 3 },
 	{"wofk",     QSOUND_1, 0,0,0, 0x0000,0xffff,0x0000,0xffff },
+	
 	{"area88k",  CPS_B_21_DEF, 0,0,0, 0x0000,0xffff,0x0001,0xffff },	/* CPSB ID not checked, but it's the same as sf2eg */
 	{"area88ka", CPS_B_21_DEF, 0,0,0, 0x0000,0xffff,0x0001,0xffff },	/* CPSB ID not checked, but it's the same as sf2eg */
 	{"captcomjk",BATTRY_3, 0,0,0, 0x0000,0xffff,0x0000,0xffff },
@@ -437,6 +450,7 @@ static struct CPS1config cps1_config_table[]=
 	{"striderjrk",CPS_B_01, 1,0,1, 0x0000,0xffff,0x0000,0xffff },
     {"ffightaek",NOBATTRY, 0,0,0, 0x0001,0xffff,0x0001,0xffff }, /* i think this is correct */
 	{"ffightjk", CPS_B_04, 0,0,0, 0x0001,0xffff,0x0001,0xffff },
+	{"rockmank",NOBATTRY, 0,0,0, 0x0000,0xffff,0x0000,0xffff },
 
 	{0}		/* End of table */
 };

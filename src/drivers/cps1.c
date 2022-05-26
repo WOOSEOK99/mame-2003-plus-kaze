@@ -15,12 +15,9 @@
 #include "driver.h"
 #include "vidhrdw/generic.h"
 #include "machine/eeprom.h"
-
+#include "ost_samples.h"
 #include "cps1.h"       /* External CPS1 definitions */
 
-bool	ff_provision_alt_song;
-bool	ff_play_alternate_song;
-bool	ff_playing_final_fight;
 
 /* in machine/kabuki.c */
 void wof_decode(void);
@@ -28,69 +25,6 @@ void dino_decode(void);
 void punisher_decode(void);
 void slammast_decode(void);
 
-
-const char *const ffight_sample_names[] =
-{
-	"*ffight",
-	"track02-01",
-	"track02-02",
-	"track03-01",
-	"track03-02",
-	"track04-01",
-	"track04-02",
-	"track05-01",
-	"track05-02",
-	"track06-01",
-	"track06-02",
-	"track07-01",
-	"track07-02",
-	"track08-01",
-	"track08-02",
-	"track09-01",
-	"track09-02",
-	"track10-01",
-	"track10-02",
-	"track11-01",
-	"track11-02",
-	"track12-01",
-	"track12-02",
-	"track13-01",
-	"track13-02",
-	"track14-01",
-	"track14-02",
-	"track15-01",
-	"track15-02",
-	"track16-01",
-	"track16-02",
-	"track17-01",
-	"track17-02",
-	"track18-01",
-	"track18-02",
-	"track19-01",
-	"track19-02",
-	"track20-01",
-	"track20-02",
-	"track21-01",
-	"track21-02",
-	"track22-01",
-	"track22-02",
-	"track23-01",
-	"track23-02",
-	"track24-01",
-	"track24-02",
-	"track25-01",
-	"track25-02",
-	"track26-01",
-	"track26-02",
-	0
-};
-
-static struct Samplesinterface ff_samples =
-{
-	2,	/* 2 channels*/
-	100, /* volume*/
-	ffight_sample_names
-};
 
 static READ16_HANDLER( cps1_input_r )
 {
@@ -168,193 +102,20 @@ static WRITE16_HANDLER( cps1_sound_command_w )
 	}
 	*/
 	
-	/* We are playing Final Fight. Let's use the samples.*/
-	if(ff_playing_final_fight && options.use_samples) {
-		switch (data) {
-			/* stage 1 upper level music*/
-			case 0x40:
-				/* Play the left channel.*/
-				sample_start(0, 0, 1);
-
-				/* Play the right channel.*/
-				sample_start(1, 1, 1);
-
-				break;
-			/* stage #1: basement*/
-			case 0x41:
-				sample_start(0, 2, 1);
-				sample_start(1, 3, 1);
-
-				break;
-			/* stage #2: subway intro*/
-			case 0x42:
-				/* play the normal version of the song unless playAlternateSong is true*/
-				if (ff_play_alternate_song == false) {
-					sample_start(0, 4, 1);
-					sample_start(1, 5, 1);
-				}
-				else {
-					sample_start(0, 40, 1);
-					sample_start(1, 41, 1);
-				}
-
-				break;
-			/* stage #2 exiting subway/alley*/
-			case 0x43:
-				sample_start(0, 6, 1);
-				sample_start(1, 7, 1);
-
-				break;
-			/* double andore cage fight music*/
-			case 0x44:
-				sample_start(0, 8, 1);
-				sample_start(1, 9, 1);
-
-				break;
-			/* bay area sea side theme*/
-			case 0x45:
-				sample_start(0, 10, 1);
-				sample_start(1, 11, 1);
-
-				/* we'll provision the alternate songs if they're not already*/
-				if (ff_provision_alt_song == false) {
-					ff_provision_alt_song = true;
-				}
-
-				break;
-			/* bathroom music for bay area*/
-			case 0x46:
-				sample_start(0, 12, 1);
-				sample_start(1, 13, 1);
-
-				break;
-			/* bay area post-bathroom ending/boss / final boss room entrance*/
-			case 0x47:
-				/* play the normal version of the song unless playAlternateSong is true*/
-				if (ff_provision_alt_song == false) {
-					sample_start(0, 14, 1);
-					sample_start(1, 15, 1);
-				}
-				else {
-					sample_start(0, 36, 1);
-					sample_start(1, 37, 1);
-				}
-
-				break;
-			/* bonus stage music*/
-			case 0x4c:
-				sample_start(0, 20, 1);
-				sample_start(1, 21, 1);
-
-				break;
-			/* industrial music theme*/
-			case 0x48:
-				sample_start(0, 16, 1);
-				sample_start(1, 17, 1);
-
-				break;
-			/* industrial zone elevator ride music*/
-			case 0x49:
-				sample_start(0, 18, 1);
-				sample_start(1, 19, 1);
-
-				break;
-			/* game start ditty*/
-			case 0x50:
-				sample_start(0, 22, 0);
-				sample_start(1, 23, 0);
-
-				/* when the game starts, we'll reset all the alternate songs*/
-				ff_provision_alt_song = false;
-				ff_play_alternate_song = false;
-
-				break;
-			/* post explosion ditty*/
-			case 0x51:
-				sample_start(0, 24, 0);
-				sample_start(1, 25, 0);
-
-				break;
-			/* opening cinematic song*/
-			case 0x52:
-				sample_start(0, 46, 0);
-				sample_start(1, 47, 0);
-
-				break;
-			/* continue/dynamite song*/
-			case 0x53:
-				sample_start(0, 32, 1);
-				sample_start(1, 33, 1);
-
-				break;
-			/* homosexual cheesy ending music*/
-			case 0x54:
-				sample_start(0, 48, 1);
-				sample_start(1, 49, 1);
-
-				break;
-			/* player select song*/
-			case 0x55:
-				sample_start(0, 30, 0);
-				sample_start(1, 31, 0);
-
-				break;
-			/* stage end/victory song*/
-			case 0x57:
-				sample_start(0, 28, 0);
-				sample_start(1, 29, 0);
-
-				/* when we beat a stage after the alternate songs are provisioned, we know that we should be playing the alternate songs*/
-				if (ff_provision_alt_song == true) {
-					ff_play_alternate_song = true;
-				}
-
-				break;
-			/* final stage clear ditty*/
-			case 0x58:
-				sample_start(0, 26, 0);
-				sample_start(1, 27, 0);
-			
-				ff_provision_alt_song = false;
-				ff_play_alternate_song = false;
-
-				break;
-			default:
-				if(ACCESSING_LSB)
-					soundlatch_w(0,data & 0xff);
-
-				/* Lets stop the Final Fight sample music.*/
-				if(data == 0xf0 || data == 0xf2 || data == 0xf7) {
-					int a = 0;
-
-					for(a = 0; a <= 50; a++) {
-						sample_stop(a);
-					}
-				}
-
-				break;
+	/* We are playing Final Fight. */
+	if(ff_playing_final_fight && options.use_alt_sound) {
+		if(generate_ost_sound_ffight( data )) {
+			if(ACCESSING_LSB) soundlatch_w(0,data & 0xff);
 		}
-
-		/* Determine how we should mix these samples together.*/
-		if(sample_playing(0) == 0 && sample_playing(1) == 1) { /* Right channel only. Lets make it play in both speakers.*/
-			sample_set_stereo_volume(1, 100, 100);
-		}
-		else if(sample_playing(0) == 1 && sample_playing(1) == 0) { /* Left channel only. Lets make it play in both speakers.*/
-			sample_set_stereo_volume(0, 100, 100);
-		}
-		else if(sample_playing(0) == 1 && sample_playing(1) == 1) { /* Both left and right channels. Lets make them play in there respective speakers.*/
-			sample_set_stereo_volume(0, 100, 0);
-			sample_set_stereo_volume(1, 0, 100);
-		}
-		else if(sample_playing(0) == 0 && sample_playing(1) == 0) { /* No sample playing, revert to the default sound.*/
-			if(ACCESSING_LSB) {
-				soundlatch_w(0,data & 0xff);
-			}
+	}
+	/* We are playing Street Fighter 2. */
+	else if(sf2_playing_street_fighter && options.use_alt_sound) {
+		if(generate_ost_sound_sf2( data )) {
+			if(ACCESSING_LSB) soundlatch_w(0,data & 0xff);
 		}
 	}
 	else {
-		if(ACCESSING_LSB)
-			soundlatch_w(0,data & 0xff);
+		if(ACCESSING_LSB) soundlatch_w(0,data & 0xff);
 	}
 }
 
@@ -403,6 +164,9 @@ static INTERRUPT_GEN( cps1_interrupt )
 	/* works without it (maybe it's used to multiplex controls). It is the */
 	/* *only* game to have that. */
 	cpu_set_irq_line(0, 2, HOLD_LINE);
+
+	if(sf2_playing_street_fighter && options.use_alt_sound)
+		ost_fade_volume();
 }
 
 /********************************************************************
@@ -695,14 +459,14 @@ MEMORY_END
 
 #define CPS1_DIFFICULTY_1 \
 	PORT_DIPNAME( 0x07, 0x04, DEF_STR( Difficulty ) ) \
-	PORT_DIPSETTING(    0x07, "1 (Easiest)" ) \
-	PORT_DIPSETTING(    0x06, "2" ) \
-	PORT_DIPSETTING(    0x05, "3" ) \
-	PORT_DIPSETTING(    0x04, "4 (Normal)" ) \
-	PORT_DIPSETTING(    0x03, "5" ) \
-	PORT_DIPSETTING(    0x02, "6" ) \
-	PORT_DIPSETTING(    0x01, "7" ) \
-	PORT_DIPSETTING(    0x00, "8 (Hardest)" )
+	PORT_DIPSETTING(    0x07, "0 (Easiest)" ) \
+	PORT_DIPSETTING(    0x06, "1" ) \
+	PORT_DIPSETTING(    0x05, "2" ) \
+	PORT_DIPSETTING(    0x04, "3 (Normal)" ) \
+	PORT_DIPSETTING(    0x03, "4" ) \
+	PORT_DIPSETTING(    0x02, "5" ) \
+	PORT_DIPSETTING(    0x01, "6" ) \
+	PORT_DIPSETTING(    0x00, "7 (Hardest)" )
 
 #define CPS1_DIFFICULTY_2 \
 	PORT_DIPNAME( 0x07, 0x07, DEF_STR( Difficulty ) ) \
@@ -3115,16 +2879,23 @@ INPUT_PORTS_START( wof )
 	PORT_BIT( 0x0002, IP_ACTIVE_LOW, IPT_JOYSTICK_LEFT  | IPF_8WAY | IPF_PLAYER1 )
 	PORT_BIT( 0x0004, IP_ACTIVE_LOW, IPT_JOYSTICK_DOWN  | IPF_8WAY | IPF_PLAYER1 )
 	PORT_BIT( 0x0008, IP_ACTIVE_LOW, IPT_JOYSTICK_UP    | IPF_8WAY | IPF_PLAYER1 )
-	PORT_BIT( 0x0010, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER1 )
-	PORT_BIT( 0x0020, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER1 )
+	//PORT_BIT( 0x0010, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER1 )	
+	// PORT_BIT( 0x0020, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER1 )
+	PORT_BIT_NAME( 0x0010, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER1,"P1 공격" )
+	PORT_BIT_NAME( 0x0020, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER1,"P1 점프" )
+	PORT_BIT_NAME( 0x0030, IP_ACTIVE_LOW, IPT_BUTTON3 | IPF_PLAYER1,"P1 메가크래쉬" )
+
 	PORT_BIT( 0x0040, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x0080, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x0100, IP_ACTIVE_LOW, IPT_JOYSTICK_RIGHT | IPF_8WAY | IPF_PLAYER2 )
 	PORT_BIT( 0x0200, IP_ACTIVE_LOW, IPT_JOYSTICK_LEFT  | IPF_8WAY | IPF_PLAYER2 )
 	PORT_BIT( 0x0400, IP_ACTIVE_LOW, IPT_JOYSTICK_DOWN  | IPF_8WAY | IPF_PLAYER2 )
 	PORT_BIT( 0x0800, IP_ACTIVE_LOW, IPT_JOYSTICK_UP    | IPF_8WAY | IPF_PLAYER2 )
-	PORT_BIT( 0x1000, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER2 )
-	PORT_BIT( 0x2000, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER2 )
+	// PORT_BIT( 0x1000, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER2 )
+	// PORT_BIT( 0x2000, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER2 )
+	PORT_BIT_NAME( 0x1000, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER2,"P2 공격" )
+	PORT_BIT_NAME( 0x2000, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER2,"P2 점프" )
+	PORT_BIT_NAME( 0x3000, IP_ACTIVE_LOW, IPT_BUTTON3 | IPF_PLAYER2,"P2 메가크래쉬" )
 	PORT_BIT( 0x4000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x8000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 
@@ -3133,8 +2904,11 @@ INPUT_PORTS_START( wof )
 	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_JOYSTICK_LEFT  | IPF_8WAY | IPF_PLAYER3 )
 	PORT_BIT( 0x04, IP_ACTIVE_LOW, IPT_JOYSTICK_DOWN  | IPF_8WAY | IPF_PLAYER3 )
 	PORT_BIT( 0x08, IP_ACTIVE_LOW, IPT_JOYSTICK_UP    | IPF_8WAY | IPF_PLAYER3 )
-	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER3 )
-	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER3 )
+	// PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER3 )
+	// PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER3 )
+	PORT_BIT_NAME( 0x10, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER3,"P3 공격" )
+	PORT_BIT_NAME( 0x20, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER3,"P3 점프" )
+	PORT_BIT_NAME( 0x30, IP_ACTIVE_LOW, IPT_BUTTON3 | IPF_PLAYER3,"P3 메가크래쉬" )	
 	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_COIN3 )
 	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_START3 )
 INPUT_PORTS_END
@@ -3168,16 +2942,22 @@ INPUT_PORTS_START( dino )
 	PORT_BIT( 0x0002, IP_ACTIVE_LOW, IPT_JOYSTICK_LEFT  | IPF_8WAY | IPF_PLAYER1 )
 	PORT_BIT( 0x0004, IP_ACTIVE_LOW, IPT_JOYSTICK_DOWN  | IPF_8WAY | IPF_PLAYER1 )
 	PORT_BIT( 0x0008, IP_ACTIVE_LOW, IPT_JOYSTICK_UP    | IPF_8WAY | IPF_PLAYER1 )
-	PORT_BIT( 0x0010, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER1 )
-	PORT_BIT( 0x0020, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER1 )
+	// PORT_BIT( 0x0010, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER1 )
+	// PORT_BIT( 0x0020, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER1 )
+	PORT_BIT_NAME( 0x0010, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER1,"P1 공격" )
+	PORT_BIT_NAME( 0x0020, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER1,"P1 점프" )
+	PORT_BIT_NAME( 0x0030, IP_ACTIVE_LOW, IPT_BUTTON3 | IPF_PLAYER1,"P1 메가크래쉬" )	
 	PORT_BIT( 0x0040, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x0080, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x0100, IP_ACTIVE_LOW, IPT_JOYSTICK_RIGHT | IPF_8WAY | IPF_PLAYER2 )
 	PORT_BIT( 0x0200, IP_ACTIVE_LOW, IPT_JOYSTICK_LEFT  | IPF_8WAY | IPF_PLAYER2 )
 	PORT_BIT( 0x0400, IP_ACTIVE_LOW, IPT_JOYSTICK_DOWN  | IPF_8WAY | IPF_PLAYER2 )
 	PORT_BIT( 0x0800, IP_ACTIVE_LOW, IPT_JOYSTICK_UP    | IPF_8WAY | IPF_PLAYER2 )
-	PORT_BIT( 0x1000, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER2 )
-	PORT_BIT( 0x2000, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER2 )
+	// PORT_BIT( 0x1000, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER2 )
+	// PORT_BIT( 0x2000, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER2 )
+	PORT_BIT_NAME( 0x1000, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER2,"P2 공격" )
+	PORT_BIT_NAME( 0x2000, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER2,"P2 점프" )
+	PORT_BIT_NAME( 0x3000, IP_ACTIVE_LOW, IPT_BUTTON3 | IPF_PLAYER2,"P2 메가크래쉬" )	
 	PORT_BIT( 0x4000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x8000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 
@@ -3186,8 +2966,11 @@ INPUT_PORTS_START( dino )
 	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_JOYSTICK_LEFT  | IPF_8WAY | IPF_PLAYER3 )
 	PORT_BIT( 0x04, IP_ACTIVE_LOW, IPT_JOYSTICK_DOWN  | IPF_8WAY | IPF_PLAYER3 )
 	PORT_BIT( 0x08, IP_ACTIVE_LOW, IPT_JOYSTICK_UP    | IPF_8WAY | IPF_PLAYER3 )
-	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER3 )
-	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER3 )
+	// PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER3 )
+	// PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER3 )
+	PORT_BIT_NAME( 0x10, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER3,"P3 공격" )
+	PORT_BIT_NAME( 0x20, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER3,"P3 점프" )
+	PORT_BIT_NAME( 0x30, IP_ACTIVE_LOW, IPT_BUTTON3 | IPF_PLAYER3,"P3 메가크래쉬" )		
 	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_COIN3 )
 	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_START3 )
 INPUT_PORTS_END
@@ -3221,16 +3004,22 @@ INPUT_PORTS_START( punisher )
 	PORT_BIT( 0x0002, IP_ACTIVE_LOW, IPT_JOYSTICK_LEFT  | IPF_8WAY | IPF_PLAYER1 )
 	PORT_BIT( 0x0004, IP_ACTIVE_LOW, IPT_JOYSTICK_DOWN  | IPF_8WAY | IPF_PLAYER1 )
 	PORT_BIT( 0x0008, IP_ACTIVE_LOW, IPT_JOYSTICK_UP    | IPF_8WAY | IPF_PLAYER1 )
-	PORT_BIT( 0x0010, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER1 )
-	PORT_BIT( 0x0020, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER1 )
+	// PORT_BIT( 0x0010, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER1 )
+	// PORT_BIT( 0x0020, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER1 )
+	PORT_BIT_NAME( 0x0010, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER1,"P1 공격" )
+	PORT_BIT_NAME( 0x0020, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER1,"P1 점프" )
+	PORT_BIT_NAME( 0x0030, IP_ACTIVE_LOW, IPT_BUTTON3 | IPF_PLAYER1,"P1 메가크래쉬" )	
 	PORT_BIT( 0x0040, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x0080, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x0100, IP_ACTIVE_LOW, IPT_JOYSTICK_RIGHT | IPF_8WAY | IPF_PLAYER2 )
 	PORT_BIT( 0x0200, IP_ACTIVE_LOW, IPT_JOYSTICK_LEFT  | IPF_8WAY | IPF_PLAYER2 )
 	PORT_BIT( 0x0400, IP_ACTIVE_LOW, IPT_JOYSTICK_DOWN  | IPF_8WAY | IPF_PLAYER2 )
 	PORT_BIT( 0x0800, IP_ACTIVE_LOW, IPT_JOYSTICK_UP    | IPF_8WAY | IPF_PLAYER2 )
-	PORT_BIT( 0x1000, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER2 )
-	PORT_BIT( 0x2000, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER2 )
+	// PORT_BIT( 0x1000, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER2 )
+	// PORT_BIT( 0x2000, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER2 )
+	PORT_BIT_NAME( 0x1000, IP_ACTIVE_LOW, IPT_BUTTON1 | IPF_PLAYER2,"P2 공격" )
+	PORT_BIT_NAME( 0x2000, IP_ACTIVE_LOW, IPT_BUTTON2 | IPF_PLAYER2,"P2 점프" )
+	PORT_BIT_NAME( 0x3000, IP_ACTIVE_LOW, IPT_BUTTON3 | IPF_PLAYER2,"P2 메가크래쉬" )		
 	PORT_BIT( 0x4000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x8000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 INPUT_PORTS_END
@@ -4235,14 +4024,16 @@ MACHINE_DRIVER_END
 
 /* For Final Fight.*/
 static MACHINE_DRIVER_START( ffight_hack )
-	ff_playing_final_fight = true;
 	
 	/* basic machine hardware */
 	MDRV_IMPORT_FROM(cps1)
 
 	/* Lets add our Final Fight music sample packs.*/
 	MDRV_SOUND_ATTRIBUTES(SOUND_SUPPORTS_STEREO)
-	MDRV_SOUND_ADD_TAG("OST Samples", SAMPLES, ff_samples)
+	MDRV_SOUND_ADD_TAG("OST Samples", SAMPLES, ost_ffight)
+	ff_playing_final_fight = true;
+	ff_alternate_song_1 = false;
+	ff_alternate_song_2 = false;
 MACHINE_DRIVER_END
 
 
@@ -4261,6 +4052,13 @@ static MACHINE_DRIVER_START( sf2 )
 	/* basic machine hardware */
 	MDRV_IMPORT_FROM(cps1)
 	MDRV_CPU_REPLACE("main", M68000, 12000000)
+
+	/* Lets add our Street Fighter 2 music sample packs.*/
+	MDRV_SOUND_ATTRIBUTES(SOUND_SUPPORTS_STEREO)
+	MDRV_SOUND_ADD_TAG("OST Samples", SAMPLES, ost_sf2)
+	sf2_playing_street_fighter = true;
+	fadingMusic = false;
+
 MACHINE_DRIVER_END
 
 
@@ -8188,20 +7986,20 @@ GAME( 1994, wofch,    0,        qsound,   wofch,    wof,      ROT0,   "Capcom", 
 
 
 //hack
-ROM_START( tk2h10 )
+ROM_START( tk2h10k )
 	ROM_REGION( CODE_SIZE, REGION_CPU1, 0 )      /* 68000 code */
-	ROM_LOAD16_WORD_SWAP( "tk2h10.23", 0x000000, 0x80000, CRC(6dba1d2f) SHA1(310e9472d4da8ed4bdccdcd52004030b8799693c) )
-	ROM_LOAD16_WORD_SWAP( "tk2h10.22", 0x080000, 0x80000, CRC(7630fd8a) SHA1(02c2164f191c2efb647b517ee2e8f46d870f9c93) )
+	ROM_LOAD16_WORD_SWAP( "tk2h10.23k", 0x000000, 0x80000, CRC(8E3D7F12) )
+	ROM_LOAD16_WORD_SWAP( "tk2h10.22k", 0x080000, 0x80000, CRC(D2A739A5) )
 
 	ROM_REGION( 0x400000, REGION_GFX1, 0 )
 	ROMX_LOAD( "tk2_gfx1.rom",   0x000000, 0x80000, CRC(0d9cb9bf) SHA1(cc7140e9a01a14b252cb1090bcea32b0de461928) , ROM_GROUPWORD | ROM_SKIP(6) )
 	ROMX_LOAD( "tk2_gfx3.rom",   0x000002, 0x80000, CRC(45227027) SHA1(b21afc593f0d4d8909dfa621d659cbb40507d1b2) , ROM_GROUPWORD | ROM_SKIP(6) )
 	ROMX_LOAD( "tk2_gfx2.rom",   0x000004, 0x80000, CRC(c5ca2460) SHA1(cbe14867f7b94b638ca80db7c8e0c60881183469) , ROM_GROUPWORD | ROM_SKIP(6) )
 	ROMX_LOAD( "tk2_gfx4.rom",   0x000006, 0x80000, CRC(e349551c) SHA1(1d977bdf256accf750ad9930ec4a0a19bbf86964) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2_05.7a",  	 0x200000, 0x80000, CRC(e4a44d53) SHA1(b747679f4d63e5e62d9fd81b3120fba0401fadfb) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2_06.8a",  	 0x200002, 0x80000, CRC(58066ba8) SHA1(c93af968e21094d020e4b2002e0c6fc0d746af0b) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2=ch=_07.9a",  0x200004, 0x80000, CRC(cc9006c9) SHA1(cfcbec3a67052268a7739538aa28a6391fe5400e) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2_08.10a", 	 0x200006, 0x80000, CRC(d4a19a02) SHA1(ff396b1d33d9b4842140f2c6d085fe05748e3244) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_05.7ak",  	 0x200000, 0x80000, CRC(188BE08A) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_06.8ak",  	 0x200002, 0x80000, CRC(3A02B86B) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2=ch=_07.9ak",  0x200004, 0x80000, CRC(3946A9BA), ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_08.10ak", 	 0x200006, 0x80000, CRC(AA00FE36) , ROM_GROUPWORD | ROM_SKIP(6) )
 
 	ROM_REGION( 0x8000, REGION_GFX2, 0 )
 	ROM_COPY( REGION_GFX1, 0x000000, 0x000000, 0x8000 )	/* stars */
@@ -8217,20 +8015,20 @@ ROM_START( tk2h10 )
 	ROM_LOAD( "tk2_q4.rom",     0x180000, 0x80000, CRC(36642e88) SHA1(8ab25b19e2b67215a5cb1f3aa81b9d26009cfeb8) )
 ROM_END
 
-ROM_START( tk2h142 )
+ROM_START( tk2h10dk )
 	ROM_REGION( CODE_SIZE, REGION_CPU1, 0 )      /* 68000 code */
-	ROM_LOAD16_WORD_SWAP( "tk2h142.23",  0x000000, 0x80000, CRC(5bf83942) SHA1(3fb4a7dcd3bc89677d8cb910e279eb1bbd7d4bf0) )
-	ROM_LOAD16_WORD_SWAP( "tk2h142.7f",  0x080000, 0x80000, CRC(96fc801e) SHA1(f24e7a05f2fe43ff9aa38407a4f32d3b70a858d6) )
+	ROM_LOAD16_WORD_SWAP( "tk2h10.23dk", 0x000000, 0x80000, CRC(72C5EC78) )
+	ROM_LOAD16_WORD_SWAP( "tk2h10.22k", 0x080000, 0x80000, CRC(D2A739A5) )
 
 	ROM_REGION( 0x400000, REGION_GFX1, 0 )
 	ROMX_LOAD( "tk2_gfx1.rom",   0x000000, 0x80000, CRC(0d9cb9bf) SHA1(cc7140e9a01a14b252cb1090bcea32b0de461928) , ROM_GROUPWORD | ROM_SKIP(6) )
 	ROMX_LOAD( "tk2_gfx3.rom",   0x000002, 0x80000, CRC(45227027) SHA1(b21afc593f0d4d8909dfa621d659cbb40507d1b2) , ROM_GROUPWORD | ROM_SKIP(6) )
 	ROMX_LOAD( "tk2_gfx2.rom",   0x000004, 0x80000, CRC(c5ca2460) SHA1(cbe14867f7b94b638ca80db7c8e0c60881183469) , ROM_GROUPWORD | ROM_SKIP(6) )
 	ROMX_LOAD( "tk2_gfx4.rom",   0x000006, 0x80000, CRC(e349551c) SHA1(1d977bdf256accf750ad9930ec4a0a19bbf86964) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2jtkh124.7a",  0x200000, 0x80000, CRC(2d9c0bd4) SHA1(cd9046774203556274b4e1f59b54acd45a38f6fc) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2jtkh124.8a",  0x200002, 0x80000, CRC(45c3a4a1) SHA1(92563f7207bea29dccc68dabf950366c5abfb84b) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2jtkh124.9a",  0x200004, 0x80000, CRC(b905dc00) SHA1(b79add016f943f14dbf486bb7b34e06dbba6e4bf) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2jtkh124.10a", 0x200006, 0x80000, CRC(6af56439) SHA1(65dc1048929c499bd6c3b7fbcec35a8ff0896cf7) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_05.7ak",  	 0x200000, 0x80000, CRC(188BE08A) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_06.8ak",  	 0x200002, 0x80000, CRC(3A02B86B) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2=ch=_07.9ak",  0x200004, 0x80000, CRC(3946A9BA), ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_08.10ak", 	 0x200006, 0x80000, CRC(AA00FE36) , ROM_GROUPWORD | ROM_SKIP(6) )
 
 	ROM_REGION( 0x8000, REGION_GFX2, 0 )
 	ROM_COPY( REGION_GFX1, 0x000000, 0x000000, 0x8000 )	/* stars */
@@ -8246,20 +8044,20 @@ ROM_START( tk2h142 )
 	ROM_LOAD( "tk2_q4.rom",     0x180000, 0x80000, CRC(36642e88) SHA1(8ab25b19e2b67215a5cb1f3aa81b9d26009cfeb8) )
 ROM_END
 
-ROM_START( tk2c21 )
+ROM_START( tk2h142k )
 	ROM_REGION( CODE_SIZE, REGION_CPU1, 0 )      /* 68000 code */
-	ROM_LOAD16_WORD_SWAP( "tk2c21.23",     0x000000, 0x80000, CRC(288ab565) SHA1(834e2d5cef1d0ae486e201bedf6281540c5ded13) )
-	ROM_LOAD16_WORD_SWAP( "tk2j_22c.7f",  0x080000, 0x80000, CRC(b74b09ac) SHA1(3a44d6db5f51e1b5d2b43ef0ad1191da21e48427) )
+	ROM_LOAD16_WORD_SWAP( "tk2h142.23k",  0x000000, 0x80000, CRC(A59B7C8E) )
+	ROM_LOAD16_WORD_SWAP( "tk2h142.22k",  0x080000, 0x80000, CRC(707BEBBC) )
 
 	ROM_REGION( 0x400000, REGION_GFX1, 0 )
 	ROMX_LOAD( "tk2_gfx1.rom",   0x000000, 0x80000, CRC(0d9cb9bf) SHA1(cc7140e9a01a14b252cb1090bcea32b0de461928) , ROM_GROUPWORD | ROM_SKIP(6) )
 	ROMX_LOAD( "tk2_gfx3.rom",   0x000002, 0x80000, CRC(45227027) SHA1(b21afc593f0d4d8909dfa621d659cbb40507d1b2) , ROM_GROUPWORD | ROM_SKIP(6) )
 	ROMX_LOAD( "tk2_gfx2.rom",   0x000004, 0x80000, CRC(c5ca2460) SHA1(cbe14867f7b94b638ca80db7c8e0c60881183469) , ROM_GROUPWORD | ROM_SKIP(6) )
 	ROMX_LOAD( "tk2_gfx4.rom",   0x000006, 0x80000, CRC(e349551c) SHA1(1d977bdf256accf750ad9930ec4a0a19bbf86964) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2_05.7a",    0x200000, 0x80000, CRC(e4a44d53) SHA1(b747679f4d63e5e62d9fd81b3120fba0401fadfb) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2_06.8a",    0x200002, 0x80000, CRC(58066ba8) SHA1(c93af968e21094d020e4b2002e0c6fc0d746af0b) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2_07.9a",    0x200004, 0x80000, CRC(d706568e) SHA1(7886414dc86c42e35d24b85c4bfa41a9f0c167ac) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2_08.10a",   0x200006, 0x80000, CRC(d4a19a02) SHA1(ff396b1d33d9b4842140f2c6d085fe05748e3244) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2jtkh124.7ak",  0x200000, 0x80000, CRC(D1B3A60D) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2jtkh124.8ak",  0x200002, 0x80000, CRC(27C77762) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2jtkh124.9ak",  0x200004, 0x80000, CRC(4CD37373) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2jtkh124.10ak", 0x200006, 0x80000, CRC(1454000D) , ROM_GROUPWORD | ROM_SKIP(6) )
 
 	ROM_REGION( 0x8000, REGION_GFX2, 0 )
 	ROM_COPY( REGION_GFX1, 0x000000, 0x000000, 0x8000 )	/* stars */
@@ -8275,20 +8073,20 @@ ROM_START( tk2c21 )
 	ROM_LOAD( "tk2_q4.rom",     0x180000, 0x80000, CRC(36642e88) SHA1(8ab25b19e2b67215a5cb1f3aa81b9d26009cfeb8) )
 ROM_END
 
-ROM_START( tk2h65 )
+ROM_START( tk2c21k )
 	ROM_REGION( CODE_SIZE, REGION_CPU1, 0 )      /* 68000 code */
-	ROM_LOAD16_WORD_SWAP( "tk2jtkh47.8f", 0x000000, 0x80000, CRC(8c22cba7) SHA1(a78a30a1a0b4527e0af22f7503f9cb0e73747757) )
-	ROM_LOAD16_WORD_SWAP( "tk2j_22c.7f", 0x080000, 0x80000, CRC(b74b09ac) SHA1(3a44d6db5f51e1b5d2b43ef0ad1191da21e48427) )
+	ROM_LOAD16_WORD_SWAP( "tk2c21.23k",    0x000000, 0x80000, CRC(CB0DD758) )
+	ROM_LOAD16_WORD_SWAP( "tk2j_22c.7fk",  0x080000, 0x80000, CRC(13DCCD83) )
 
 	ROM_REGION( 0x400000, REGION_GFX1, 0 )
 	ROMX_LOAD( "tk2_gfx1.rom",   0x000000, 0x80000, CRC(0d9cb9bf) SHA1(cc7140e9a01a14b252cb1090bcea32b0de461928) , ROM_GROUPWORD | ROM_SKIP(6) )
 	ROMX_LOAD( "tk2_gfx3.rom",   0x000002, 0x80000, CRC(45227027) SHA1(b21afc593f0d4d8909dfa621d659cbb40507d1b2) , ROM_GROUPWORD | ROM_SKIP(6) )
 	ROMX_LOAD( "tk2_gfx2.rom",   0x000004, 0x80000, CRC(c5ca2460) SHA1(cbe14867f7b94b638ca80db7c8e0c60881183469) , ROM_GROUPWORD | ROM_SKIP(6) )
 	ROMX_LOAD( "tk2_gfx4.rom",   0x000006, 0x80000, CRC(e349551c) SHA1(1d977bdf256accf750ad9930ec4a0a19bbf86964) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2_05.7a",      0x200000, 0x80000, CRC(e4a44d53) SHA1(b747679f4d63e5e62d9fd81b3120fba0401fadfb) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2_06.8a",      0x200002, 0x80000, CRC(58066ba8) SHA1(c93af968e21094d020e4b2002e0c6fc0d746af0b) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2_07.9a",      0x200004, 0x80000, CRC(d706568e) SHA1(7886414dc86c42e35d24b85c4bfa41a9f0c167ac) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2_08.10a",     0x200006, 0x80000, CRC(d4a19a02) SHA1(ff396b1d33d9b4842140f2c6d085fe05748e3244) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_05.7ak",    0x200000, 0x80000, CRC(188BE08A) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_06.8ak",    0x200002, 0x80000, CRC(3A02B86B) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_07.9ak",    0x200004, 0x80000, CRC(22D0F9FD) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_08.10ak",   0x200006, 0x80000, CRC(AA00FE36) , ROM_GROUPWORD | ROM_SKIP(6) )
 
 	ROM_REGION( 0x8000, REGION_GFX2, 0 )
 	ROM_COPY( REGION_GFX1, 0x000000, 0x000000, 0x8000 )	/* stars */
@@ -8304,20 +8102,20 @@ ROM_START( tk2h65 )
 	ROM_LOAD( "tk2_q4.rom",     0x180000, 0x80000, CRC(36642e88) SHA1(8ab25b19e2b67215a5cb1f3aa81b9d26009cfeb8) )
 ROM_END
 
-ROM_START( tk2h71 )
+ROM_START( tk2h65k )
 	ROM_REGION( CODE_SIZE, REGION_CPU1, 0 )      /* 68000 code */
-	ROM_LOAD16_WORD_SWAP( "tk2jtkh53.8f", 0x000000, 0x80000, CRC(826accb5) SHA1(038bafa42421e8ba294d640827a62062b01bd263) )
-	ROM_LOAD16_WORD_SWAP( "tk2jtkh53.7f", 0x080000, 0x80000, CRC(70ab92cb) SHA1(b334a20ee227178b86bbed8857907ba6db32ce73) )
+	ROM_LOAD16_WORD_SWAP( "tk2jtkh47.8fk", 0x000000, 0x80000, CRC(13DCCD83) )
+	ROM_LOAD16_WORD_SWAP( "tk2j_22c.7fk", 0x080000, 0x80000, CRC(6FA5A99A) )
 
 	ROM_REGION( 0x400000, REGION_GFX1, 0 )
 	ROMX_LOAD( "tk2_gfx1.rom",   0x000000, 0x80000, CRC(0d9cb9bf) SHA1(cc7140e9a01a14b252cb1090bcea32b0de461928) , ROM_GROUPWORD | ROM_SKIP(6) )
 	ROMX_LOAD( "tk2_gfx3.rom",   0x000002, 0x80000, CRC(45227027) SHA1(b21afc593f0d4d8909dfa621d659cbb40507d1b2) , ROM_GROUPWORD | ROM_SKIP(6) )
 	ROMX_LOAD( "tk2_gfx2.rom",   0x000004, 0x80000, CRC(c5ca2460) SHA1(cbe14867f7b94b638ca80db7c8e0c60881183469) , ROM_GROUPWORD | ROM_SKIP(6) )
 	ROMX_LOAD( "tk2_gfx4.rom",   0x000006, 0x80000, CRC(e349551c) SHA1(1d977bdf256accf750ad9930ec4a0a19bbf86964) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2_05.7a",      0x200000, 0x80000, CRC(e4a44d53) SHA1(b747679f4d63e5e62d9fd81b3120fba0401fadfb) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2_06.8a",      0x200002, 0x80000, CRC(58066ba8) SHA1(c93af968e21094d020e4b2002e0c6fc0d746af0b) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2_07.9a",      0x200004, 0x80000, CRC(d706568e) SHA1(7886414dc86c42e35d24b85c4bfa41a9f0c167ac) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2_08.10a",     0x200006, 0x80000, CRC(d4a19a02) SHA1(ff396b1d33d9b4842140f2c6d085fe05748e3244) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_05.7ak",    0x200000, 0x80000, CRC(188BE08A) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_06.8ak",    0x200002, 0x80000, CRC(3A02B86B) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_07.9ak",    0x200004, 0x80000, CRC(22D0F9FD) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_08.10ak",   0x200006, 0x80000, CRC(AA00FE36) , ROM_GROUPWORD | ROM_SKIP(6) )
 
 	ROM_REGION( 0x8000, REGION_GFX2, 0 )
 	ROM_COPY( REGION_GFX1, 0x000000, 0x000000, 0x8000 )	/* stars */
@@ -8333,20 +8131,49 @@ ROM_START( tk2h71 )
 	ROM_LOAD( "tk2_q4.rom",     0x180000, 0x80000, CRC(36642e88) SHA1(8ab25b19e2b67215a5cb1f3aa81b9d26009cfeb8) )
 ROM_END
 
-ROM_START( tk2hek06 )
+ROM_START( tk2h71k )
 	ROM_REGION( CODE_SIZE, REGION_CPU1, 0 )      /* 68000 code */
-	ROM_LOAD16_WORD_SWAP( "tk2hj_ek06.8f", 0x000000, 0x80000, CRC(229f5354) )
-	ROM_LOAD16_WORD_SWAP( "tk2hj_ek01.7f", 0x080000, 0x80000, CRC(d65c20de) )
+	ROM_LOAD16_WORD_SWAP( "tk2jtkh53.8fk", 0x000000, 0x80000, CRC(61EDAE88) )
+	ROM_LOAD16_WORD_SWAP( "tk2jtkh53.7fk", 0x080000, 0x80000, CRC(D43C56E4) )
 
 	ROM_REGION( 0x400000, REGION_GFX1, 0 )
 	ROMX_LOAD( "tk2_gfx1.rom",   0x000000, 0x80000, CRC(0d9cb9bf) SHA1(cc7140e9a01a14b252cb1090bcea32b0de461928) , ROM_GROUPWORD | ROM_SKIP(6) )
 	ROMX_LOAD( "tk2_gfx3.rom",   0x000002, 0x80000, CRC(45227027) SHA1(b21afc593f0d4d8909dfa621d659cbb40507d1b2) , ROM_GROUPWORD | ROM_SKIP(6) )
 	ROMX_LOAD( "tk2_gfx2.rom",   0x000004, 0x80000, CRC(c5ca2460) SHA1(cbe14867f7b94b638ca80db7c8e0c60881183469) , ROM_GROUPWORD | ROM_SKIP(6) )
 	ROMX_LOAD( "tk2_gfx4.rom",   0x000006, 0x80000, CRC(e349551c) SHA1(1d977bdf256accf750ad9930ec4a0a19bbf86964) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2_05.7a",      0x200000, 0x80000, CRC(e4a44d53) SHA1(b747679f4d63e5e62d9fd81b3120fba0401fadfb) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2_06.8a",      0x200002, 0x80000, CRC(58066ba8) SHA1(c93af968e21094d020e4b2002e0c6fc0d746af0b) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2_07.9a",      0x200004, 0x80000, CRC(d706568e) SHA1(7886414dc86c42e35d24b85c4bfa41a9f0c167ac) , ROM_GROUPWORD | ROM_SKIP(6) )
-	ROMX_LOAD( "tk2_08.10a",     0x200006, 0x80000, CRC(d4a19a02) SHA1(ff396b1d33d9b4842140f2c6d085fe05748e3244) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_05.7ak",    0x200000, 0x80000, CRC(188BE08A) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_06.8ak",    0x200002, 0x80000, CRC(3A02B86B) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_07.9ak",    0x200004, 0x80000, CRC(22D0F9FD) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_08.10ak",   0x200006, 0x80000, CRC(AA00FE36) , ROM_GROUPWORD | ROM_SKIP(6) )
+
+	ROM_REGION( 0x8000, REGION_GFX2, 0 )
+	ROM_COPY( REGION_GFX1, 0x000000, 0x000000, 0x8000 )	/* stars */
+
+	ROM_REGION( 2*0x28000, REGION_CPU2, 0 ) /* QSound Z80 code + space for decrypted opcodes */
+	ROM_LOAD( "tk2_qa.rom",     0x00000, 0x08000, CRC(c9183a0d) SHA1(d8b1d41c572f08581f8ab9eb878de77d6ea8615d) )
+	ROM_CONTINUE(               0x10000, 0x18000 )
+
+	ROM_REGION( 0x200000, REGION_SOUND1, 0 ) /* QSound samples */
+	ROM_LOAD( "tk2_q1.rom",     0x000000, 0x80000, CRC(611268cf) SHA1(83ab059f2110fb25fdcff928d56b790fc1f5c975) )
+	ROM_LOAD( "tk2_q2.rom",     0x080000, 0x80000, CRC(20f55ca9) SHA1(90134e9a9c4749bb65c728b66ea4dac1fd4d88a4) )
+	ROM_LOAD( "tk2_q3.rom",     0x100000, 0x80000, CRC(bfcf6f52) SHA1(2a85ff3fc89b4cbabd20779ec12da2e116333c7c) )
+	ROM_LOAD( "tk2_q4.rom",     0x180000, 0x80000, CRC(36642e88) SHA1(8ab25b19e2b67215a5cb1f3aa81b9d26009cfeb8) )
+ROM_END
+
+ROM_START( tk2hek06k )
+	ROM_REGION( CODE_SIZE, REGION_CPU1, 0 )      /* 68000 code */
+	ROM_LOAD16_WORD_SWAP( "tk2hj_ek06.8fk", 0x000000, 0x80000, CRC(C1183169) )
+	ROM_LOAD16_WORD_SWAP( "tk2hj_ek01.7fk", 0x080000, 0x80000, CRC(72CBE4F1) )
+
+	ROM_REGION( 0x400000, REGION_GFX1, 0 )
+	ROMX_LOAD( "tk2_gfx1.rom",   0x000000, 0x80000, CRC(0d9cb9bf) SHA1(cc7140e9a01a14b252cb1090bcea32b0de461928) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_gfx3.rom",   0x000002, 0x80000, CRC(45227027) SHA1(b21afc593f0d4d8909dfa621d659cbb40507d1b2) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_gfx2.rom",   0x000004, 0x80000, CRC(c5ca2460) SHA1(cbe14867f7b94b638ca80db7c8e0c60881183469) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_gfx4.rom",   0x000006, 0x80000, CRC(e349551c) SHA1(1d977bdf256accf750ad9930ec4a0a19bbf86964) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_05.7ak",    0x200000, 0x80000, CRC(188BE08A) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_06.8ak",    0x200002, 0x80000, CRC(3A02B86B) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_07.9ak",    0x200004, 0x80000, CRC(22D0F9FD) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "tk2_08.10ak",   0x200006, 0x80000, CRC(AA00FE36) , ROM_GROUPWORD | ROM_SKIP(6) )
 
 	ROM_REGION( 0x8000, REGION_GFX2, 0 )
 	ROM_COPY( REGION_GFX1, 0x000000, 0x000000, 0x8000 )	/* stars */
@@ -8666,6 +8493,35 @@ ROM_START( captcomjk )
 	ROM_LOAD( "cc_19.rom",    0x20000, 0x20000, CRC(b99091ae) SHA1(b19197c7ad3aeaf5f41c26bf853b0c9b502ecfca) )
 ROM_END
 
+ROM_START( captcomek1k )
+	ROM_REGION( CODE_SIZE, REGION_CPU1, 0 )      /* 68000 code */
+	ROM_LOAD16_WORD_SWAP( "cce_23f_sp.8f", 0x000000, 0x80000, CRC(438cde06) )
+	ROM_LOAD16_WORD_SWAP( "ccj_22fk.7f",   0x080000, 0x80000, CRC(216FE8E9))
+	ROM_LOAD16_BYTE( "cc_24f_spk.9e",       0x100000, 0x20000, CRC(3F5365F0) )
+	ROM_LOAD16_BYTE( "cc_28f_spk.9f",       0x100001, 0x20000, CRC(56949DB8) )
+
+	ROM_REGION( 0x400000, REGION_GFX1, 0 )
+	ROMX_LOAD( "gfx_01.rom",   0x000000, 0x80000, CRC(7261d8ba) SHA1(4b66292e42d20d0b79a756f0e445492ddb9c6bbc) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "gfx_03.rom",   0x000002, 0x80000, CRC(6a60f949) SHA1(87391ff92abaf3e451f70d789a938cffbd1fd222) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "gfx_02.rom",   0x000004, 0x80000, CRC(00637302) SHA1(2c554b59cceec2de67a9a4bc6281fe846d3c8cd2) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "gfx_04.rom",   0x000006, 0x80000, CRC(cc87cf61) SHA1(7fb1f49494cc1a08aded20754bb0cefb1c323198) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "cc_05k.7a",   0x200000, 0x80000, CRC(3C7B514C) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "cc_06k.8a",   0x200002, 0x80000, CRC(DBCF6C0E) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "cc_07k.9a",   0x200004, 0x80000, CRC(18632BF0) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "cc_08k.10a",   0x200006, 0x80000, CRC(10FD12A3) , ROM_GROUPWORD | ROM_SKIP(6) )
+
+	ROM_REGION( 0x8000, REGION_GFX2, 0 )
+	ROM_COPY( REGION_GFX1, 0x000000, 0x000000, 0x8000 )	/* stars */
+
+	ROM_REGION( 0x18000, REGION_CPU2, 0 ) /* 64k for the audio CPU (+banks) */
+	ROM_LOAD( "cc_09.rom",     0x00000, 0x08000, CRC(698e8b58) SHA1(b7a3d905a7ed2c430426ca2e185e3d7e75e752a1) )
+	ROM_CONTINUE(              0x10000, 0x08000 )
+
+	ROM_REGION( 0x40000, REGION_SOUND1, 0 )	/* Samples */
+	ROM_LOAD( "cc_18.rom",    0x00000, 0x20000, CRC(6de2c2db) SHA1(9a1eaba8d104f59a5e61f89679bb5de0c0c64364) )
+	ROM_LOAD( "cc_19.rom",    0x20000, 0x20000, CRC(b99091ae) SHA1(b19197c7ad3aeaf5f41c26bf853b0c9b502ecfca) )
+ROM_END
+
 ROM_START( kodjk )
 	ROM_REGION( CODE_SIZE, REGION_CPU1, 0 )      /* 68000 code */
 	ROM_LOAD16_BYTE( "kdj_30a.11e",  0x00000, 0x20000, CRC(DCCCCF4F) )
@@ -8842,29 +8698,70 @@ ROM_START( ffightjk )
 	ROM_LOAD( "ffj_31.bin",  0x20000, 0x20000, CRC(1ef137f9) SHA1(974b5e72aa28b87ebfa7438efbdfeda769dedf5e) )
 ROM_END
 
-GAME( 1992, tk2h10,     wof,     qsound,   wof,      wof,      ROT0,   "hack", "Tenchi wo Kurau II (Sanmei Spiral Counterattack Beta 103)" )					/* World - warning */
-GAME( 1992, tk2h142,    wof,     qsound,   wof,      wof,      ROT0,   "hack", "Tenchi wo Kurau II (Xu Wei Musou Edition 2019-08-14)" )					/* World - warning */
-GAME( 1992, tk2c21,     wof,     qsound,   wof,      wof,      ROT0,   "hack", "Tenchi wo Kurau II (Enhanced Subutai (Chou-Un)'s kick)" )					/* World - warning */
-GAME( 2013, tk2h65,     wof,     qsound,   wof,      wof,      ROT0,   "hack", "Tenchi wo Kurau II (Kassar - Grabbing - Spinning Pile Driver 2013-03-12)" )
-GAME( 1992, tk2h71,     wof,     qsound,   wof,      wof,      ROT0,   "hack", "Tenchi wo Kurau II (Guan Yu - Screw Pile (Cyclone Sit) 2013-08-08)")
-GAME( 1992, tk2hek06,   wof,     qsound,   wof,      wof,      ROT0,   "hack", "Tenchi wo Kurau II (Change Char,Skil Upgrade,Get Weapon(not disapear),Horse Attack Enhanced(sonic boom))" )
+ROM_START( rockmank )
+	ROM_REGION( CODE_SIZE, REGION_CPU1, 0 )      /* 68000 code */
+	ROM_LOAD16_WORD_SWAP( "rcm23a.bin",   0x000000, 0x80000, CRC(CB60D510) )
+	ROM_LOAD16_WORD_SWAP( "rcm22a.bin",   0x080000, 0x80000, CRC(EE2B97FF) )
+	ROM_LOAD16_WORD_SWAP( "rcm21a.bin",   0x100000, 0x80000, CRC(517ccde2) SHA1(492256c192f0c4814efa1ee1dd390453dd2e5865) )
+
+	ROM_REGION( 0x800000, REGION_GFX1, 0 )
+	ROMX_LOAD( "rcm_01k.rom",    0x000000, 0x80000, CRC(4C736693)  , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "rcm_02k.rom",    0x000002, 0x80000, CRC(AB0EF46B)  , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "rcm_03k.rom",    0x000004, 0x80000, CRC(144D9090)  , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "rcm_04k.rom",    0x000006, 0x80000, CRC(6BA5999B)  , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "rcm_05.rom",    0x200000, 0x80000, CRC(5dd131fd) SHA1(1a7fc8cf38901245d40901996e946e7ad9c0e0c5) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "rcm_06.rom",    0x200002, 0x80000, CRC(f0faf813) SHA1(adff01c2ecc4c8ce6f8a50cbd07d8f8bb9f48168) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "rcm_07.rom",    0x200004, 0x80000, CRC(826de013) SHA1(47f36b1d92a487c43c8dadc8293b8e6f40649286) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "rcm_08.rom",    0x200006, 0x80000, CRC(fbff64cf) SHA1(f0cb531ef195dc1dcd224a208906a62fb5d199a1) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "rcm_10k.rom",    0x400000, 0x80000, CRC(C4B5A6FC)  , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "rcm_11k.rom",    0x400002, 0x80000, CRC(D837CD36)  , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "rcm_12k.rom",    0x400004, 0x80000, CRC(263804B5)  , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "rcm_13k.rom",    0x400006, 0x80000, CRC(DAD13D11)  , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "rcm_14.rom",    0x600000, 0x80000, CRC(303be3bd) SHA1(1e5c3fd71966ea9f457840c40582795b501c323e) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "rcm_15.rom",    0x600002, 0x80000, CRC(4f2d372f) SHA1(db6a94d1f92c1b96e404b38ebcb1eedbec3ae6cc) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "rcm_16.rom",    0x600004, 0x80000, CRC(93d97fde) SHA1(e4be5216f98ad08a9118d629d398be2bd54e2e2a) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "rcm_17.rom",    0x600006, 0x80000, CRC(92371042) SHA1(c55833cbaddcc986edd23c009a3e3c7ff09c2708) , ROM_GROUPWORD | ROM_SKIP(6) )
+
+	ROM_REGION( 0x8000, REGION_GFX2, 0 )
+	ROM_COPY( REGION_GFX1, 0x000000, 0x000000, 0x8000 )	/* stars */
+
+	ROM_REGION( 0x28000, REGION_CPU2, 0 ) /* 64k for the audio CPU (+banks) */
+	ROM_LOAD( "rcm_09.rom",    0x00000, 0x08000, CRC(9632d6ef) SHA1(2bcb6f17005ffbc9ef8fa4478a814f24b2e6e0b6) )
+	ROM_CONTINUE(              0x10000, 0x18000 )
+
+	ROM_REGION( 0x40000, REGION_SOUND1, 0 )	/* Samples */
+	ROM_LOAD( "rcm_18.rom",    0x00000, 0x20000, CRC(80f1f8aa) SHA1(4a5b7b2a6941ad68da7472c63362c7bcd353fa54) )
+	ROM_LOAD( "rcm_19.rom",    0x20000, 0x20000, CRC(f257dbe1) SHA1(967def6b6f93039dbc46373caabeb3301577be75) )
+ROM_END
+
+GAME( 1992, tk2h10k,    wofk,     qsound,   wof,      wof,      ROT0,   "Korean", "Tenchi wo Kurau II (Sanmei Spiral Counterattack Beta 103 Korean)" )					/* World - warning */
+GAME( 1992, tk2h142k,   wofk,     qsound,   wof,      wof,      ROT0,   "Korean", "Tenchi wo Kurau II (Xu Wei Musou Edition 2019-08-14 Korean)" )					/* World - warning */
+GAME( 1992, tk2c21k,    wofk,     qsound,   wof,      wof,      ROT0,   "Korean", "Tenchi wo Kurau II (Enhanced Subutai (Chou-Un)'s kick Korean)" )					/* World - warning */
+GAME( 2013, tk2h65k,    wofk,     qsound,   wof,      wof,      ROT0,   "Korean", "Tenchi wo Kurau II (Kassar - Grabbing - Spinning Pile Driver 2013-03-12 Korean)" )
+GAME( 1992, tk2h71k,    wofk,     qsound,   wof,      wof,      ROT0,   "Korean", "Tenchi wo Kurau II (Guan Yu - Screw Pile (Cyclone Sit) 2013-08-08 Korean)")
+GAME( 1992, tk2hek06k,  wofk,     qsound,   wof,      wof,      ROT0,   "Korean", "Tenchi wo Kurau II (Change Char,Skil Upgrade,Get Weapon(not disapear),Horse Attack Enhanced(sonic boom)) Korean" )
+GAME( 1992, tk2h10dk,   wofk,     qsound,   wof,      wof,      ROT0,   "Korean", "Tenchi wo Kurau II (Sanmei Spiral Counterattack enhanced Korean)" )					/* World - warning */
+
 //dino
 GAME( 2019, dinos209,   dino,    qsound,   dino,     dino,     ROT0,   "hack", "Cadillacs and Dinosaurs (V5 Enhanced Version 2019-09-16)" )
 GAME( 2014, dinoslice,  dino,    qsound,   dino,     dino,     ROT0,   "hack", "Cadillacs and Dinosaurs (Boss Improved Version 2014-10-04)" )
 GAME( 2017, dinos145,   dino,    qsound,   dino,     dino,     ROT0,   "hack", "Cadillacs and Dinosaurs (Unparalleled Strike 2017 2017-04-17)" )
 //captcomm
-GAME( 2018, captcommek1,captcomm,  cps1,   captcomm, cps1,     ROT0,   "Kaze", "Captain Commando (Coin Button to Weapon, Start Button Chariot, Easy mode)" )
+GAME( 2018, captcommek1,captcomjk,  cps1,   captcomm, cps1,     ROT0,   "Kaze", "Captain Commando (Coin Button to Weapon, Start Button Chariot, Easy mode)" )
+GAME( 2018, captcomek1k,captcomjk,  cps1,   captcomm, cps1,     ROT0,   "Kaze", "Captain Commando (Coin Button to Weapon, Start Button Chariot, Easy mode)" )
+
 // ffight
 GAME( 1990, ffightb,     ffight,   cps1,   ffight,   cps1,     ROT0,   "Whirlwind (Piracy)", "Final Fight (Quick whirlwind)" )
 // korean patch
-GAME( 1994, wofchk,    wofch,  	 qsound,   		  wofch,    wof,      ROT0,   "Capcom", "Tenchi wo Kurau II: Sekiheki no Tatakai (Korean Patch, Ura-mode)" )
-GAME( 1991, knightsk,  knights,  cps1,     		  knights,  cps1,     ROT0,   "Capcom", "Knights of the Round (Korean Patch)" )
-GAME( 1992, wofk,      wof,  	 qsound,   		  wof,      wof,      ROT0,   "Capcom", "Tenchi wo Kurau II - Sekiheki no Tatakai (Korean Patch)" )
-GAME( 1989, area88rk,  area88,   cps1,     		  unsquad,  cps1,     ROT0,   "Capcom", "Area 88 (Japan B-board Korean Patch A)" )
-GAME( 1989, area88rka, area88,   cps1,     		  unsquad,  cps1,     ROT0,   "Capcom", "Area 88 (Japan B-board Korean Patch B)" )
-GAME( 1991, captcomjk, captcomm, cps1,     		  captcomm, cps1,     ROT0,   "Capcom", "Captain Commando (Japan 911202 Korean Patch)" )
-GAME( 1991, kodjk,     kod,  	 cps1,     		  kodj,     cps1,     ROT0,   "Capcom", "The King of Dragons (Japan 910805 Korean Patch)" )
-GAME( 1988, daimakaik, ghouls,   cps1,     		  daimakai, cps1,     ROT0,   "Capcom", "Dai Makai-Mura (Korean Patch)" )						/* Wed.26.10.1988 in the ROMS*/
-GAME( 1989, striderjrk,strider,  cps1,     		  strider,  cps1,     ROT0,   "Capcom", "Strider Hiryu (Korean Patch)" )
-GAME( 1989, ffightaek, ffight,   ffight_hack,     ffightae, cps1,     ROT0,   "bootleg", "Final Fight 30th Anniversary Edition (Korean Patch)" )
-GAME( 1989, ffightjk,  ffight,   ffight_hack,     ffight,   cps1,     ROT0,   "Capcom", "Final Fight (Japan set 1 - Korean Patch)" )
+GAME( 1992, wofk,      0,  	 	qsound,   		  wof,      wof,      ROT0,   "Korean", "Tenchi wo Kurau II - Sekiheki no Tatakai (Korean Patch)" )
+GAME( 1994, wofchk,    0,	  	qsound,   		  wofch,    wof,      ROT0,   "Korean", "Tenchi wo Kurau II: Sekiheki no Tatakai (Korean Patch, Ura-mode)" )
+GAME( 1991, knightsk,  0,  		cps1,     		  knights,  cps1,     ROT0,   "Korean", "Knights of the Round (Korean Patch)" )
+GAME( 1989, area88rk,  0,   	cps1,     		  unsquad,  cps1,     ROT0,   "Korean", "Area 88 (Japan B-board Korean Patch A)" )
+GAME( 1989, area88rka, 0,   	cps1,     		  unsquad,  cps1,     ROT0,   "Korean", "Area 88 (Japan B-board Korean Patch B)" )
+GAME( 1991, captcomjk, 0, 		cps1,     		  captcomm, cps1,     ROT0,   "Korean", "Captain Commando (Japan 911202 Korean Patch)" )
+GAME( 1991, kodjk,     0,  	 	cps1,     		  kodj,     cps1,     ROT0,   "Korean", "The King of Dragons (Japan 910805 Korean Patch)" )
+GAME( 1988, daimakaik, 0,  		cps1,     		  daimakai, cps1,     ROT0,   "Korean", "Dai Makai-Mura (Korean Patch)" )						/* Wed.26.10.1988 in the ROMS*/
+GAME( 1989, striderjrk,0,  		cps1,     		  strider,  cps1,     ROT0,   "Korean", "Strider Hiryu (Korean Patch)" )
+GAME( 1989, ffightaek, 0,   	ffight_hack,      ffightae, cps1,     ROT0,   "Korean", "Final Fight 30th Anniversary Edition (Korean Patch)" )
+GAME( 1989, ffightjk,  0,   	ffight_hack,      ffight,   cps1,     ROT0,   "Korean", "Final Fight (Japan set 1 - Korean Patch)" )
+GAME( 1995, rockmank,  megaman, cps1,     		  megaman,  cps1,  	  ROT0,   "Korean", "Rockman - The Power Battle (Korean Patch)" )

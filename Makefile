@@ -174,7 +174,7 @@ else ifeq ($(platform), rpi0)
 	fpic = -fPIC
 	CFLAGS += $(fpic)
 	LDFLAGS += $(fpic) -shared -Wl,--version-script=link.T
-	PLATCFLAGS += -marm -mcpu=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard
+	PLATCFLAGS += -marm -mcpu=arm1176jzf-s -mfpu=vfp -mfloat-abi=hard
 	PLATCFLAGS += -fomit-frame-pointer -ffast-math
 	CXXFLAGS = $(CFLAGS) -fno-rtti -fno-exceptions
 	CPU_ARCH := arm
@@ -186,7 +186,7 @@ else ifeq ($(platform), rpi1)
 	fpic = -fPIC
 	CFLAGS += $(fpic)
 	LDFLAGS += $(fpic) -shared -Wl,--version-script=link.T
-	PLATCFLAGS += -marm -mcpu=cortex-a7 -mfpu=neon-vfpv4 -mfloat-abi=hard
+	PLATCFLAGS += -marm -mcpu=arm1176jzf-s -mfpu=vfp -mfloat-abi=hard
 	PLATCFLAGS += -fomit-frame-pointer -ffast-math
 	CXXFLAGS = $(CFLAGS) -fno-rtti -fno-exceptions
 	CPU_ARCH := arm
@@ -274,8 +274,6 @@ else ifeq ($(platform), classic_armv7_a7)
 	ASFLAGS += $(CFLAGS)
 	HAVE_NEON = 1
 	ARCH = arm
-	BUILTIN_GPU = neon
-	USE_DYNAREC = 1
 	CPU_ARCH := arm
 	ARM = 1
 	ifeq ($(shell echo `$(CC) -dumpversion` "< 4.9" | bc -l), 1)
@@ -287,6 +285,27 @@ else ifeq ($(platform), classic_armv7_a7)
 			LDFLAGS += -static-libgcc -static-libstdc++
 		endif
 	endif
+
+# Amlogic S812
+else ifeq ($(platform), s812)
+	TARGET := $(TARGET_NAME)_libretro.so
+	fpic := -fPIC
+	LDFLAGS += $(fpic) -shared -Wl,--version-script=link.T
+	CFLAGS += -Ofast \
+	-flto=4 -fwhole-program -fuse-linker-plugin \
+	-fdata-sections -ffunction-sections -Wl,--gc-sections \
+	-fno-stack-protector -fno-ident -fomit-frame-pointer \
+	-falign-functions=1 -falign-jumps=1 -falign-loops=1 \
+	-fno-unwind-tables -fno-asynchronous-unwind-tables -fno-unroll-loops \
+	-fmerge-all-constants -fno-math-errno \
+	-marm -mtune=cortex-a9 -mfpu=neon-vfpv3 -mfloat-abi=hard
+	CXXFLAGS += $(CFLAGS)
+	CPPFLAGS += $(CFLAGS)
+	ASFLAGS += $(CFLAGS)
+	HAVE_NEON = 1
+	ARCH = arm
+	CPU_ARCH := arm
+	ARM = 1
 
 # Playstation Classic
 else ifeq ($(platform), classic_armv8_a35)
@@ -306,8 +325,6 @@ else ifeq ($(platform), classic_armv8_a35)
 	ASFLAGS += $(CFLAGS)
 	HAVE_NEON = 1
 	ARCH = arm
-	BUILTIN_GPU = neon
-	USE_DYNAREC = 1
 	CPU_ARCH := arm
 	ARM = 1
 	CFLAGS += -march=armv8-a
@@ -419,34 +436,18 @@ else ifeq ($(platform), ps2)
 	CXXFLAGS += -fno-rtti -fno-exceptions -ffast-math
 	STATIC_LINKING = 1
 
-# PS3
-else ifeq ($(platform), ps3)
-	TARGET = $(TARGET_NAME)_libretro_$(platform).a
-	BIGENDIAN = 1
-	CC = $(CELL_SDK)/host-win32/ppu/bin/ppu-lv2-gcc.exe
-	AR = $(CELL_SDK)/host-win32/ppu/bin/ppu-lv2-ar.exe
-	PLATCFLAGS += -D__CELLOS_LV2__ -D__ppc__ -D__POWERPC__
-	STATIC_LINKING = 1
-	SPLIT_UP_LINK=1
-
-# snc PS3
-else ifeq ($(platform), sncps3)
-	TARGET = $(TARGET_NAME)_libretro_ps3.a
-	BIGENDIAN = 1
-	CC = $(CELL_SDK)/host-win32/sn/bin/ps3ppusnc.exe
-	AR = $(CELL_SDK)/host-win32/sn/bin/ps3snarl.exe
-	PLATCFLAGS += -D__CELLOS_LV2__ -D__ppc__ -D__POWERPC__
-	STATIC_LINKING = 1
-	SPLIT_UP_LINK=1
-
 # Lightweight PS3 Homebrew SDK
-else ifeq ($(platform), psl1ght)
-	TARGET = $(TARGET_NAME)_libretro_$(platform).a
+else ifneq (,$(filter $(platform), ps3 psl1ght))
+	TARGET := $(TARGET_NAME)_libretro_$(platform).a
 	BIGENDIAN = 1
-	CC = $(PS3DEV)/ppu/bin/ppu-gcc$
-	AR = $(PS3DEV)/ppu/bin/ppu-ar$
-	PLATCFLAGS += -D__CELLOS_LV2__ -D__ppc__ -D__POWERPC__
+	CC = $(PS3DEV)/ppu/bin/ppu-$(COMMONLV)gcc$(EXE_EXT)
+	AR = $(PS3DEV)/ppu/bin/ppu-$(COMMONLV)ar$(EXE_EXT)
+	PLATCFLAGS += -D__PS3__ -D__ppc__ -D__POWERPC__
+	ifeq ($(platform), psl1ght)
+		PLATFORM_DEFINES += -D__PSL1GHT__
+	endif
 	STATIC_LINKING = 1
+	SPLIT_UP_LINK=1
 
 # PSP
 else ifeq ($(platform), psp1)
@@ -517,6 +518,18 @@ else ifeq ($(platform), retrofw)
 	LIBS := -lc -lgcc -lm
 	fpic := -fPIC -nostdlib
 	CFLAGS += -lm -march=mips32 -mtune=mips32 -mhard-float
+
+# MIYOO
+else ifeq ($(platform), miyoo)
+	TARGET := $(TARGET_NAME)_libretro.so
+	CC = /opt/miyoo/usr/bin/arm-linux-gcc
+	CXX = /opt/miyoo/usr/bin/arm-linux-g++
+	AR = /opt/miyoo/usr/bin/arm-linux-ar
+	fpic := -fPIC
+	LDFLAGS += -shared -Wl,--version-script=link.T -Wl,-no-undefined
+	PLATCFLAGS := -DNO_UNALIGNED_ACCESS
+	PLATCFLAGS += -fomit-frame-pointer -march=armv5te -mtune=arm926ej-s -ffast-math
+	CXXFLAGS += -fno-rtti -fno-exceptions
 
 # Emscripten
 else ifeq ($(platform), emscripten)
@@ -795,6 +808,9 @@ CFLAGS += -DHAVE_LANGINFO_CODESET
 CFLAGS += -DHAVE_SOCKLEN_T
 CFLAGS += -D_LARGEFILE_SOURCE
 CFLAGS += -D_FILE_OFFSET_BITS=64
+
+# Required for RZIP support in cheat.c
+CFLAGS += -DHAVE_ZLIB
 
 # In theory, the RETRO_PROFILE could be set to different values for different
 # architectures or for special builds to hint to the host system how many

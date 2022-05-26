@@ -6468,8 +6468,8 @@ GAME( 2001, progear,  0,       cps2, sgemf,   cps2, ROT0,   "Cave, distributed b
 GAME( 2001, progearj, progear, cps2, sgemf,   cps2, ROT0,   "Cave, distributed by Capcom", "Progear No Arashi (Japan 010117)" )
 
 //hack
-GAMEC( 1996, ddsomak,   ddsom,   cps2, ddtod,   cps2, ROT0,   "Capcom", "Dungeons and Dragons: Shadow over Mystara (Korean Patch)", &ddsom_ctrl, &ddsomj_bootstrap )
-GAMEC( 1996, ddsomjk,   ddsom,   cps2, ddtod,   cps2, ROT0,   "Capcom", "Dungeons and Dragons: Shadow over Mystara (Korean Patch)", &ddsom_ctrl, &ddsomj_bootstrap )
+GAMEC( 1996, ddsomak,   0,   cps2, ddtod,   cps2, ROT0,   "Capcom", "Dungeons and Dragons: Shadow over Mystara (Euro,Korean Patch)", &ddsom_ctrl, &ddsomj_bootstrap )
+GAMEC( 1996, ddsomjk,   0,   cps2, ddtod,   cps2, ROT0,   "Capcom", "Dungeons and Dragons: Shadow over Mystara (Japan, Korean Patch)", &ddsom_ctrl, &ddsomj_bootstrap )
 
 ROM_START( sfzjk )
 	ROM_REGION( CODE_SIZE, REGION_CPU1, 0 )      /* 68000 code */
@@ -6597,7 +6597,67 @@ ROM_START( sfz2aljk )
 	ROM_LOAD16_WORD_SWAP( "sz2.12",   0x200000, 0x200000, CRC(2237bc53) SHA1(96d5693047e4cf1ed10a8ee1905cea267a278e92) )
 ROM_END
 
+ROM_START( rckman2k )
+	ROM_REGION(CODE_SIZE, REGION_CPU1, 0 )      /* 68000 code */
+	ROM_LOAD16_WORD_SWAP( "rm2k.03", 0x000000, 0x80000, CRC(6BA5E8D2)  )
+	ROM_LOAD16_WORD_SWAP( "rm2k.04", 0x080000, 0x80000, CRC(211105C9)  )
+	ROM_LOAD16_WORD_SWAP( "rm2.05",  0x100000, 0x80000, CRC(02ee9efc) SHA1(1b80c40389b51a03b930051f232630616c12e6c5) )
+
+	ROM_REGION16_BE( CODE_SIZE, REGION_USER1, 0 )
+	ROM_LOAD16_WORD_SWAP( "rm2jx.03", 0x000000, 0x80000, CRC(2c297750) SHA1(bf93b275113aac4fa290aea920772060324db9b3) )
+	ROM_LOAD16_WORD_SWAP( "rm2jx.04", 0x080000, 0x80000, CRC(676a116e) SHA1(c8b6ab70efb22fdd9b7b4b736084a0d3eb123e3c) )
+
+	ROM_REGION( 0x1000000, REGION_GFX1, 0 )
+	ROM_FILL(              0x000000, 0x800000, 0 )
+	ROMX_LOAD( "rm2k.14",   0x800000, 0x200000, CRC(712CCD27) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "rm2k.16",   0x800002, 0x200000, CRC(BA4CC30B) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "rm2k.18",   0x800004, 0x200000, CRC(53CB1A05) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "rm2k.20",   0x800006, 0x200000, CRC(7B019F2C) , ROM_GROUPWORD | ROM_SKIP(6) )
+
+	ROM_REGION(QSOUND_SIZE, REGION_CPU2, 0 ) /* 64k for the audio CPU (+banks) */
+	ROM_LOAD( "rm2.01a",  0x00000, 0x08000, CRC(d18e7859) SHA1(0939fac70042d0b4db5c2fdcef1f79b95febd45e) )
+	ROM_CONTINUE(         0x10000, 0x18000 )
+	ROM_LOAD( "rm2.02",   0x28000, 0x20000, CRC(c463ece0) SHA1(5c3e41eb61610b3f8c431206f6672907e3a0bdb0) )
+
+	ROM_REGION( 0x400000, REGION_SOUND1, 0 ) /* QSound samples */
+	ROM_LOAD16_WORD_SWAP( "rm2.11",   0x000000, 0x200000, CRC(2106174d) SHA1(0a35d9ca8ebcad74904b20648d5320f839d6377e) )
+	ROM_LOAD16_WORD_SWAP( "rm2.12",   0x200000, 0x200000, CRC(546c1636) SHA1(f96b172ab899f2c6ee17a5dd1fb61af9432e3cd2) )
+ROM_END
+
+ROM_START( csclubk )
+	ROM_REGION( CODE_SIZE, REGION_CPU1, 0 )      /* 68000 code */
+	ROM_LOAD16_WORD_SWAP( "csck.03", 0x000000, 0x80000, CRC(B146E8DB) )
+	ROM_LOAD16_WORD_SWAP( "cscj.04", 0x080000, 0x80000, CRC(60c632bb) SHA1(0d42c33aa476d2cc4efcdad78667353b88225966) )
+	ROM_LOAD16_WORD_SWAP( "cscj.05", 0x100000, 0x80000, CRC(ad042003) SHA1(1e167c88f3b0617c38c9f43bdc816045ac0296e0) )
+	ROM_LOAD16_WORD_SWAP( "cscj.06", 0x180000, 0x80000, CRC(169e4d40) SHA1(6540d89df5e76189d32b696be7626087fe26e33b) )
+	ROM_LOAD16_WORD_SWAP( "csc.07",  0x200000, 0x80000, CRC(01b05caa) SHA1(5b84487da68e6b6f2889c76bf9e070e25941988c) )
+
+	ROM_REGION16_BE( CODE_SIZE, REGION_USER1, 0 )
+	ROM_LOAD16_WORD_SWAP( "cscjx.03", 0x000000, 0x80000, CRC(2de1d45d) SHA1(204574607d2dc45e233ed2f88fadc1d5a3790ba6) )
+	ROM_LOAD16_WORD_SWAP( "cscjx.04", 0x080000, 0x80000, CRC(81b25d76) SHA1(e81a5768c053cea10d340c6624e270dd5604c855) )
+	ROM_LOAD16_WORD_SWAP( "cscjx.05", 0x100000, 0x80000, CRC(5adb1c93) SHA1(734aff59e3819ca2250d1fe3e945bd0f0410deef) )
+	ROM_LOAD16_WORD_SWAP( "cscjx.06", 0x180000, 0x80000, CRC(f5558f79) SHA1(0cb75f19db9c83dffb998f6fc6dcf35a58d35dd9) )
+
+	ROM_REGION( 0x1000000, REGION_GFX1, 0 )
+	ROM_FILL(              0x000000, 0x800000, 0 )
+	ROMX_LOAD( "csck.14",   0x800000, 0x200000, CRC(BBC331B6) , ROM_GROUPWORD | ROM_SKIP(6) ) /* roms 73 to 76 joined in all eprom version */
+	ROMX_LOAD( "csck.16",   0x800002, 0x200000, CRC(6B3E7280) , ROM_GROUPWORD | ROM_SKIP(6) ) /* roms 63 to 66 joined in all eprom version */
+	ROMX_LOAD( "csck.18",   0x800004, 0x200000, CRC(DF65F3EE) , ROM_GROUPWORD | ROM_SKIP(6) ) /* roms 83 to 86 joined in all eprom version */
+	ROMX_LOAD( "csck.20",   0x800006, 0x200000, CRC(1CCB5969) , ROM_GROUPWORD | ROM_SKIP(6) ) /* roms 93 to 96 joined in all eprom version */
+
+	ROM_REGION( QSOUND_SIZE, REGION_CPU2, 0 ) /* 64k for the audio CPU (+banks) */
+	ROM_LOAD( "csc.01",   0x00000, 0x08000, CRC(ee162111) SHA1(ce8d4bd32bb10ee8b0274ba6fcef05a583b39d48) )
+	ROM_CONTINUE(         0x10000, 0x18000 )
+
+	ROM_REGION( 0x400000, REGION_SOUND1, 0 ) /* QSound samples */
+	ROM_LOAD16_WORD_SWAP( "csc.11",   0x000000, 0x200000, CRC(a027b827) SHA1(6d58a63efc7bd5d07353d9b55826c01a3c416c33) ) /* roms 51 to 54 joined in all eprom version */
+	ROM_LOAD16_WORD_SWAP( "csc.12",   0x200000, 0x200000, CRC(cb7f6e55) SHA1(b64e6b663fd09e887d2dc0f4b545e88688c0af55) ) /* roms 55 to 58 joined in all eprom version */
+ROM_END
+
+
 GAME( 1995, sfzjk,     sfa,     cps2, ssf2,    cps2, ROT0,   "Capcom", "Street Fighter Zero (Korean Patch)" )
 //GAME( 1996, sfz2jk,    sfa2,    cps2, ssf2,    cps2, ROT0,   "Capcom", "Street Fighter Zero 2 (Korean Patch)" )
 GAME( 1996, sfz2jr1k,  sfa2,    cps2, ssf2,    cps2, ROT0,   "Capcom", "Street Fighter Zero 2 (Korean Patch)" )
 GAME( 1996, sfz2aljk,  sfa2,    cps2, ssf2,    cps2, ROT0,   "Capcom", "Street Fighter Zero 2 Alpha (Korean Patch)" )
+GAME( 1996, rckman2k,  megaman2,cps2, sgemf,   cps2, ROT0,   "Capcom", "Rockman 2: The Power Fighters (Korean Patch)" )
+GAME( 1997, csclubk,  csclub,  cps2, sgemf,   cps2, ROT0,   "Capcom", "Capcom Sports Club (Korean Patch)" )
