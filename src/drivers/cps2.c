@@ -357,7 +357,30 @@ static MEMORY_WRITE16_START( cps2_writemem )
 	{ 0xff0000, 0xffffff, MWA16_RAM },				/* RAM */
 MEMORY_END
 
-
+static MEMORY_WRITE16_START( dead_cps2_writemem )
+	{ 0x000000, 0x3fffff, MWA16_ROM },				/* ROM */
+	{ 0x400000, 0x40000b, MWA16_RAM, &cps2_output, &cps2_output_size },	/* CPS2 output */
+	{ 0x618000, 0x619fff, qsound_sharedram1_w },		/* Q RAM */
+	{ 0x662000, 0x662001, MWA16_RAM },				/* Network adapter related, accessed in SSF2TB */
+	{ 0x662008, 0x662009, MWA16_RAM },				/* Network adapter related, accessed in SSF2TB (not sure if this port is write only yet)*/
+	{ 0x662020, 0x662021, MWA16_RAM },				/* Network adapter related, accessed in SSF2TB */
+	{ 0x660000, 0x663fff, MWA16_RAM },				/* When bit 14 of 0x804030 equals 0 this space is available. Many games store highscores and other info here if available. */
+	{ 0x664000, 0x664001, MWA16_RAM },				/* Unknown - Only used if 0x660000-0x663fff available (could be RAM enable?) */
+	{ 0x700000, 0x701fff, cps2_objram1_w, &cps2_objram1 },	/* Object RAM, no game seems to use it directly */
+	{ 0x708000, 0x709fff, cps2_objram2_w, &cps2_objram2 },	/* Object RAM */
+	{ 0x70a000, 0x70bfff, cps2_objram2_w },			/* mirror */
+	{ 0x70c000, 0x70dfff, cps2_objram2_w },			/* mirror */
+	{ 0x70e000, 0x70ffff, cps2_objram2_w },			/* mirror */
+	{ 0x800100, 0x8001ff, cps1_output_w },			/* Output ports mirror (sfa) */
+	{ 0x804040, 0x804041, cps2_eeprom_port_w },		/* EEPROM */
+	{ 0x8040a0, 0x8040a1, MWA16_NOP },				/* Unknown (reset once on startup) */
+	{ 0x8040e0, 0x8040e1, cps2_objram_bank_w },		/* bit 0 = Object ram bank swap */
+	{ 0x804100, 0x8041ff, cps1_output_w, &cps1_output, &cps1_output_size },  /* Output ports */
+	{ 0x900000, 0x92ffff, cps1_gfxram_w, &cps1_gfxram, &cps1_gfxram_size },
+	{ 0xff0000, 0xffffef, MWA16_RAM },				/* RAM */
+	{ 0xfffff0, 0xfffffb, MWA16_RAM, &cps2_output, &cps2_output_size},				/* RAM */
+	{ 0xfffffc, 0xffffff, MWA16_RAM },				/* RAM */
+MEMORY_END
 
 
 INPUT_PORTS_START( 19xx )
@@ -890,6 +913,42 @@ static MACHINE_DRIVER_START( cps2 )
 	MDRV_VIDEO_ATTRIBUTES(VIDEO_TYPE_RASTER | VIDEO_NEEDS_6BITS_PER_GUN | VIDEO_UPDATE_BEFORE_VBLANK)
 	MDRV_SCREEN_SIZE(64*8, 32*8)
 	MDRV_VISIBLE_AREA(8*8, (64-8)*8-1, 2*8, 30*8-1 )
+	MDRV_GFXDECODE(gfxdecodeinfo)
+	MDRV_PALETTE_LENGTH(4096)
+
+	MDRV_VIDEO_START(cps2)
+	MDRV_VIDEO_EOF(cps1)
+	MDRV_VIDEO_UPDATE(cps1)
+
+	/* sound hardware */
+	MDRV_SOUND_ATTRIBUTES(SOUND_SUPPORTS_STEREO)
+	MDRV_SOUND_ADD(QSOUND, qsound_interface)
+MACHINE_DRIVER_END
+
+static MACHINE_DRIVER_START( dead_cps2 )
+
+	/* basic machine hardware */
+	MDRV_CPU_ADD(M68000, 11800000)
+	MDRV_CPU_CONFIG(cps2_encryption)
+	MDRV_CPU_MEMORY(cps2_readmem,dead_cps2_writemem)
+	MDRV_CPU_VBLANK_INT(cps2_interrupt,262)	/* 262   // ??? interrupts per frame /*/
+
+	MDRV_CPU_ADD(Z80, 8000000)
+	MDRV_CPU_MEMORY(qsound_readmem,qsound_writemem)
+	MDRV_CPU_PERIODIC_INT(irq0_line_hold,251)	/* 251 is good (see 'mercy mercy mercy'section of sgemf attract mode for accurate sound sync */
+
+	MDRV_FRAMES_PER_SECOND(59.633333)
+	MDRV_VBLANK_DURATION(0)
+/*	MDRV_INTERLEAVE(262)   // 262 scanlines, for raster effects /*/
+
+	MDRV_NVRAM_HANDLER(cps2)
+
+	/* video hardware */
+	MDRV_VIDEO_ATTRIBUTES(VIDEO_TYPE_RASTER | VIDEO_NEEDS_6BITS_PER_GUN | VIDEO_UPDATE_BEFORE_VBLANK)
+	MDRV_SCREEN_SIZE(64*8, 32*8)
+	//MDRV_VISIBLE_AREA(8*8, (64-8)*8-1, 4*8, 30*8-1 )
+	MDRV_VISIBLE_AREA(130, 508, 28, 255 )
+
 	MDRV_GFXDECODE(gfxdecodeinfo)
 	MDRV_PALETTE_LENGTH(4096)
 
@@ -4510,6 +4569,75 @@ ROM_START( sfa3r1 )
 	ROM_LOAD16_WORD_SWAP( "sz3.12",   0x400000, 0x400000, CRC(f392b13a) SHA1(fa04ce0370144a49bd1d5acd873eef87b0dc9d15) )
 ROM_END
 
+ROM_START( sfa3ud )
+	ROM_REGION( CODE_SIZE, REGION_CPU1, 0 )      /* 68000 code */
+	ROM_LOAD16_WORD_SWAP( "sz3ud.03c", 0x000000, 0x80000, CRC(6db8add7) SHA1(f6dc8ed330254acab16e42a8e729bca7713c8dc1) )
+	ROM_LOAD16_WORD_SWAP( "sz3ud.04c", 0x080000, 0x80000, CRC(d9c65a26) SHA1(8293ef112eaa534b58a3b56721af5d2f53fd1576) )
+	ROM_LOAD16_WORD_SWAP( "sz3.05c",   0x100000, 0x80000, CRC(57fd0a40) SHA1(bc2d5f4d57117bbf58b1adb088e00424ef489e92) )
+	ROM_LOAD16_WORD_SWAP( "sz3.06c",   0x180000, 0x80000, CRC(f6305f8b) SHA1(3fd1ebdbad96103aca604e950b488e52460a71ec) )
+	ROM_LOAD16_WORD_SWAP( "sz3.07c",   0x200000, 0x80000, CRC(6eab0f6f) SHA1(f8d093dda65cf4e8a3000dc1b96355bb03dcb495) )
+	ROM_LOAD16_WORD_SWAP( "sz3.08c",   0x280000, 0x80000, CRC(910c4a3b) SHA1(dbd41280f9b16ad6a5b8f12092549970349395f1) )
+	ROM_LOAD16_WORD_SWAP( "sz3.09c",   0x300000, 0x80000, CRC(b29e5199) SHA1(c6c215eb5aa37f678a9cafcbd8620969fb5ca12f) )
+	ROM_LOAD16_WORD_SWAP( "sz3.10b",   0x380000, 0x80000, CRC(deb2ff52) SHA1(0aa4722aad68a04164946c78bf05752f947b4322) )
+
+	ROM_REGION16_BE( CODE_SIZE, REGION_USER1, 0 )
+	ROM_FILL( 0x000000, 0x100000, 0x00 )
+
+	ROM_REGION( 0x2000000, REGION_GFX1, 0 )
+	ROMX_LOAD( "sz3.13",   0x0000000, 0x400000, CRC(0f7a60d9) SHA1(c69e0ee22537312909dacc86d2e4be319d54e426) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "sz3.15",   0x0000002, 0x400000, CRC(8e933741) SHA1(f4ac4bfe830dc7df9fe4f680e4e0c053e7cbd8fe) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "sz3.17",   0x0000004, 0x400000, CRC(d6e98147) SHA1(37f331fbb1284db446faecade6f484f58c0e1b2a) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "sz3.19",   0x0000006, 0x400000, CRC(f31a728a) SHA1(f14136564648f006c1b74afda78349f260524b5f) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "sz3.14",   0x1000000, 0x400000, CRC(5ff98297) SHA1(9e0ce43380b776c7a03872bafd4856f6fa60bda7) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "sz3.16",   0x1000002, 0x400000, CRC(52b5bdee) SHA1(7918204dc457f7a146d8fb8cf7242dfed3109fd8) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "sz3.18",   0x1000004, 0x400000, CRC(40631ed5) SHA1(c18c56822b90a71ca5fbdf3440eb2671011f3d8f) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "sz3.20",   0x1000006, 0x400000, CRC(763409b4) SHA1(af60a5116c1ca9050366a35ea29128921867f3cc) , ROM_GROUPWORD | ROM_SKIP(6) )
+
+	ROM_REGION( QSOUND_SIZE, REGION_CPU2, 0 ) /* 64k for the audio CPU (+banks) */
+	ROM_LOAD( "sz3.01",   0x00000, 0x08000, CRC(de810084) SHA1(fd0b969b732921ed8b40c16fbfa30ee09c7a7cbd) )
+	ROM_CONTINUE(         0x10000, 0x18000 )
+	ROM_LOAD( "sz3.02",   0x28000, 0x20000, CRC(72445dc4) SHA1(14fca7596ac45ba655016eef5b6120f9f9671c23) )
+
+	ROM_REGION( 0x800000, REGION_SOUND1, 0 ) /* QSound samples */
+	ROM_LOAD16_WORD_SWAP( "sz3.11",   0x000000, 0x400000, CRC(1c89eed1) SHA1(649a0b0a3eb72e2e69e9fb1ac51a58b70daa39f3) )
+	ROM_LOAD16_WORD_SWAP( "sz3.12",   0x400000, 0x400000, CRC(f392b13a) SHA1(fa04ce0370144a49bd1d5acd873eef87b0dc9d15) )
+ROM_END
+
+ROM_START( sfz3mix )
+	ROM_REGION( CODE_SIZE, REGION_CPU1, 0 )      /* 68000 code */
+	ROM_LOAD16_WORD_SWAP( "sfz3mix.03",   0x000000, 0x80000, CRC(4EEE8312) )
+	ROM_LOAD16_WORD_SWAP( "sfz3mix.04",   0x080000, 0x80000, CRC(3F6BAC25) )
+	ROM_LOAD16_WORD_SWAP( "sfz3mix.05",   0x100000, 0x80000, CRC(4314B417) )
+	ROM_LOAD16_WORD_SWAP( "sfz3mix.06",   0x180000, 0x80000, CRC(B15A331C) )
+	ROM_LOAD16_WORD_SWAP( "sfz3mix.07",   0x200000, 0x80000, CRC(505EA66F) )
+	ROM_LOAD16_WORD_SWAP( "sfz3mix.08",   0x280000, 0x80000, CRC(C9661960) )
+	ROM_LOAD16_WORD_SWAP( "sfz3mix.09",   0x300000, 0x80000, CRC(7A5A0D3C) )
+	ROM_LOAD16_WORD_SWAP( "sfz3mix.10",   0x380000, 0x80000, CRC(07286674) )
+
+	ROM_REGION16_BE( CODE_SIZE, REGION_USER1, 0 )
+	ROM_FILL( 0x000000, 0x100000, 0x00 )
+
+
+	ROM_REGION( 0x2000000, REGION_GFX1, 0 )
+	ROMX_LOAD( "sfz3mix.13m",   0x0000000, 0x400000, CRC(93183516) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "sfz3mix.15m",   0x0000002, 0x400000, CRC(B06F14CE) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "sfz3mix.17m",   0x0000004, 0x400000, CRC(661C1355) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "sfz3mix.19m",   0x0000006, 0x400000, CRC(7227F353) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "sfz3mix.14m",   0x1000000, 0x400000, CRC(62496779) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "sfz3mix.16m",   0x1000002, 0x400000, CRC(1E7AA3CB) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "sfz3mix.18m",   0x1000004, 0x400000, CRC(95E161CE) , ROM_GROUPWORD | ROM_SKIP(6) )
+	ROMX_LOAD( "sfz3mix.20m",   0x1000006, 0x400000, CRC(A6AFDC2D) , ROM_GROUPWORD | ROM_SKIP(6) )
+
+	ROM_REGION( QSOUND_SIZE, REGION_CPU2, 0 ) /* 64k for the audio CPU (+banks) */
+	ROM_LOAD( "sz3.01",   0x00000, 0x08000, CRC(85143FAC) )
+	ROM_CONTINUE(         0x10000, 0x18000 )
+	ROM_LOAD( "sz3.02",   0x28000, 0x20000, CRC(B0F7DD76) )
+
+	ROM_REGION( 0x800000, REGION_SOUND1, 0 ) /* QSound samples */
+	ROM_LOAD16_WORD_SWAP( "sz3.11",   0x000000, 0x400000, CRC(1c89eed1) SHA1(649a0b0a3eb72e2e69e9fb1ac51a58b70daa39f3) )
+	ROM_LOAD16_WORD_SWAP( "sz3.12",   0x400000, 0x400000, CRC(f392b13a) SHA1(fa04ce0370144a49bd1d5acd873eef87b0dc9d15) )
+ROM_END
+
 ROM_START( sfz3j )
 	ROM_REGION( CODE_SIZE, REGION_CPU1, 0 )      /* 68000 code */
 	ROM_LOAD16_WORD_SWAP( "sz3j.03a", 0x000000, 0x80000, CRC(6ee0beae) SHA1(243436fb64628f70cd130c7029d365ae97f3f42d) )
@@ -6437,6 +6565,10 @@ GAME( 1998, mvsca,    mvsc,    cps2, ssf2,    cps2, ROT0,   "Capcom", "Marvel Vs
 GAMEX(1998, mvsch,    mvsc,    cps2, ssf2,    cps2, ROT0,   "Capcom", "Marvel Vs. Capcom: Clash of Super Heroes (Hispanic 980123)", GAME_NOT_WORKING )
 GAME( 1998, sfa3,     0,       cps2, ssf2,    cps2, ROT0,   "Capcom", "Street Fighter Alpha 3 (USA 980904)" )
 GAME( 1998, sfa3r1,   sfa3,    cps2, ssf2,    cps2, ROT0,   "Capcom", "Street Fighter Alpha 3 (USA 980629)" )
+GAME( 1998, sfa3ud,   sfa3,    dead_cps2, ssf2,    cps2, ROT0,   "Capcom", "Street Fighter Alpha 3 (USA 980904 Phoenix Edition) (bootleg)" )
+GAME( 1998, sfz3mix,  sfa3,    cps2, ssf2,    cps2, ROT0,   "Capcom", "Street Fighter Alpha 3 mix 0.12" )
+
+
 GAME( 1998, sfz3j,    sfa3,    cps2, ssf2,    cps2, ROT0,   "Capcom", "Street Fighter Zero 3 (Japan 980727)" )
 GAME( 1998, sfz3jr1,  sfa3,    cps2, ssf2,    cps2, ROT0,   "Capcom", "Street Fighter Zero 3 (Japan 980629)" )
 GAME( 1998, sfz3a,    sfa3,    cps2, ssf2,    cps2, ROT0,   "Capcom", "Street Fighter Zero 3 (Asia 980701)" )

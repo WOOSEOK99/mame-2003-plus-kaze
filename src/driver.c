@@ -5989,5 +5989,6 @@ Other Sun games
 	DRIVER( tengaik )	/* (c) 1996 */
 	DRIVER( csclubk )	/* 22/07/1997 (c) 1997 (Japan) */
 	DRIVER( gunbirdkp )	/* (c) 1994 */
+	DRIVER( sfz3mix )	/* 29/06/1998 (c) 1998 (US) */
 
 #endif	/* DRIVER_RECURSIVE */
