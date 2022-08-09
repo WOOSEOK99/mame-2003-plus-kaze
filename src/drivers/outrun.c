@@ -26,39 +26,8 @@
 #include "cpu/z80/z80.h"
 #include "cpu/i8039/i8039.h"
 #include "system16.h"
+#include "ost_samples.h"
 
-bool	outrun_playing = false;
-bool	outrun_start = false;
-bool	outrun_diddy = false;
-bool	outrun_title_diddy = false;
-bool	outrun_title = false;
-bool	outrun_lastwave = false;
-int		outrun_start_counter = 0;
-
-const char *const outrun_samples_set_names[] =
-{
-	"*outrun",
-	"intro-01",
-	"intro-02",
-	"title-cut-01",
-	"title-cut-02",
-	"map-01",
-	"map-02",	
-	"track1-01",
-	"track1-02",
-	"track3-01",
-	"track3-02",
-	"track4-01",
-	"track4-02",
-	0
-};
-
-static struct Samplesinterface outrun_samples_set =
-{
-	2,	// 2 channels
-	100, // volume
-	outrun_samples_set_names
-};
 
 static void set_fg_page( int data ){
 	sys16_fg_page[0] = data>>12;
@@ -727,157 +696,12 @@ static READ16_HANDLER( or_io_service_r )
 
 static WRITE16_HANDLER( outrun_sound_write_w )
 {
-	if(outrun_playing && options.use_samples) {
-		int a = 0;
-		int o_max_samples = 12;
-		int sa_left = 0;
-		int sa_right = 1;
-		bool sa_loop = 1; // --> 1 == loop, 0 == do not loop.
-		bool sa_play_sample = false;
-		bool sa_play_original = false;
-		bool outrun_do_nothing = false;
-		bool outrun_stop_samples = false;
-		bool outrun_play_default = false;
-				
-		if(outrun_start == true) {
-			sa_play_sample = true;
-			sa_left = 0;
-			sa_right = 1;
-			outrun_start = false;
-			outrun_diddy = true;
-			outrun_lastwave = false;
-		}
-			
-		switch (data) {
-			case 0x0:
-				if(outrun_diddy == true) {
-					outrun_start_counter++;
-
-					if(outrun_start_counter == 2) {
-						sa_play_sample = true;
-						sa_left = 2;
-						sa_right = 3;
-						outrun_diddy = false;
-						outrun_title_diddy = true;
-						outrun_lastwave = false;
-						sa_loop = 0;
-					}
-				}
-				else if(outrun_title_diddy == true) {
-					outrun_diddy = false;
-					outrun_start_counter++;
-
-					if(outrun_start_counter > 5)
-						outrun_title_diddy = false;
-				}
-				else if(outrun_diddy == false && outrun_title_diddy == false && outrun_title == false) {
-					sa_play_sample = true;
-
-					outrun_diddy = true;
-					sa_left = 0;
-					sa_right = 1;
-					outrun_start_counter = 1;
-					
-					outrun_lastwave = false;
-				}
-				break;
-				
-			// 2. --> Passing Breeze
-			case 0x81:
-				outrun_diddy = false;
-				outrun_title_diddy = false;
-				outrun_lastwave = false;
-				sa_play_sample = true;
-				sa_left = 8;
-				sa_right = 9;				
-				break;
-						
-			// 1. --> Splash wave
-			case 0x82:
-				outrun_diddy = false;
-				outrun_title_diddy = false;
-				outrun_lastwave = false;
-				sa_play_sample = true;
-				sa_left = 10;
-				sa_right = 11;				
-				break;
-
-			// 3 --> Magical Sound Shower
-			case 0x85:
-				outrun_diddy = false;
-				outrun_title_diddy = false;
-				outrun_lastwave = false;
-				sa_play_sample = true;
-				sa_left = 6;
-				sa_right = 7;				
-				break;
-
-			// --> Last Wave
-			case 0x93:
-				if(outrun_lastwave == false) {
-					outrun_diddy = false;
-					outrun_title_diddy = false;
-					outrun_lastwave = true;
-					sa_play_sample = true;
-					sa_left = 4;
-					sa_right = 5;
-				}
-				else
-					outrun_do_nothing = true;
-				break;
-
-			default:
-				sound_shared_ram[0]=data&0xff;
-		}
-
-		if(sa_play_sample == true) {
-			a = 0;
-
-			for(a = 0; a <= o_max_samples; a++) {
-				sample_stop(a);
-			}
-
-			sample_start(0, sa_left, sa_loop);
-			sample_start(1, sa_right, sa_loop);
-			
-			// Determine how we should mix these samples together.
-			if(sample_playing(0) == 0 && sample_playing(1) == 1) { // Right channel only. Lets make it play in both speakers.
-				sample_set_stereo_volume(1, 100, 100);
-			}
-			else if(sample_playing(0) == 1 && sample_playing(1) == 0) { // Left channel only. Lets make it play in both speakers.
-				sample_set_stereo_volume(0, 100, 100);
-			}
-			else if(sample_playing(0) == 1 && sample_playing(1) == 1) { // Both left and right channels. Lets make them play in there respective speakers.
-				sample_set_stereo_volume(0, 100, 0);
-				sample_set_stereo_volume(1, 0, 100);
-			}
-			else if(sample_playing(0) == 0 && sample_playing(1) == 0 && outrun_do_nothing == false) { // No sample playing, revert to the default sound.
-				sa_play_original = false;
-				sound_shared_ram[0]=data&0xff;
-			}
-
-			if(sa_play_original == true)
-				sound_shared_ram[0]=data&0xff;
-		}
-		else if(outrun_do_nothing == true) {
-			// --> Do nothing.
-		}
-		else if(outrun_stop_samples == true) {
-			a = 0;
-
-			for(a = 0; a <= o_max_samples; a++) {
-				sample_stop(a);
-			}
-
-			// Now play the default sound.
-			sound_shared_ram[0]=data&0xff;
-		}
-		else if(outrun_play_default == true) {
-			sound_shared_ram[0]=data&0xff;
-		}
+	if( ost_support_enabled(OST_SUPPORT_OUTRUN) ) {
+		if(generate_ost_sound_outrun( data )) sound_shared_ram[0]=data&0xff;
 	}
-	else
+	else {
 		sound_shared_ram[0]=data&0xff;
+	}
 }
 
 static WRITE16_HANDLER( outrun_ctrl2_w )
@@ -1047,7 +871,6 @@ static MACHINE_INIT( outrun ){
 
 static DRIVER_INIT( outrun )
 {
-	machine_init_sys16_onetime();
 	sys16_interleave_sprite_data( 0x100000 );
 	generate_gr_screen(512,2048,0,0,3,0x8000);
 
@@ -1055,7 +878,6 @@ static DRIVER_INIT( outrun )
 
 static DRIVER_INIT( toutrun )
 {
-	machine_init_sys16_onetime();
 	sys16_interleave_sprite_data( 0x100000 );
 	generate_gr_screen(512,2048,0,0,0,0x8000); /* fixes road 2 */
 
@@ -1066,7 +888,6 @@ static DRIVER_INIT( outrunb )
 	data16_t *RAM = (data16_t *)memory_region(REGION_CPU1);
 	int i;
 
-	machine_init_sys16_onetime();
 /*
   Main Processor
 	Comparing the bootleg with the custom bootleg, it seems that:-
@@ -1317,6 +1138,9 @@ static MACHINE_DRIVER_START( outrun )
 	MDRV_GFXDECODE(sys16_gfxdecodeinfo)
 	MDRV_PALETTE_LENGTH(4096*ShadowColorsMultiplier)
 
+	/* initilize system16 variables prior to driver_init and video_start */
+	machine_init_sys16_onetime();
+
 	MDRV_VIDEO_START(outrun)
 	MDRV_VIDEO_UPDATE(outrun)
 
@@ -1326,14 +1150,8 @@ static MACHINE_DRIVER_START( outrun )
 	MDRV_SOUND_ADD(SEGAPCM, sys16_segapcm_interface_15k)
 
 	// Lets add our Out Run music sample packs.
-	MDRV_SOUND_ADD_TAG("OST Samples", SAMPLES, outrun_samples_set)
-	outrun_playing = true;
-	outrun_start = true;
-	outrun_diddy = false;
-	outrun_title_diddy = false;
-	outrun_title = false;
-	outrun_lastwave = false;
-	outrun_start_counter = 0;
+	MDRV_SOUND_ADD_TAG("OST Samples", SAMPLES, ost_outrun)
+	init_ost_settings(OST_SUPPORT_OUTRUN);
 MACHINE_DRIVER_END
 
 #if 0
@@ -1374,6 +1192,9 @@ static MACHINE_DRIVER_START( toutrun )
 	MDRV_VISIBLE_AREA(0*8, 40*8-1, 0*8, 28*8-1)
 	MDRV_GFXDECODE(sys16_gfxdecodeinfo)
 	MDRV_PALETTE_LENGTH(4096*ShadowColorsMultiplier)
+
+	/* initilize system16 variables prior to driver_init and video_start */
+	machine_init_sys16_onetime();
 
 	MDRV_VIDEO_START(outrun)
 	MDRV_VIDEO_UPDATE(outrun)
@@ -1499,7 +1320,6 @@ static MACHINE_INIT( shangon ){
 }
 
 static DRIVER_INIT( shangon ){
-	machine_init_sys16_onetime();
 	generate_gr_screen(512,1024,0,0,4,0x8000);
 
 	sys16_patch_z80code( 0x1087, 0x20);
@@ -1507,7 +1327,6 @@ static DRIVER_INIT( shangon ){
 }
 
 static DRIVER_INIT( shangonb ){
-	machine_init_sys16_onetime();
 	generate_gr_screen(512,1024,8,0,4,0x8000);
 }
 /***************************************************************************/
@@ -1604,6 +1423,8 @@ static MACHINE_DRIVER_START( shangon )
 	MDRV_GFXDECODE(sys16_gfxdecodeinfo)
 	MDRV_PALETTE_LENGTH(2048*ShadowColorsMultiplier)
 
+	/* initilize system16 variables prior to driver_init and video_start */
+	machine_init_sys16_onetime();
 	MDRV_VIDEO_START(hangon)
 	MDRV_VIDEO_UPDATE(hangon)
 

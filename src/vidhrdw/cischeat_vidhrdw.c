@@ -458,35 +458,6 @@ READ16_HANDLER( f1gpstr2_vregs_r )
 }
 
 
-/**************************************************************************
-							Wild Pilot
-**************************************************************************/
-
-READ16_HANDLER( wildplt_vregs_r )
-{
-	if ((offset >= 0x1000/2) && (offset < 0x2000/2))
-		return megasys1_vregs[offset];
-
-	switch (offset)
-	{
-		case 0x0000/2 :	return readinputport(0); // DSW 1 & 2
-
-		case 0x0004/2 :	return readinputport(1); // Buttons
-
-		case 0x0008/2 :	return soundlatch2_r(0); // From sound cpu
-
-		case 0x0010/2 :	// X, Y
-			return readinputport(2) | (readinputport(3)<<8);
-
-		case 0x0018/2 :
-			return (f1gpstr2_ioready[0]&1) ? 0xff : 0xf0;
-
-		default: SHOW_READ_ERROR("vreg %04X read!",offset*2);
-			return megasys1_vregs[offset];
-	}
-}
-
-
 WRITE16_HANDLER( f1gpstar_vregs_w )
 {
 /*	data16_t old_data = megasys1_vregs[offset];*/
@@ -1187,12 +1158,14 @@ VIDEO_UPDATE( bigrun )
 	cischeat_tmap_SET_SCROLL(1)
 	cischeat_tmap_SET_SCROLL(2)
 
-	fillbitmap(bitmap,Machine->pens[0],cliprect);
+	fillbitmap(bitmap,Machine->pens[0x1000],cliprect);
 
 	for (i = 7; i >= 4; i--)
 	{											/* bitmap, road, min_priority, max_priority, transparency */
-		if (megasys1_active_layers & 0x10)	cischeat_draw_road(bitmap,cliprect,0,i,i,TRANSPARENCY_NONE);
+		if (megasys1_active_layers & 0x10)	cischeat_draw_road(bitmap,cliprect,0,i,i,(i != 7));
 		if (megasys1_active_layers & 0x20)	cischeat_draw_road(bitmap,cliprect,1,i,i,TRANSPARENCY_PEN);
+	  if (megasys1_active_layers & 0x08)	bigrun_draw_sprites(bitmap,cliprect,i+1,i);
+
 	}
 
 	flag = 0;
@@ -1203,9 +1176,10 @@ VIDEO_UPDATE( bigrun )
 	{											/* bitmap, road, min_priority, max_priority, transparency */
 		if (megasys1_active_layers & 0x10)	cischeat_draw_road(bitmap,cliprect,0,i,i,TRANSPARENCY_PEN);
 		if (megasys1_active_layers & 0x20)	cischeat_draw_road(bitmap,cliprect,1,i,i,TRANSPARENCY_PEN);
+	  if (megasys1_active_layers & 0x08)	bigrun_draw_sprites(bitmap,cliprect,i+1,i);
 	}
 
-	if (megasys1_active_layers & 0x08)	bigrun_draw_sprites(bitmap,cliprect,15,0);
+/*	if (megasys1_active_layers & 0x08)	bigrun_draw_sprites(bitmap,cliprect,15,0); */
 
 	cischeat_tmap_DRAW(2)
 

@@ -100,7 +100,7 @@ static int setup_via_menu = 0;
 UINT8 ui_dirty;
 
 
-// CMD <°ø·«>
+// CMD <ê³µëµ>
 #ifdef CMD_PLUS
 static int displaycommand_ex(struct mame_bitmap *bitmap, int selected, int shortcut);
 
@@ -126,11 +126,11 @@ static int cmd_display_scroll_message (struct mame_bitmap *bitmap, int *scroll, 
 
 #define ROWHEIGHT       	(uirotcharheight + ROWMARGIN)
 
-/* ÇÑ¶óÀÎÀÇ ³ôÀÌ: ÇöÀç ÇÑ¶óÀÎÀÇ ³ôÀÌ´Â ÆùÆ®ÀÇ ³ôÀÌ(uirotcharheight)¿¡ 1/5À» Ãß°¡ÇÏ¿© ´õÇÑ´Ù.
-   ¿øº» MAME¿¡¼­´Â (3 * uirotcharheight / 2)·Î °è»êÇÏ¿© ÇÑ¶óÀÎÀÇ ³ôÀÌ´Â ÆùÆ®ÀÇ ³ôÀÌÀÇ 150%·Î
-   Àâ´Â´Ù.
-   µû¶ó¼­ ¿øº»ÇØ¼­ i°³ÀÇ ¶óÀÎÀ» Ãâ·ÂÇÏ±â À§ÇØ¼­´Â (3*i+1) * uirotcharheight / 2·Î °è»êÇÏÁö¸¸
-   ÇöÀç´Â ´ÙÀ½ÀÇ MENUROWHEIGHT¸¦ ÀÌ¿ëÇÏ¿© (i*MENUROWHEIGHT)·Î °£´Ü/¸í·áÇÏ°Ô °è»êÇÒ ¼ö ÀÖ´Ù.
+/* í•œë¼ì¸ì˜ ë†’ì´: í˜„ì¬ í•œë¼ì¸ì˜ ë†’ì´ëŠ” í°íŠ¸ì˜ ë†’ì´(uirotcharheight)ì— 1/5ì„ ì¶”ê°€í•˜ì—¬ ë”í•œë‹¤.
+   ì›ë³¸ MAMEì—ì„œëŠ” (3 * uirotcharheight / 2)ë¡œ ê³„ì‚°í•˜ì—¬ í•œë¼ì¸ì˜ ë†’ì´ëŠ” í°íŠ¸ì˜ ë†’ì´ì˜ 150%ë¡œ
+   ì¡ëŠ”ë‹¤.
+   ë”°ë¼ì„œ ì›ë³¸í•´ì„œ iê°œì˜ ë¼ì¸ì„ ì¶œë ¥í•˜ê¸° ìœ„í•´ì„œëŠ” (3*i+1) * uirotcharheight / 2ë¡œ ê³„ì‚°í•˜ì§€ë§Œ
+   í˜„ì¬ëŠ” ë‹¤ìŒì˜ MENUROWHEIGHTë¥¼ ì´ìš©í•˜ì—¬ (i*MENUROWHEIGHT)ë¡œ ê°„ë‹¨/ëª…ë£Œí•˜ê²Œ ê³„ì‚°í•  ìˆ˜ ìˆë‹¤.
 */   
 #define MENUROWHEIGHT       (uirotcharheight + (uirotcharheight/5))
 
@@ -950,7 +950,7 @@ void ui_drawbox(struct mame_bitmap *bitmap, int leftx, int topy, int width, int 
 #pragma mark BOXES & LINES
 #endif
 
-// ´ã´ç½ºÅ©¸°: "¸ŞÀÎ¸Ş´º" ...
+// ë‹´ë‹¹ìŠ¤í¬ë¦°: "ë©”ì¸ë©”ë‰´" ...
 #ifdef UI_TITLE_MENU
 void ui_displaymenu(struct mame_bitmap *bitmap,const char **items,const char **subitems,char *flag,const char *title,int selected,int arrowize_subitem)
 #else
@@ -988,7 +988,7 @@ void ui_displaymenu(struct mame_bitmap *bitmap,const char **items,const char **s
 
 	visible = (uirotheight / MENUROWHEIGHT) - 1;
 #ifdef UI_TITLE_MENU
-	/* Å¸ÀÌÆ²ÀÌ ÀÖ´Â °æ¿ì Å¸ÀÌÆ²À» Ãâ·ÂÇÒ ¶óÀÎÀ» Á¦¿ÜÇÏ±â À§ÇØ ÇÑ ÁÙÀ» °¨»ê */
+	/* íƒ€ì´í‹€ì´ ìˆëŠ” ê²½ìš° íƒ€ì´í‹€ì„ ì¶œë ¥í•  ë¼ì¸ì„ ì œì™¸í•˜ê¸° ìœ„í•´ í•œ ì¤„ì„ ê°ì‚° */
 	if(title) visible --;
 #endif /* UI_TITLE_MENU */
 
@@ -1001,17 +1001,17 @@ void ui_displaymenu(struct mame_bitmap *bitmap,const char **items,const char **s
 		if (topitem > count - visible) topitem = count - visible;
 	}
 
-	/* ¸Ş´º¹Ú½º°¡ À§Ä¡ÇÒ Left/TopÀ§Ä¡ °è»ê 
-		LeftOffs : (È­¸éÆø - Ãâ·ÂÇÒ¹®ÀåÆø) / 2
-		TopOffs  : (È­¸é³ôÀÌ - (Ãâ·ÂÇÒ¶óÀÎ¼ö * ¶óÀÎ´ç³ôÀÌ)) / 2
-				   Ãâ·ÂÇÒ¶óÀÎ¼ö´Â Å¸ÀÌÆ²À» Ãß°¡ÇÒ°æ¿ì + 1ÀÌ µÊ.
+	/* ë©”ë‰´ë°•ìŠ¤ê°€ ìœ„ì¹˜í•  Left/Topìœ„ì¹˜ ê³„ì‚° 
+		LeftOffs : (í™”ë©´í­ - ì¶œë ¥í• ë¬¸ì¥í­) / 2
+		TopOffs  : (í™”ë©´ë†’ì´ - (ì¶œë ¥í• ë¼ì¸ìˆ˜ * ë¼ì¸ë‹¹ë†’ì´)) / 2
+				   ì¶œë ¥í• ë¼ì¸ìˆ˜ëŠ” íƒ€ì´í‹€ì„ ì¶”ê°€í• ê²½ìš° + 1ì´ ë¨.
 	*/
 	leftoffs = (uirotwidth - (maxlen * uirotcharwidth)) / 2;
 	topoffs = (uirotheight - (visible * MENUROWHEIGHT)) / 2;
 
 	topoffs -= DRAWBOX_MARGIN;
 	
-	/* ¸Ş´º¹Ú½ºÀÇ ³ôÀÌ */
+	/* ë©”ë‰´ë°•ìŠ¤ì˜ ë†’ì´ */
 	iHeight  = (visible * MENUROWHEIGHT) + (DRAWBOX_MARGIN * 2) + ROWMARGIN;
 
 #ifdef UI_TITLE_MENU
@@ -1020,10 +1020,10 @@ void ui_displaymenu(struct mame_bitmap *bitmap,const char **items,const char **s
 		topoffs -= (MENUROWHEIGHT / 2);
 		iHeight += (MENUROWHEIGHT + DRAWBOX_MARGIN + ROWMARGIN);
 
-		/* black background : ¸Ş´º¹Ú½º ±×¸®±â */
+		/* black background : ë©”ë‰´ë°•ìŠ¤ ê·¸ë¦¬ê¸° */
 		ui_drawbox(bitmap, leftoffs, topoffs-ROWMARGIN, maxlen * uirotcharwidth, iHeight );
 
-		topoffs += DRAWBOX_MARGIN;	/* ¸Ş´º¹Ú½ºÀÇ À§ÂÊÅ×µÎ¸®¿©¹é ¸¸Å­ ³»¸°´Ù */
+		topoffs += DRAWBOX_MARGIN;	/* ë©”ë‰´ë°•ìŠ¤ì˜ ìœ„ìª½í…Œë‘ë¦¬ì—¬ë°± ë§Œí¼ ë‚´ë¦°ë‹¤ */
 		
 		/* Draw Title Bar */
 		ui_drawtitlebar(bitmap, leftoffs, topoffs + ROWMARGIN - 1, maxlen, 0);
@@ -1035,7 +1035,7 @@ void ui_displaymenu(struct mame_bitmap *bitmap,const char **items,const char **s
 
 		dt[1].text = 0;	/* terminate array */
 
-		/* Á¦¸ñÁÙ(TITLE) Ãâ·Â */
+		/* ì œëª©ì¤„(TITLE) ì¶œë ¥ */
 		displaytext(bitmap,dt);
 
 		topoffs += (MENUROWHEIGHT + ROWMARGIN);
@@ -1043,7 +1043,7 @@ void ui_displaymenu(struct mame_bitmap *bitmap,const char **items,const char **s
 	else {
 #endif /* UI_TITLE_MENU */
 
-	/* black background : ¸Ş´º¹Ú½º ±×¸®±â */
+	/* black background : ë©”ë‰´ë°•ìŠ¤ ê·¸ë¦¬ê¸° */
 	ui_drawbox(bitmap, leftoffs, topoffs - ROWMARGIN, maxlen * uirotcharwidth, iHeight );
 
 #ifdef UI_TITLE_MENU
@@ -1205,7 +1205,7 @@ void ui_displaymenu(struct mame_bitmap *bitmap,const char **items,const char **s
 	}
 }
 
-// ´ã´ç½ºÅ©¸°: "ÄÚÀÎÁ¤º¸" / "°ÔÀÓÁ¤º¸" ...
+// ë‹´ë‹¹ìŠ¤í¬ë¦°: "ì½”ì¸ì •ë³´" / "ê²Œì„ì •ë³´" ...
 #ifdef UI_TITLE_MENU
 void ui_displaymessagewindow(struct mame_bitmap *bitmap,const char *text, const char *title)
 #else
@@ -1279,10 +1279,10 @@ void ui_displaymessagewindow(struct mame_bitmap *bitmap,const char *text)
 	maxlen += 1;
 
 
-	/* ¸Ş´º¹Ú½º°¡ À§Ä¡ÇÒ Left/TopÀ§Ä¡ °è»ê 
-		LeftOffs : (È­¸éÆø - Ãâ·ÂÇÒ¹®ÀåÆø) / 2
-		TopOffs  : (È­¸é³ôÀÌ - (Ãâ·ÂÇÒ¶óÀÎ¼ö * ¶óÀÎ´ç³ôÀÌ)) / 2
-				   Ãâ·ÂÇÒ¶óÀÎ¼ö´Â Å¸ÀÌÆ²À» Ãß°¡ÇÒ°æ¿ì + 1ÀÌ µÊ.
+	/* ë©”ë‰´ë°•ìŠ¤ê°€ ìœ„ì¹˜í•  Left/Topìœ„ì¹˜ ê³„ì‚° 
+		LeftOffs : (í™”ë©´í­ - ì¶œë ¥í• ë¬¸ì¥í­) / 2
+		TopOffs  : (í™”ë©´ë†’ì´ - (ì¶œë ¥í• ë¼ì¸ìˆ˜ * ë¼ì¸ë‹¹ë†’ì´)) / 2
+				   ì¶œë ¥í• ë¼ì¸ìˆ˜ëŠ” íƒ€ì´í‹€ì„ ì¶”ê°€í• ê²½ìš° + 1ì´ ë¨.
 	*/
 	leftoffs = (uirotwidth - (uirotcharwidth * maxlen)) / 2;
 	if (leftoffs < 0) leftoffs = 0;
@@ -1291,7 +1291,7 @@ void ui_displaymessagewindow(struct mame_bitmap *bitmap,const char *text)
 	topoffs  = (uirotheight - (lines * MENUROWHEIGHT)) / 2;
 	topoffs -= DRAWBOX_MARGIN;
 
-	/* ¸Ş´º¹Ú½ºÀÇ ³ôÀÌ */
+	/* ë©”ë‰´ë°•ìŠ¤ì˜ ë†’ì´ */
 	iHeight  = (lines * MENUROWHEIGHT) + (DRAWBOX_MARGIN * 2) + ROWMARGIN;
 	
 #ifdef UI_TITLE_MENU
@@ -1304,10 +1304,10 @@ void ui_displaymessagewindow(struct mame_bitmap *bitmap,const char *text)
 
 		lines += 1;
 
-		/* black background : ¸Ş´º¹Ú½º ±×¸®±â */
+		/* black background : ë©”ë‰´ë°•ìŠ¤ ê·¸ë¦¬ê¸° */
 		ui_drawbox(bitmap, leftoffs, topoffs-ROWMARGIN, (maxlen * uirotcharwidth), iHeight );
 
-		topoffs += DRAWBOX_MARGIN;	/* ¸Ş´º¹Ú½ºÀÇ À§ÂÊÅ×µÎ¸®¿©¹é ¸¸Å­ ³»¸°´Ù */
+		topoffs += DRAWBOX_MARGIN;	/* ë©”ë‰´ë°•ìŠ¤ì˜ ìœ„ìª½í…Œë‘ë¦¬ì—¬ë°± ë§Œí¼ ë‚´ë¦°ë‹¤ */
 		
 		/* Draw Title Bar */
 		ui_drawtitlebar(bitmap, leftoffs, topoffs + ROWMARGIN - 1, maxlen, 0);
@@ -1319,7 +1319,7 @@ void ui_displaymessagewindow(struct mame_bitmap *bitmap,const char *text)
 
 		dt[1].text = 0;	/* terminate array */
 
-		/* Á¦¸ñÁÙ(TITLE) Ãâ·Â */
+		/* ì œëª©ì¤„(TITLE) ì¶œë ¥ */
 		displaytext(bitmap,dt);
 
 		topoffs += (MENUROWHEIGHT + ROWMARGIN);
@@ -1328,7 +1328,7 @@ void ui_displaymessagewindow(struct mame_bitmap *bitmap,const char *text)
 #endif /* UI_TITLE_MENU */
 	if (topoffs < DRAWBOX_MARGIN) topoffs = DRAWBOX_MARGIN;
 
-	/* black background : ¸Ş´º¹Ú½º ±×¸®±â */
+	/* black background : ë©”ë‰´ë°•ìŠ¤ ê·¸ë¦¬ê¸° */
 	//ui_drawbox(bitmap,leftoffs,topoffs,maxlen * uirotcharwidth,(3 * lines + 1) * uirotcharheight / 2);
 	ui_drawbox(bitmap, leftoffs, topoffs - ROWMARGIN, (maxlen * uirotcharwidth), iHeight );
 	
@@ -2268,7 +2268,7 @@ static int setautofiresettings(struct mame_bitmap *bitmap,int selected)
 	int autofire_delay;
 	int value = 0;
 	int changed = 0;
-#ifdef CMD_PLUS	// ¿¬»ç ¼³Á¤¿¡¼­ PageUp,PageDownÅ°·Î ÆäÀÌÁö ´ÜÀ§ ÀÌµ¿
+#ifdef CMD_PLUS	// ì—°ì‚¬ ì„¤ì •ì—ì„œ PageUp,PageDowní‚¤ë¡œ í˜ì´ì§€ ë‹¨ìœ„ ì´ë™
 	int visible = 0;
 
 	visible = Machine->uiheight / (3 * Machine->uifontheight / 2) - 1;
@@ -2322,7 +2322,7 @@ static int setautofiresettings(struct mame_bitmap *bitmap,int selected)
 	menu_subitem[total++] = 0;
 	menu_item[total] = 0;
 
-#ifdef UI_TITLE_MENU // ¼³¸í: ¿¬»ç ¼³Á¤ ¸Ş´º
+#ifdef UI_TITLE_MENU // ì„¤ëª…: ì—°ì‚¬ ì„¤ì • ë©”ë‰´
 	ui_displaymenu(bitmap,menu_item,menu_subitem,0,ui_getstring(UI_autofire),sel,0);
 #else
 	ui_displaymenu(bitmap,menu_item,menu_subitem,0,sel,0);
@@ -2368,7 +2368,7 @@ static int setautofiresettings(struct mame_bitmap *bitmap,int selected)
 	if (input_ui_pressed_repeat(IPT_UI_UP,8))
 		sel = (sel + total - 1) % total;
 
-#ifdef CMD_PLUS	// ¿¬»ç ¼³Á¤¿¡¼­ PageUp,PageDownÅ°·Î ÆäÀÌÁö ´ÜÀ§ ÀÌµ¿
+#ifdef CMD_PLUS	// ì—°ì‚¬ ì„¤ì •ì—ì„œ PageUp,PageDowní‚¤ë¡œ í˜ì´ì§€ ë‹¨ìœ„ ì´ë™
 	if (code_pressed_memory_repeat(KEYCODE_PGUP,8))
 	{
 		sel -= visible;
@@ -3228,7 +3228,7 @@ static int count_lines_in_buffer (char *buffer)
 	return lines;
 }
 
-// ´ã´ç½ºÅ©¸°: "°ÔÀÓ È÷½ºÅä¸®" ...
+// ë‹´ë‹¹ìŠ¤í¬ë¦°: "ê²Œì„ íˆìŠ¤í† ë¦¬" ...
 /* Display lines from buffer, starting with line 'scroll', in a width x height text window */
 #ifdef UI_TITLE_MENU
 static void display_scroll_message (struct mame_bitmap *bitmap, int *scroll, int width, int height, char *buf, const char *title)
@@ -3249,17 +3249,17 @@ static void display_scroll_message (struct mame_bitmap *bitmap, int *scroll, int
 
 
 
-	/* ¸Ş´º¹Ú½º°¡ À§Ä¡ÇÒ Left/TopÀ§Ä¡ °è»ê 
-		LeftOffs : (È­¸éÆø - Ãâ·ÂÇÒ¹®ÀåÆø) / 2
-		TopOffs  : (È­¸é³ôÀÌ - (Ãâ·ÂÇÒ¶óÀÎ¼ö * ¶óÀÎ´ç³ôÀÌ)) / 2
-				   Ãâ·ÂÇÒ¶óÀÎ¼ö´Â Å¸ÀÌÆ²À» Ãß°¡ÇÒ°æ¿ì + 1ÀÌ µÊ.
+	/* ë©”ë‰´ë°•ìŠ¤ê°€ ìœ„ì¹˜í•  Left/Topìœ„ì¹˜ ê³„ì‚° 
+		LeftOffs : (í™”ë©´í­ - ì¶œë ¥í• ë¬¸ì¥í­) / 2
+		TopOffs  : (í™”ë©´ë†’ì´ - (ì¶œë ¥í• ë¼ì¸ìˆ˜ * ë¼ì¸ë‹¹ë†’ì´)) / 2
+				   ì¶œë ¥í• ë¼ì¸ìˆ˜ëŠ” íƒ€ì´í‹€ì„ ì¶”ê°€í• ê²½ìš° + 1ì´ ë¨.
 	*/
 	leftoffs = (uirotwidth - (uirotcharwidth * (width + 1))) / 2;
 	if (leftoffs < 0) leftoffs = 0;
 
 	topoffs = (uirotheight - (height * ROWHEIGHT + ROWMARGIN)) / 2;
 
-	/* ¹Ú½ºÀÇ ³ôÀÌ */
+	/* ë°•ìŠ¤ì˜ ë†’ì´ */
 	iHeight  = (height * ROWHEIGHT) + (DRAWBOX_MARGIN * 2) + ROWMARGIN;
 
 #ifdef UI_TITLE_MENU
@@ -3268,10 +3268,10 @@ static void display_scroll_message (struct mame_bitmap *bitmap, int *scroll, int
 		topoffs -= (MENUROWHEIGHT / 2);
 		iHeight += (MENUROWHEIGHT + DRAWBOX_MARGIN + ROWMARGIN);
 
-		/* black background : ¹Ú½º ±×¸®±â */
+		/* black background : ë°•ìŠ¤ ê·¸ë¦¬ê¸° */
 		ui_drawbox(bitmap, leftoffs, topoffs-ROWMARGIN, (width + 1) * uirotcharwidth, iHeight );
 		
-		topoffs += DRAWBOX_MARGIN;	/* ¸Ş´º¹Ú½ºÀÇ À§ÂÊÅ×µÎ¸®¿©¹é ¸¸Å­ ³»¸°´Ù */
+		topoffs += DRAWBOX_MARGIN;	/* ë©”ë‰´ë°•ìŠ¤ì˜ ìœ„ìª½í…Œë‘ë¦¬ì—¬ë°± ë§Œí¼ ë‚´ë¦°ë‹¤ */
 		
 		/* Draw Title Bar */
 		ui_drawtitlebar(bitmap, leftoffs, topoffs + ROWMARGIN -1, width + 1, 0);
@@ -3283,7 +3283,7 @@ static void display_scroll_message (struct mame_bitmap *bitmap, int *scroll, int
 
 		dt[1].text = 0;	/* terminate array */
 
-		/* Á¦¸ñÁÙ(TITLE) Ãâ·Â */
+		/* ì œëª©ì¤„(TITLE) ì¶œë ¥ */
 		displaytext(bitmap,dt);
 
 		topoffs += (MENUROWHEIGHT + ROWMARGIN);
@@ -3292,7 +3292,7 @@ static void display_scroll_message (struct mame_bitmap *bitmap, int *scroll, int
 	{
 #endif /* UI_TITLE_MENU */
 
-	/* black background : ¹Ú½º ±×¸®±â */
+	/* black background : ë°•ìŠ¤ ê·¸ë¦¬ê¸° */
 	ui_drawbox(bitmap,leftoffs,topoffs,(width + 1) * uirotcharwidth, iHeight );
 
 #ifdef UI_TITLE_MENU
@@ -3870,7 +3870,7 @@ static int setup_menu(struct mame_bitmap *bitmap, int selected)
 				break;
 
 			case UI_GENERATE_XML_DAT:
-				frontend_message_cb("XML DAT ¸¸µé±â", 180);
+				frontend_message_cb("XML DAT ë§Œë“¤ê¸°", 180);
 				schedule_full_refresh();
 				generate_DAT = true;
 				break;
@@ -4052,7 +4052,7 @@ int handle_user_interface(struct mame_bitmap *bitmap)
 	}
 #ifdef CMD_PLUS			
 // Show_CHEATLIST_END
-	// [START] °ø·«
+	// [START] ê³µëµ
 	if (setup_selected == 0 && input_ui_pressed(IPT_UI_COMMAND))
 	{
 		command_sc ^= 1;
@@ -4071,7 +4071,7 @@ int handle_user_interface(struct mame_bitmap *bitmap)
 			command_sel = 1;
 		}
 	}
-	// [END] °ø·«
+	// [END] ê³µëµ
 
 	if (setup_selected == 0 && input_ui_pressed(IPT_UI_CANCEL))
 	{	
@@ -4088,7 +4088,7 @@ int handle_user_interface(struct mame_bitmap *bitmap)
 	// {
 	// 	extern int toggle_autofire(void);
 	// 	int autofire_enable = toggle_autofire();
-	// 	usrintf_showmessage("ÀÚµ¿¿¬»ç %s",(autofire_enable ? "»ç¿ëÇÔ" : "»ç¿ë¾ÈÇÔ"));
+	// 	usrintf_showmessage("ìë™ì—°ì‚¬ %s",(autofire_enable ? "ì‚¬ìš©í•¨" : "ì‚¬ìš©ì•ˆí•¨"));
 	// }	
 
 	if (setup_selected == 0 && input_ui_pressed(IPT_UI_TOGGLE_AUTOFIRE))
@@ -4138,7 +4138,7 @@ int setup_active(void)
 }
 
 
-//<°ø·«>
+//<ê³µëµ>
 
 #ifdef UI_TITLE_MENU
 static int cmd_display_scroll_message (struct mame_bitmap *bitmap, int *scroll, int width, int height, char *buf, const char *title)
@@ -4164,17 +4164,17 @@ static int cmd_display_scroll_message (struct mame_bitmap *bitmap, int *scroll, 
 	int is_bold = UI_COLOR_NORMAL;
 #endif /* CMD_TITLE */
 
-	/* ¸Ş´º¹Ú½º°¡ À§Ä¡ÇÒ Left/TopÀ§Ä¡ °è»ê 
-		LeftOffs : (È­¸éÆø - Ãâ·ÂÇÒ¹®ÀåÆø) / 2
-		TopOffs  : (È­¸é³ôÀÌ - (Ãâ·ÂÇÒ¶óÀÎ¼ö * ¶óÀÎ´ç³ôÀÌ)) / 2
-				   Ãâ·ÂÇÒ¶óÀÎ¼ö´Â Å¸ÀÌÆ²À» Ãß°¡ÇÒ°æ¿ì + 1ÀÌ µÊ.
+	/* ë©”ë‰´ë°•ìŠ¤ê°€ ìœ„ì¹˜í•  Left/Topìœ„ì¹˜ ê³„ì‚° 
+		LeftOffs : (í™”ë©´í­ - ì¶œë ¥í• ë¬¸ì¥í­) / 2
+		TopOffs  : (í™”ë©´ë†’ì´ - (ì¶œë ¥í• ë¼ì¸ìˆ˜ * ë¼ì¸ë‹¹ë†’ì´)) / 2
+				   ì¶œë ¥í• ë¼ì¸ìˆ˜ëŠ” íƒ€ì´í‹€ì„ ì¶”ê°€í• ê²½ìš° + 1ì´ ë¨.
 	*/
 	leftoffs = (uirotwidth - uirotcharwidth * (width + 1)) / 2;
 	if (leftoffs < 0) leftoffs = 0;
 
 	topoffs = (uirotheight - (height * ROWHEIGHT + ROWMARGIN)) / 2;
 	
-	/* ¹Ú½ºÀÇ ³ôÀÌ */
+	/* ë°•ìŠ¤ì˜ ë†’ì´ */
 	iHeight  = (height * ROWHEIGHT) + (DRAWBOX_MARGIN * 2) + ROWMARGIN;
 	
 #ifdef UI_TITLE_MENU
@@ -4183,10 +4183,10 @@ static int cmd_display_scroll_message (struct mame_bitmap *bitmap, int *scroll, 
 		topoffs -= (MENUROWHEIGHT / 2);
 		iHeight += (MENUROWHEIGHT + DRAWBOX_MARGIN + ROWMARGIN);
 
-		/* black background : ¹Ú½º ±×¸®±â */
+		/* black background : ë°•ìŠ¤ ê·¸ë¦¬ê¸° */
 		ui_drawbox(bitmap, leftoffs, topoffs-ROWMARGIN, (width + 1) * uirotcharwidth, iHeight );
 		
-		topoffs += DRAWBOX_MARGIN;	/* ¸Ş´º¹Ú½ºÀÇ À§ÂÊÅ×µÎ¸®¿©¹é ¸¸Å­ ³»¸°´Ù */
+		topoffs += DRAWBOX_MARGIN;	/* ë©”ë‰´ë°•ìŠ¤ì˜ ìœ„ìª½í…Œë‘ë¦¬ì—¬ë°± ë§Œí¼ ë‚´ë¦°ë‹¤ */
 		
 		/* Draw Title Bar */
 		ui_drawtitlebar(bitmap, leftoffs, topoffs + ROWMARGIN -1, width + 1, 0);
@@ -4198,7 +4198,7 @@ static int cmd_display_scroll_message (struct mame_bitmap *bitmap, int *scroll, 
 
 		dt[1].text = 0;	/* terminate array */
 
-		/* Á¦¸ñÁÙ(TITLE) Ãâ·Â */
+		/* ì œëª©ì¤„(TITLE) ì¶œë ¥ */
 		displaytext(bitmap,dt);
 
 		topoffs += (MENUROWHEIGHT + ROWMARGIN);
@@ -4207,7 +4207,7 @@ static int cmd_display_scroll_message (struct mame_bitmap *bitmap, int *scroll, 
 	{
 #endif /* UI_TITLE_MENU */
 	
-	/* black background : ¹Ú½º ±×¸®±â */
+	/* black background : ë°•ìŠ¤ ê·¸ë¦¬ê¸° */
 	ui_drawbox(bitmap,leftoffs,topoffs,(width + 1) * uirotcharwidth, iHeight );
 
 #ifdef UI_TITLE_MENU

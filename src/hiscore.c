@@ -187,12 +187,15 @@ static void hs_load (void)
 			}
 			mem_range = mem_range->next;
 		}
-		mame_fclose (f);
+		mame_fclose(f);
 	}
 }
 
 static void hs_save (void)
 {
+	/* bail if the core option has changed and is now disabled */
+	if (!options.autosave_hiscore) return;
+
 	if (!state.hs_file)
 	{
 		state.hs_file = mame_fopen (Machine->gamedrv->name, 0, FILETYPE_HIGHSCORE, 1);
@@ -226,80 +229,87 @@ static void hs_save (void)
 /* call hs_open once after loading a game */
 void hs_open (const char *name)
 {   
-  char buffer[MAX_CONFIG_LINE_SIZE];
-  enum { FIND_NAME, FIND_DATA, FETCH_DATA } mode;
-  mame_file *db_file = NULL;
+	char buffer[MAX_CONFIG_LINE_SIZE];
+	enum { FIND_NAME, FIND_DATA, FETCH_DATA } mode;
+	mame_file *db_file = NULL;
 
-  state.mem_range = NULL;
-  mode = FIND_NAME;
+	state.mem_range = NULL;
+	mode = FIND_NAME;
 
-  db_file = mame_fopen(NULL, db_filename, FILETYPE_HIGHSCORE_DB, 0);
-  
-  if(!db_file)
-  {
-      log_cb(RETRO_LOG_INFO, LOGPRE "hiscore.dat not found: generating new hiscore.dat\n");
-    	db_file = mame_fopen(NULL, db_filename, FILETYPE_HIGHSCORE_DB, 1);
-			mame_fwrite(db_file, hiscoredat_bytes, hiscoredat_length); 
-			mame_fclose(db_file);
-  }
-  
-  db_file = mame_fopen(NULL, db_filename, FILETYPE_HIGHSCORE_DB, 0);
-  if(!db_file)
-  {
-    log_cb(RETRO_LOG_ERROR, LOGPRE "Failure generating hiscore.dat!\n");
-    return;
-  }
+	/* Core option to disable hiscore implementation */
+	if (!options.autosave_hiscore)
+	{
+		log_cb(RETRO_LOG_INFO, LOGPRE "hiscore implementation has been disabled via core option\n");
+		return;
+	}
 
-  while (mame_fgets (buffer, MAX_CONFIG_LINE_SIZE, db_file))
-  {
-    if (mode==FIND_NAME)
-    {
-      if (matching_game_name (buffer, name))
-      {
-        mode = FIND_DATA;
-        log_cb(RETRO_LOG_INFO, LOGPRE "%s hiscore memory map found in hiscore.dat!\n", name);
-      }
-    }
-    else if (is_mem_range (buffer))
-    {
-      const char            *pBuf = buffer;
-      struct mem_range *mem_range = (struct mem_range*)
-      malloc(sizeof(struct mem_range));
+	db_file = mame_fopen(NULL, db_filename, FILETYPE_HIGHSCORE_DB, 0);
 
-      if (mem_range)
-      {
-        mem_range->cpu = hexstr2num (&pBuf);
-        mem_range->addr = hexstr2num (&pBuf);
-        mem_range->num_bytes = hexstr2num (&pBuf);
-        mem_range->start_value = hexstr2num (&pBuf);
-        mem_range->end_value = hexstr2num (&pBuf);
+	if(!db_file)
+	{
+		log_cb(RETRO_LOG_INFO, LOGPRE "hiscore.dat not found: generating new hiscore.dat\n");
+		db_file = mame_fopen(NULL, db_filename, FILETYPE_HIGHSCORE_DB, 1);
+		mame_fwrite(db_file, hiscoredat_bytes, hiscoredat_length); 
+		mame_fclose(db_file);
 
-        mem_range->next = NULL;
-        {
-          struct mem_range *last = state.mem_range;
-          while (last && last->next) last = last->next;
-          if (last == NULL)
-            state.mem_range = mem_range;
-          else
-            last->next = mem_range;
-        }
+		db_file = mame_fopen(NULL, db_filename, FILETYPE_HIGHSCORE_DB, 0);
+		if(!db_file)
+		{
+			log_cb(RETRO_LOG_ERROR, LOGPRE "Failure generating hiscore.dat!\n");
+			return;
+		}
+	}
 
-        mode = FETCH_DATA;
-      }
-      else
-      {
-        hs_free();
-        break;
-      }
-    }
-    else
-    {
-      /* line is a game name */
-      if (mode == FETCH_DATA)
-        break;
-    }
-  }
-  mame_fclose(db_file);
+	while (mame_fgets (buffer, MAX_CONFIG_LINE_SIZE, db_file))
+	{
+		if (mode==FIND_NAME)
+		{
+			if (matching_game_name (buffer, name))
+			{
+				mode = FIND_DATA;
+				log_cb(RETRO_LOG_INFO, LOGPRE "%s hiscore memory map found in hiscore.dat!\n", name);
+			}
+		}
+		else if (is_mem_range (buffer))
+		{
+			const char            *pBuf = buffer;
+			struct mem_range *mem_range = (struct mem_range*)
+				malloc(sizeof(struct mem_range));
+
+			if (mem_range)
+			{
+				mem_range->cpu = hexstr2num (&pBuf);
+				mem_range->addr = hexstr2num (&pBuf);
+				mem_range->num_bytes = hexstr2num (&pBuf);
+				mem_range->start_value = hexstr2num (&pBuf);
+				mem_range->end_value = hexstr2num (&pBuf);
+
+				mem_range->next = NULL;
+				{
+					struct mem_range *last = state.mem_range;
+					while (last && last->next) last = last->next;
+					if (last == NULL)
+						state.mem_range = mem_range;
+					else
+						last->next = mem_range;
+				}
+
+				mode = FETCH_DATA;
+			}
+			else
+			{
+				hs_free();
+				break;
+			}
+		}
+		else
+		{
+			/* line is a game name */
+			if (mode == FETCH_DATA)
+				break;
+		}
+	}
+	mame_fclose(db_file);
 }
 
 
@@ -336,7 +346,7 @@ void hs_update (void)
 			if (safe_to_load())
 				hs_load();
 		}
-		else if (options.autosave_hiscore)
+		else if (options.autosave_hiscore == 2)
 		{
 			if (state.hs_sync_delay-- <= 0)
 			{

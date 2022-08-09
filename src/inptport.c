@@ -65,7 +65,7 @@ extern unsigned int coins[COIN_COUNTERS];
 extern unsigned int lastcoin[COIN_COUNTERS];
 extern unsigned int coinlockedout[COIN_COUNTERS];
 
-extern int legacy_flag;
+extern bool save_protection;
 
 static unsigned short input_port_value[MAX_INPUT_PORTS];
 static unsigned short input_vblank[MAX_INPUT_PORTS];
@@ -743,7 +743,7 @@ getout:
 
 void save_input_port_settings(void)
 {
-	if (legacy_flag)
+	if (save_protection == options.mame_remapping)
 	{
 		config_file *cfg;
 		struct mixer_config mixercfg;
@@ -882,9 +882,9 @@ void update_analog_port(int port)
 		case IPT_TRACKBALL_Y:
 			axis = Y_AXIS; is_stick = 0; is_gun=0; check_bounds = 0; break;
 		case IPT_AD_STICK_X:
-			axis = X_AXIS; is_stick = 1; is_gun=0; check_bounds = 1; break;
+			axis = X_AXIS; is_stick = 1; is_gun=options.override_ad_stick; check_bounds = 1; break;
 		case IPT_AD_STICK_Y:
-			axis = Y_AXIS; is_stick = 1; is_gun=0; check_bounds = 1; break;
+			axis = Y_AXIS; is_stick = 1; is_gun=options.override_ad_stick; check_bounds = 1; break;
 		case IPT_AD_STICK_Z:
 			axis = Z_AXIS; is_stick = 1; is_gun=0; check_bounds = 1; break;
 		case IPT_LIGHTGUN_X:
@@ -965,22 +965,29 @@ void update_analog_port(int port)
 		There is an ugly hack to stop scaling of lightgun returned values.  It really
 		needs rewritten...
 		*/
-		if (axis == X_AXIS) {
-			if (lightgun_delta_axis[player][X_AXIS] || lightgun_delta_axis[player][Y_AXIS]) {
+
+
+		if (lightgun_delta_axis[player][X_AXIS] || lightgun_delta_axis[player][Y_AXIS])
+		{
+			if (axis == X_AXIS)
+			{
 				analog_previous_axis[player][X_AXIS]=0;
 				analog_current_axis[player][X_AXIS]=lightgun_delta_axis[player][X_AXIS];
+				input_analog_scale[port]=0;
+				sensitivity=100;
+			}
+			else if (axis == Y_AXIS)
+			{
+				analog_previous_axis[player][Y_AXIS]=0;
+				analog_current_axis[player][Y_AXIS]=lightgun_delta_axis[player][Y_AXIS];
 				input_analog_scale[port]=0;
 				sensitivity=100;
 			}
 		}
 		else
 		{
-			if (lightgun_delta_axis[player][X_AXIS] || lightgun_delta_axis[player][Y_AXIS]) {
-				analog_previous_axis[player][Y_AXIS]=0;
-				analog_current_axis[player][Y_AXIS]=lightgun_delta_axis[player][Y_AXIS];
-				input_analog_scale[port]=0;
-				sensitivity=100;
-			}
+			/* this must unset what the above could have set if port isint active to switch xy devices with working scaling */
+			input_analog_scale[port]=1;
 		}
 	}
 
@@ -1530,12 +1537,10 @@ profiler_mark(PROFILER_INPUT);
 		osd_analogjoy_read (i, analog_current_axis[i], analogjoy_input[i]);
 
 		/* update mouse/trackball position */
-		if(options.xy_device == RETRO_DEVICE_MOUSE || options.xy_device == RETRO_DEVICE_POINTER)
-			osd_xy_device_read (i, &(mouse_delta_axis[i])[X_AXIS], &(mouse_delta_axis[i])[Y_AXIS]);
+		osd_xy_device_read (i, &(mouse_delta_axis[i])[X_AXIS], &(mouse_delta_axis[i])[Y_AXIS], "relative");
 
 		/* update lightgun position, if any */
-		else if(options.xy_device == RETRO_DEVICE_LIGHTGUN)
- 			osd_xy_device_read (i, &(lightgun_delta_axis[i])[X_AXIS], &(lightgun_delta_axis[i])[Y_AXIS]);
+		osd_xy_device_read (i, &(lightgun_delta_axis[i])[X_AXIS], &(lightgun_delta_axis[i])[Y_AXIS], "absolute");
 	}
 
 	for (i = 0;i < MAX_INPUT_PORTS;i++)

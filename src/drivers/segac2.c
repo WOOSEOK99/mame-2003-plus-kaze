@@ -464,7 +464,7 @@ static WRITE16_HANDLER( puckpkmn_YM3438_w )
 
 
 /* handle writes to the UPD7759 */
-static WRITE16_HANDLER( upd7759_w )
+static WRITE16_HANDLER( UPD7759_w )
 {
 	/* make sure we have a UPD chip */
 	if (!sound_banks)
@@ -473,11 +473,11 @@ static WRITE16_HANDLER( upd7759_w )
 	/* only works if we're accessing the low byte */
 	if (ACCESSING_LSB)
 	{
-		UPD7759_reset_w(0, 0);
-		UPD7759_reset_w(0, 1);
-		UPD7759_port_w(0, data & 0xff);
-		UPD7759_start_w(0, 0);
-		UPD7759_start_w(0, 1);
+		upd7759_reset_w(0, 0);
+		upd7759_reset_w(0, 1);
+		upd7759_port_w(0, data & 0xff);
+		upd7759_start_w(0, 0);
+		upd7759_start_w(0, 1);
 	}
 }
 
@@ -639,7 +639,7 @@ static READ16_HANDLER( iochip_r )
 		case 0x00:	return 0xff00 | readinputport(1);
 		case 0x01:	return 0xff00 | readinputport(2);
 		case 0x02:	if (sound_banks)
-						return 0xff00 | (UPD7759_0_busy_r(0) << 6) | 0xbf; /* must return high bit on */
+						return 0xff00 | (upd7759_0_busy_r(0) << 6) | 0xbf; /* must return high bit on */
 					else
 						return 0xffff;
 		case 0x04:	return 0xff00 | readinputport(0);
@@ -688,7 +688,7 @@ static WRITE16_HANDLER( iochip_w )
 			if (sound_banks > 1)
 			{
 				newbank = (data >> 2) & (sound_banks - 1);
-				UPD7759_set_bank_base(0, newbank * 0x20000);
+				upd7759_set_bank_base(0, newbank * 0x20000);
 			}
 			break;
 
@@ -949,7 +949,7 @@ static MEMORY_WRITE16_START( writemem )
 	{ 0x800200, 0x800201, control_w },					/* Seems to be global controls */
 	{ 0x840000, 0x84001f, iochip_w },					/* I/O Chip */
 	{ 0x840100, 0x840107, ym3438_w },					/* Ym3438 Sound Chip Writes */
-	{ 0x880000, 0x880001, upd7759_w },					/* UPD7759 Sound Writes */
+	{ 0x880000, 0x880001, UPD7759_w },					/* UPD7759 Sound Writes */
 	{ 0x880134, 0x880135, counter_timer_w },			/* Bookkeeping */
 	{ 0x880334, 0x880335, counter_timer_w },			/* Bookkeeping (mirror) */
 	{ 0x8c0000, 0x8c0fff, palette_w, &paletteram16 },	/* Palette Ram */
@@ -975,7 +975,7 @@ static MEMORY_WRITE16_START( ooparts_writemem )
 	{ 0x800200, 0x800201, control_w },					/* Seems to be global controls */
 	{ 0x840000, 0x84001f, iochip_w },					/* I/O Chip */
 	{ 0x840100, 0x840107, ym3438_w },					/* Ym3438 Sound Chip Writes */
-	{ 0x880000, 0x880001, upd7759_w },					/* UPD7759 Sound Writes */
+	{ 0x880000, 0x880001, UPD7759_w },					/* UPD7759 Sound Writes */
 	{ 0x880134, 0x880135, counter_timer_w },			/* Bookkeeping */
 	{ 0x880334, 0x880335, counter_timer_w },			/* Bookkeeping (mirror) */
 	{ 0x8c0000, 0x8c0fff, palette_w, &paletteram16 },	/* Palette Ram */
@@ -3220,7 +3220,7 @@ INPUT_PORTS_START( ooparts ) /*  Ichidant-R and Tant-R Input Ports */
     COINS
 	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_UNKNOWN )
-	
+
 	PORT_START		/* Player 1 Controls */
     PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_BUTTON1 )      /* 'Paddle' */
     PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_BUTTON2 )      /* 'Special weapon' */
@@ -4192,7 +4192,7 @@ INPUT_PORTS_START( barek2ch )
     PORT_DIPNAME( 0x80, 0x80, "SW1:8" )
     PORT_DIPSETTING(    0x80, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	
+
 	PORT_START
 	PORT_DIPNAME( 0x01, 0x01, "SW2:1" ) // at least some of the first 3 seem to control difficulty (enemies attack later / less frequently by switching these)
     PORT_DIPSETTING(    0x01, DEF_STR( Off ) )
@@ -4297,12 +4297,12 @@ INPUT_PORTS_END
 	Sound interfaces
 ******************************************************************************/
 
-static struct UPD7759_interface upd7759_intf =
+static struct upd7759_interface upd7759_intf =
 {
 	1,								/* One chip */
+	{ UPD7759_STANDARD_CLOCK },
 	{ 50 },							/* Volume */
 	{ REGION_SOUND1 },				/* Memory pointer (gen.h) */
-	UPD7759_STANDALONE_MODE			/* Chip mode */
 };
 
 static struct YM2612interface ym3438_intf =

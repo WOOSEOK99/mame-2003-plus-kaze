@@ -65,38 +65,9 @@ Other notes:
 #include "vidhrdw/generic.h"
 #include "cpu/z80/z80.h"
 #include "system16.h"
+#include "ost_samples.h"
 
 /***************************************************************************/
-
-bool		moonwalker_playing = false;
-bool		moon_diddy = false;
-int			mj_current_music = 0;
-
-const char *const moonwalker_samples_set_names[] =
-{
-	"*moonwalk",
-	"bad-01",
-	"bad-02",
-	"smoothcriminal-01",
-	"smoothcriminal-02",	
-	"beatit-01",
-	"beatit-02",
-	"thriller-01",
-	"thriller-02",	
-	"billiejean-01",
-	"billiejean-02",
-	"title-01",
-	"title-02",
-	0
-};
-
-static struct Samplesinterface moonwalker_samples_set =
-{
-	2,	// 2 channels
-	100, // volume
-	moonwalker_samples_set_names
-};
-
 
 static WRITE16_HANDLER( sys18_refreshenable_w )
 {
@@ -352,272 +323,11 @@ PORT_END
 static WRITE16_HANDLER( sound_command_nmi_w ){
 
 	if( ACCESSING_LSB ){
-		if(moonwalker_playing && options.use_samples) {
-			int a = 0;
-			int o_max_samples = 12;
-			int sa_left = 0;
-			int sa_right = 1;
-			int mj_fade = 30;
-			bool sa_loop = 1; // --> 1 == loop, 0 == do not loop.
-			bool sa_play_sample = false;
-			bool sa_play_original = false;
-			bool moonwalker_do_nothing = false;
-			bool moonwalker_stop_samples = false;
-			bool moonwalker_play_default = false;
-
-			switch (data) {
-				// Reset music. Title screen.
-				case 0x0:
-					moonwalker_stop_samples = true;
-					mj_current_music = 0;
-					moon_diddy = false;
-					
-					break;
-
-				// Title screen stuff.
-				case 0x85:
-					if(mj_current_music != 85) {
-						mj_current_music = 85;
-						sa_loop = 0;
-						sa_play_sample = true;
-						sa_left = 10;
-						sa_right = 11;
-					}
-					else
-						moonwalker_do_nothing = true;
-
-					break;
-
-				// Title screen magic.
-				case 0x86:
-					if(mj_current_music == 85)
-						moonwalker_do_nothing = true;
-					else
-						sa_play_original = true;
-						
-					break;
-
-				// Title screen magic.
-				case 0x87:
-					if(mj_current_music == 85)
-						moonwalker_do_nothing = true;
-					else
-						sa_play_original = true;
-						
-					break;
-										
-				// Stage 1 and Stage 5. Bad.
-				case 0x81:
-					if(mj_current_music != 81) {
-						mj_current_music = 81;
-						sa_play_sample = true;
-						sa_left = 0;
-						sa_right = 1;
-					}
-					else
-						moonwalker_do_nothing = true;
-
-					break;
-
-				// Stage 2. Smooth Criminal.
-				case 0x82:
-					if(mj_current_music != 82) {
-						mj_current_music = 82;
-						sa_play_sample = true;
-						sa_left = 2;
-						sa_right = 3;
-					}
-					else
-						moonwalker_do_nothing = true;						
-					break;
-
-				// Stage 3. Beat It.
-				case 0x84:
-					if(mj_current_music != 83) {
-						mj_current_music = 83;
-						sa_play_sample = true;
-						sa_left = 4;
-						sa_right = 5;
-					}
-					else
-						moonwalker_do_nothing = true;						
-					break;
-
-				// Stage 4. Thriller.
-				case 0x8A:
-					if(mj_current_music != 8) {
-						mj_current_music = 8;
-						sa_play_sample = true;
-						sa_left = 6;
-						sa_right = 7;
-					}
-					else
-						moonwalker_do_nothing = true;						
-					break;
-
-				// Ending. Billie Jean.
-				case 0x89:
-					if(mj_current_music != 89) {
-						mj_current_music = 89;
-						sa_play_sample = true;
-						sa_left = 8;
-						sa_right = 9;
-					}
-					else
-						moonwalker_do_nothing = true;						
-					break;
-
-				// First boss music
-				case 0x8B:
-						moonwalker_do_nothing = true;
-					break;
-
-				// Second boss music
-				case 0x83:
-						moonwalker_do_nothing = true;
-					break;
-
-				// Third boss music
-				case 0x8E:
-						moonwalker_do_nothing = true;
-					break;										
-							
-				// Special move music diddy.
-				case 0xFA:
-						moonwalker_play_default = true;
-						moon_diddy = true;
-
-						// While the special move is playing, lets adjust the level music volume lower temporary to 30%.
-						if(sample_playing(0) == 0 && sample_playing(1) == 1) {
-							sample_set_stereo_volume(1, mj_fade, mj_fade);
-						}
-						else if(sample_playing(0) == 1 && sample_playing(1) == 0) {
-							sample_set_stereo_volume(0, mj_fade, mj_fade);
-						}
-						else if(sample_playing(0) == 1 && sample_playing(1) == 1) {
-							sample_set_stereo_volume(0, mj_fade, 0);
-							sample_set_stereo_volume(1, 0, mj_fade);
-						}
-					break;
-
-				// Special move music diddy.
-				case 0xFB:
-						moonwalker_play_default = true;
-						moon_diddy = true;
-
-						// While the special move is playing, lets adjust the level music volume lower temporary to 30%.
-						if(sample_playing(0) == 0 && sample_playing(1) == 1) {
-							sample_set_stereo_volume(1, mj_fade, mj_fade);
-						}
-						else if(sample_playing(0) == 1 && sample_playing(1) == 0) {
-							sample_set_stereo_volume(0, mj_fade, mj_fade);
-						}
-						else if(sample_playing(0) == 1 && sample_playing(1) == 1) {
-							sample_set_stereo_volume(0, mj_fade, 0);
-							sample_set_stereo_volume(1, 0, mj_fade);
-						}						
-					break;
-
-				// Special move music diddy.
-				case 0xF6:
-						moonwalker_play_default = true;
-						moon_diddy = true;
-
-						// While the special move is playing, lets adjust the level music volume lower temporary to 30%.
-						if(sample_playing(0) == 0 && sample_playing(1) == 1) {
-							sample_set_stereo_volume(1, mj_fade, mj_fade);
-						}
-						else if(sample_playing(0) == 1 && sample_playing(1) == 0) {
-							sample_set_stereo_volume(0, mj_fade, mj_fade);
-						}
-						else if(sample_playing(0) == 1 && sample_playing(1) == 1) {
-							sample_set_stereo_volume(0, mj_fade, 0);
-							sample_set_stereo_volume(1, 0, mj_fade);
-						}						
-					break;									
-
-				// Special move "owww" sound effect. This plays after the special move has always finished.
-				case 0xC3:
-						moonwalker_play_default = true;
-						
-						if(moon_diddy == true) {
-							moon_diddy = false;
-
-							// The special move is finished, lets return the level music volume back to 100%.
-							if(sample_playing(0) == 0 && sample_playing(1) == 1) {
-								sample_set_stereo_volume(1, 100, 100);
-							}
-							else if(sample_playing(0) == 1 && sample_playing(1) == 0) {
-								sample_set_stereo_volume(0, 100, 100);
-							}
-							else if(sample_playing(0) == 1 && sample_playing(1) == 1) {
-								sample_set_stereo_volume(0, 100, 0);
-								sample_set_stereo_volume(1, 0, 100);
-							}							
-						}						
-					break;
-				
-				default:
-					soundlatch_w( 0,data&0xff );
-					cpu_set_nmi_line(1, PULSE_LINE);
-
-					break;
-			}
-
-			if(sa_play_sample == true) {
-				a = 0;
-					
-				for(a = 0; a <= o_max_samples; a++) {
-					sample_stop(a);
-				}
-				
-				sample_start(0, sa_left, sa_loop);
-				sample_start(1, sa_right, sa_loop);
-				
-				// Determine how we should mix these samples together.
-				if(sample_playing(0) == 0 && sample_playing(1) == 1) { // Right channel only. Lets make it play in both speakers.
-					sample_set_stereo_volume(1, 100, 100);
-				}
-				else if(sample_playing(0) == 1 && sample_playing(1) == 0) { // Left channel only. Lets make it play in both speakers.
-					sample_set_stereo_volume(0, 100, 100);
-				}
-				else if(sample_playing(0) == 1 && sample_playing(1) == 1) { // Both left and right channels. Lets make them play in there respective speakers.
-					sample_set_stereo_volume(0, 100, 0);
-					sample_set_stereo_volume(1, 0, 100);
-				}
-				else if(sample_playing(0) == 0 && sample_playing(1) == 0 && moonwalker_do_nothing == false) { // No sample playing, revert to the default sound.
-					sa_play_original = false;
-					mj_current_music = 0;
-					soundlatch_w( 0,data&0xff );
-					cpu_set_nmi_line(1, PULSE_LINE);
-				}
-
-				if(sa_play_original == true) {
-					mj_current_music = 0;
-					soundlatch_w( 0,data&0xff );
-					cpu_set_nmi_line(1, PULSE_LINE);
-				}
-			}
-			else if(moonwalker_do_nothing == true) {
-				// --> Do nothing.
-			}
-			else if(moonwalker_stop_samples == true) {
-				mj_current_music = 0;
-				a = 0;
-
-				for(a = 0; a <= o_max_samples; a++) {
-					sample_stop(a);
-				}
-
-				// Now play the default sound.
+		if( ost_support_enabled(OST_SUPPORT_MOONWALKER) ) {
+			if(generate_ost_sound_moonwalker( data )) {
 				soundlatch_w( 0,data&0xff );
 				cpu_set_nmi_line(1, PULSE_LINE);
 			}
-			else if(moonwalker_play_default == true) {
-				mj_current_music = 0;
-				soundlatch_w( 0,data&0xff );
-				cpu_set_nmi_line(1, PULSE_LINE);
-			}			
 		}
 		else {
 			soundlatch_w( 0,data&0xff );
@@ -1024,7 +734,6 @@ static DRIVER_INIT( shdancer ){
 		0x1f, 0xA0000  // ROM #4 = 256K
 	};
 
-	machine_init_sys16_onetime();
 	sys18_splittab_fg_x=&sys16_textram[0x0f80/2];
 	sys18_splittab_bg_x=&sys16_textram[0x0fc0/2];
 	sys16_MaxShadowColors=0;
@@ -1060,7 +769,6 @@ static DRIVER_INIT( shdancrj ){
 		0x1f, 0xA0000  // ROM #4 = 256K
 	};
 
-	machine_init_sys16_onetime();
 	sys18_splittab_fg_x=&sys16_textram[0x0f80/2];
 	sys18_splittab_bg_x=&sys16_textram[0x0fc0/2];
 	sys16_MaxShadowColors=0;
@@ -1101,7 +809,6 @@ static DRIVER_INIT( shdancrb ){
 		0x1f, 0xA0000  // ROM #4 = 256K
 	};
 
-	machine_init_sys16_onetime();
 	sys18_splittab_fg_x=&sys16_textram[0x0f80/2];
 	sys18_splittab_bg_x=&sys16_textram[0x0fc0/2];
 	sys16_MaxShadowColors=0;
@@ -1235,7 +942,6 @@ static DRIVER_INIT( shdancbl )
 	for(i = 0; i < 0xc0000; i++)
 		mem[i] ^= 0xFF;
 
-	machine_init_sys16_onetime();
 	install_mem_read16_handler(0, 0xffc000, 0xffc001, shdancbl_skip_r );
 
 	sys18_splittab_fg_x=&sys16_textram[0x0f80/2];
@@ -1377,7 +1083,6 @@ static DRIVER_INIT( moonwalk ){
 		0x1f, 0xA0000  // ROM #4 = 256K
 	};
 
-	machine_init_sys16_onetime();
 	sys18_splittab_fg_x=&sys16_textram[0x0f80/2];
 	sys18_splittab_bg_x=&sys16_textram[0x0fc0/2];
 
@@ -1548,7 +1253,6 @@ static DRIVER_INIT( astorm ){
 		0x1f, 0xA0000  // ROM #4 = 256K
 	};
 
-	machine_init_sys16_onetime();
 	sys18_splittab_fg_x=&sys16_textram[0x0f80/2];
 	sys18_splittab_bg_x=&sys16_textram[0x0fc0/2];
 	sys16_MaxShadowColors = 0; // doesn't seem to use transparent shadows
@@ -1580,6 +1284,9 @@ static MACHINE_DRIVER_START( system18 )
 	MDRV_GFXDECODE(sys16_gfxdecodeinfo)
 	MDRV_PALETTE_LENGTH(2048*ShadowColorsMultiplier)
 
+	/* initilize system16 variables prior to driver_init and video_start */
+	machine_init_sys16_onetime();
+
 	MDRV_VIDEO_START(system18)
 	MDRV_VIDEO_UPDATE(system18)
 
@@ -1608,9 +1315,8 @@ static MACHINE_DRIVER_START( moonwalk )
 	MDRV_CPU_MEMORY(moonwalk_readmem,moonwalk_writemem)
 
 	MDRV_MACHINE_INIT(moonwalk)
-	MDRV_SOUND_ADD_TAG("OST Samples", SAMPLES, moonwalker_samples_set)
-	moonwalker_playing = true;
-	moon_diddy = false;
+	MDRV_SOUND_ADD_TAG("OST Samples", SAMPLES, ost_moonwalker)
+	init_ost_settings(OST_SUPPORT_MOONWALKER);
 MACHINE_DRIVER_END
 
 
