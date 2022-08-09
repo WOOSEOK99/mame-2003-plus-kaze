@@ -278,7 +278,11 @@ static WRITE_HANDLER( ddragon_interrupt_w )
 		cpu_set_irq_line(0,M6809_IRQ_LINE,CLEAR_LINE);
 		break;
 	case 3: /* 380e - SND irq */
+<<<<<<< HEAD
 		if( ost_support_enabled(OST_SUPPORT_DDRAGON) ) {
+=======
+		if(ddragon_playing && options.use_alt_sound) {
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 			if(generate_ost_sound_ddragon( data )) {
 				soundlatch_w( 0, data );
 				cpu_set_irq_line( snd_cpu, sound_irq, (sound_irq == IRQ_LINE_NMI) ? PULSE_LINE : HOLD_LINE );
@@ -1096,7 +1100,14 @@ static MACHINE_DRIVER_START( ddragon )
 	MDRV_SOUND_ADD(MSM5205, msm5205_interface)
 
 	MDRV_SOUND_ADD_TAG("OST Samples", SAMPLES, ost_ddragon)
+<<<<<<< HEAD
 	init_ost_settings(OST_SUPPORT_DDRAGON);
+=======
+	ddragon_playing = true;
+	ddragon_current_music = 0;
+	ddragon_stage = 0;
+	d_title_counter = 0;
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 MACHINE_DRIVER_END
 
 static MACHINE_DRIVER_START( darktowr )

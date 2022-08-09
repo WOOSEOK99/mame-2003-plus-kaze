@@ -10241,6 +10241,7 @@ ROM_START( tophuntrk )
 	ROM_LOAD16_BYTE( "046-c8k.c8", 0x600001, 0x100000, CRC(A3D7AD03) ) /* Plane 2,3 */ /* mask rom TC538200 */
 ROM_END
 
+<<<<<<< HEAD
 ROM_START( samsho2nf )
 	ROM_REGION( 0x200000, REGION_CPU1, 0 )
 	ROM_LOAD16_WORD_SWAP( "063-p1nf.bin", 0x100000, 0x100000, CRC(5cc4ab13) )
@@ -10269,6 +10270,8 @@ ROM_START( samsho2nf )
 	ROM_LOAD16_BYTE( "063-c8.bin", 0xc00001, 0x200000, CRC(1ffc6dfa) SHA1(acea18aca76c072e0bac2a364fc96d49cfc86e77) ) /* Plane 2,3 */
 ROM_END
 
+=======
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 GAMEB( 1992, aofkt,      neogeo,  neogeo, raster, neogeojp,  neogeo,   ROT0, "Hack", "Art of Fighting / Ryuuko no Ken (Korean Translator)", &neogeo_ctrl, NULL )
 GAMEB( 1994, kof94kt,    neogeo,  neogeo, neogeo, neogeojp,  neogeo,   ROT0, "Hack", "The King of Fighters '94 (Korean Translator)", &neogeo_ctrl, NULL )
 GAMEB( 1994, kof94kteasy,kof94kt, neogeo, neogeo, neogeojp,  neogeo,   ROT0, "Hack", "The King of Fighters '94 (Korean Translator,Easy command,Unlimited special attack,Boss patch,remove credit)", &neogeo_ctrl, NULL )
@@ -10291,5 +10294,8 @@ GAMEB( 1999, kof2kkt,    neogeo,   neogeo, neogeo, neogeojpc, neogeo,   ROT0, "H
 GAMEB( 1995, puzzldpk,   neogeo,   neogeo, neogeo, neogeojp,  neogeo,   ROT0, "Taito (Visco license)", "Puzzle De Pon! (Korean Translator)", &neogeo_ctrl, NULL )
 GAMEB( 1997, puzldprk,   neogeo,   neogeo, neogeo, neogeojp,  neogeo,   ROT0, "Taito (Visco license)", "Puzzle De Pon! R! (Korean Translator)", &neogeo_ctrl, NULL )
 GAMEB( 1994, tophuntrk,  neogeo,   neogeo, ras320, neogeojp,  neogeo,   ROT0, "SNK", "Top Hunter - Roddy and Cathy (Korean Translator)", &neogeo_ctrl, NULL )
+<<<<<<< HEAD
 
 GAMEB( 1994, samsho2nf,  neogeo,   neogeo, neo320, neogeo,  neogeo,   ROT0, "SNK", "Samurai Shodown II / Shin Samurai Spirits - Haohmaru jigokuhen (Flash Remove)", &neogeo_ctrl, NULL )
+=======
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5

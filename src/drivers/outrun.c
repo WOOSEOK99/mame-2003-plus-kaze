@@ -696,7 +696,11 @@ static READ16_HANDLER( or_io_service_r )
 
 static WRITE16_HANDLER( outrun_sound_write_w )
 {
+<<<<<<< HEAD
 	if( ost_support_enabled(OST_SUPPORT_OUTRUN) ) {
+=======
+	if(outrun_playing && options.use_alt_sound) {
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 		if(generate_ost_sound_outrun( data )) sound_shared_ram[0]=data&0xff;
 	}
 	else {
@@ -1151,7 +1155,17 @@ static MACHINE_DRIVER_START( outrun )
 
 	// Lets add our Out Run music sample packs.
 	MDRV_SOUND_ADD_TAG("OST Samples", SAMPLES, ost_outrun)
+<<<<<<< HEAD
 	init_ost_settings(OST_SUPPORT_OUTRUN);
+=======
+	outrun_playing = true;
+	outrun_start = true;
+	outrun_diddy = false;
+	outrun_title_diddy = false;
+	outrun_title = false;
+	outrun_lastwave = false;
+	outrun_start_counter = 0;
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 MACHINE_DRIVER_END
 
 #if 0

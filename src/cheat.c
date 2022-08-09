@@ -376,8 +376,12 @@ is selected
 #include "artwork.h"
 #include "machine/eeprom.h"
 #include <ctype.h>
+#include <streams/interface_stream.h>
 
 
+#define CHEAT_DATABASE_RZIP_FILENAME  "cheat.rzip"
+#define CHEAT_DATABASE_FILENAME       "cheat.dat"
+#define CHEAT_SAVE_FILENAME           "save_cheat.dat"
 
 #define OSD_READKEY_KLUDGE	1
 
@@ -395,8 +399,6 @@ is selected
 #define DEFINE_BITFIELD_ENUM(name, end, start)	k##name##_Shift = (int)(end), 											\
 												k##name##_ShiftedMask = (int)(0xFFFFFFFF >> (32 - (start - end + 1))),	\
 												k##name##_Mask = (int)(k##name##_ShiftedMask << k##name##_Shift)
-
-#define CHEAT_FILENAME_MAX_LEN					255
 
 #define kRegionListLength						(REGION_MAX - REGION_INVALID)
 
@@ -826,11 +828,6 @@ struct MenuItemInfoStruct
 
 typedef struct MenuItemInfoStruct	MenuItemInfoStruct;
 
-/**** Exported Globals *******************************************************/
-
-int			he_did_cheat = 0;
-const char	* cheatfile = NULL;
-
 /**** Local Globals **********************************************************/
 
 static CheatEntry			* cheatList = NULL;
@@ -852,8 +849,6 @@ static int					cheatsDisabled = 0;
 static int					watchesDisabled = 0;
 
 static int					fullMenuPageHeight = 0;
-
-static char					mainDatabaseName[CHEAT_FILENAME_MAX_LEN + 1];
 
 static MenuStringList		menuStrings;
 
@@ -1094,7 +1089,7 @@ static void		InitStringTable(void);
 static void		FreeStringTable(void);
 
 static INT32	UserSelectValueMenu(struct mame_bitmap * bitmap, int selection, CheatEntry * entry);
-int		EnableDisableCheatMenu(struct mame_bitmap * bitmap, int selection, int firstTime, int shortcut);
+static int		EnableDisableCheatMenu(struct mame_bitmap * bitmap, int selection, int firstTime);
 static int		EditCheatMenu(struct mame_bitmap * bitmap, CheatEntry * entry, int selection);
 static int		DoSearchMenuClassic(struct mame_bitmap * bitmap, int selection, int startNew);
 static int		DoSearchMenu(struct mame_bitmap * bitmap, int selection, int startNew);
@@ -1155,7 +1150,6 @@ static int		ConvertOldCode(int code, int cpu, int * data, int * extendData);
 static int		MatchCommandCheatLine(char * buf);
 static void		HandleLocalCommandCheat(UINT32 type, UINT32 address, UINT32 data, UINT32 extendData, char * name, char * description);
 
-static void		LoadCheatFile(char * fileName);
 static void		LoadCheatDatabase(void);
 static void		DisposeCheatDatabase(void);
 
@@ -1674,8 +1668,6 @@ void InitCheat(void)
 
 	artwork_get_screensize(&screenWidth, &screenHeight);
 
-	he_did_cheat =			0;
-
 	cheatList =				NULL;
 	cheatListLength =		0;
 
@@ -1758,7 +1750,6 @@ void StopCheat(void)
 	foundCheatDatabase =	0;
 	cheatsDisabled =		0;
 	watchesDisabled =		0;
-	mainDatabaseName[0] =	0;
 	menuItemInfoLength =	0;
 	useClassicSearchBox =	1;
 	dontPrintNewLabels =	0;
@@ -1799,7 +1790,7 @@ int cheat_menu(struct mame_bitmap * bitmap, int selection)
 		switch(sel)
 		{
 			case kMenu_EnableDisable:
-				submenu_choice = EnableDisableCheatMenu(bitmap, submenu_choice, firstEntry,0);
+				submenu_choice = EnableDisableCheatMenu(bitmap, submenu_choice, firstEntry);
 				break;
 
 			case kMenu_AddEdit:
@@ -2332,7 +2323,7 @@ static INT32 CommentMenu(struct mame_bitmap * bitmap, int selection, CheatEntry 
 	return sel + 1;
 }
 
-int EnableDisableCheatMenu(struct mame_bitmap * bitmap, int selection, int firstTime, int shortcut)
+static int EnableDisableCheatMenu(struct mame_bitmap * bitmap, int selection, int firstTime)
 {
 	INT32			sel;
 	static INT32	submenu_choice = 0;
@@ -8295,18 +8286,78 @@ static void HandleLocalCommandCheat(UINT32 type, UINT32 address, UINT32 data, UI
 	}
 }
 
-static void LoadCheatFile(char * fileName)
+static void LoadCheatDatabase()
 {
-	mame_file	* theFile;
+	intfstream_t	* in_file  = NULL;
+	intfstream_t	* out_file = NULL;
+	char 		cheat_directory[PATH_MAX_LENGTH];
+	char 		cheat_path[PATH_MAX_LENGTH];
 	char		formatString[256];
 	char		oldFormatString[256];
 	char		buf[2048];
 	int			recordNames = 0;
 
-	theFile = mame_fopen(NULL, fileName, FILETYPE_CHEAT, 0);
+	cheat_directory[0] = '\0';
+	cheat_path[0]      = '\0';
 
-	if(!theFile)
-		return;
+	/* Open existing cheat.rzip */
+	osd_get_path(FILETYPE_CHEAT, cheat_directory);
+	snprintf(cheat_path, PATH_MAX_LENGTH, "%s%c%s", cheat_directory, PATH_DEFAULT_SLASH_C(), CHEAT_DATABASE_RZIP_FILENAME);
+	in_file = intfstream_open_rzip_file(cheat_path, RETRO_VFS_FILE_ACCESS_READ);
+
+	if(!in_file)
+	{
+		/* Try to open cheat.dat */
+		cheat_path[0] = '\0';
+		snprintf(cheat_path, PATH_MAX_LENGTH, "%s%c%s", cheat_directory, PATH_DEFAULT_SLASH_C(), CHEAT_DATABASE_FILENAME);
+		in_file = intfstream_open_file(cheat_path, RETRO_VFS_FILE_ACCESS_READ, RETRO_VFS_FILE_ACCESS_HINT_NONE);
+
+		if(!in_file)
+			goto end;
+
+		/* Create new cheat.rzip file */
+		cheat_path[0] = '\0';
+		snprintf(cheat_path, PATH_MAX_LENGTH, "%s%c%s", cheat_directory, PATH_DEFAULT_SLASH_C(), CHEAT_DATABASE_RZIP_FILENAME);
+		out_file = intfstream_open_rzip_file(cheat_path, RETRO_VFS_FILE_ACCESS_WRITE);
+
+		if(!out_file)
+		{
+			log_cb(RETRO_LOG_ERROR, LOGPRE "Failed to create cheat.rzip\n");
+			goto end;
+		}
+
+		/* Compression loop */
+		for(;;)
+		{
+			int64_t data_read  = intfstream_read(in_file, buf, sizeof(buf));
+			int64_t data_write = 0;
+
+			if (data_read < 0)
+			{
+				log_cb(RETRO_LOG_ERROR, LOGPRE "Failed to read from cheat.dat\n");
+				goto end;
+			}
+	
+			if (data_read == 0)
+			{
+				/* Finished, close cheat.rzip and rewind input file */
+				intfstream_close(out_file);
+				free(out_file);
+				out_file = NULL;
+
+				intfstream_rewind(in_file);
+				break;
+			}
+
+			data_write = intfstream_write(out_file, buf, data_read);
+
+			if (data_write != data_read)
+			{
+				log_cb(RETRO_LOG_ERROR, LOGPRE "Failed to write to cheat.rzip\n");
+				goto end;
+			}
+		}
+	}
 
 	foundCheatDatabase = 1;
 
@@ -8314,7 +8365,7 @@ static void LoadCheatFile(char * fileName)
 	sprintf(formatString, ":%s:%s", Machine->gamedrv->name, "%x:%x:%x:%x:%[^:\n\r]:%[^:\n\r]");
 	sprintf(oldFormatString, "%s:%s", Machine->gamedrv->name, "%d:%x:%x:%d:%[^:\n\r]:%[^:\n\r]");
 
-	while(mame_fgets(buf, 2048, theFile))
+	while(intfstream_gets(in_file, buf, 2048))
 	{
 		int			type;
 		int			address;
@@ -8368,9 +8419,8 @@ static void LoadCheatFile(char * fileName)
 			{
 				if(cheatListLength == 0)
 				{
-					log_cb(RETRO_LOG_ERROR, LOGPRE "LoadCheatFile: first cheat found was link cheat; bailing\n");
-
-					goto bail;
+					log_cb(RETRO_LOG_ERROR, LOGPRE "LoadCheatDatabase: first cheat found was link cheat; bailing\n");
+					goto end;
 				}
 
 				/*logerror("cheat: doing link cheat\n");*/
@@ -8386,9 +8436,8 @@ static void LoadCheatFile(char * fileName)
 
 				if(cheatListLength == 0)
 				{
-					log_cb(RETRO_LOG_ERROR, LOGPRE "LoadCheatFile: cheat list resize failed; bailing\n");
-
-					goto bail;
+					log_cb(RETRO_LOG_ERROR, LOGPRE "LoadCheatDatabase: cheat list resize failed; bailing\n");
+					goto end;
 				}
 
 				entry = &cheatList[cheatListLength - 1];
@@ -8414,9 +8463,8 @@ static void LoadCheatFile(char * fileName)
 
 			if(entry->actionListLength == 0)
 			{
-				log_cb(RETRO_LOG_ERROR, LOGPRE "LoadCheatFile: action list resize failed; bailing\n");
-
-				goto bail;
+				log_cb(RETRO_LOG_ERROR, LOGPRE "LoadCheatDatabase: action list resize failed; bailing\n");
+				goto end;
 			}
 
 			action = &entry->actionList[entry->actionListLength - 1];
@@ -8434,59 +8482,19 @@ static void LoadCheatFile(char * fileName)
 		}
 	}
 
-	bail:
+end:
 
-	mame_fclose(theFile);
-}
-
-static void LoadCheatDatabase(void)
-{
-	char	buf[4096];
-	const char	* inTraverse;
-	char	* outTraverse;
-	char	* mainTraverse;
-	int		first = 1;
-	char	data;
-
-	if(!cheatfile)
-		cheatfile = "cheat.dat";
-
-	inTraverse = cheatfile;
-	outTraverse = buf;
-	mainTraverse = mainDatabaseName;
-
-	buf[0] = 0;
-
-	do
+	if(in_file)
 	{
-		data = *inTraverse;
-
-		if(	(data == ';') ||
-			(data == 0))
-		{
-			*outTraverse++ = 0;
-			if(first)
-				*mainTraverse++ = 0;
-
-			if(buf[0])
-			{
-				LoadCheatFile(buf);
-
-				outTraverse = buf;
-				buf[0] = 0;
-				first = 0;
-			}
-		}
-		else
-		{
-			*outTraverse++ = data;
-			if(first)
-				*mainTraverse++ = data;
-		}
-
-		inTraverse++;
+		intfstream_close(in_file);
+		free(in_file);
 	}
-	while(data);
+
+	if(out_file)
+	{
+		intfstream_close(out_file);
+		free(out_file);
+	}
 
 	UpdateAllCheatInfo();
 }
@@ -8518,7 +8526,7 @@ static void SaveCheat(CheatEntry * entry)
 	if(!entry || !entry->actionList)
 		return;
 
-	theFile = mame_fopen(NULL, mainDatabaseName, FILETYPE_CHEAT, 1);
+	theFile = mame_fopen(NULL, CHEAT_SAVE_FILENAME, FILETYPE_CHEAT, 1);
 
 	if(!theFile)
 		return;
@@ -9662,8 +9670,6 @@ static void ActivateCheat(CheatEntry * entry)
 	}
 
 	entry->flags |= kCheatFlag_Active;
-
-	he_did_cheat = 1;
 }
 
 static void DeactivateCheat(CheatEntry * entry)

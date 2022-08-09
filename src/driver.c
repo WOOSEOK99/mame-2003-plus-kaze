@@ -5232,8 +5232,11 @@ Other Sun games
 	/* Playmark games */
 	DRIVER( sslam )		/* (c) 1993 */
 	DRIVER( sslama )	/* (c) 1993 */
+<<<<<<< HEAD
   DRIVER( powerbal ) /* (c) 1994 */  
   DRIVER( hrdtimes ) /* (c) 1994 */
+=======
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 	DRIVER( bigtwin )	/* (c) 1995 */
 	DRIVER( wbeachvl )	/* (c) 1995 */
 
@@ -6001,6 +6004,9 @@ Other Sun games
 	DRIVER( csclubk )	/* 22/07/1997 (c) 1997 (Japan) */
 	DRIVER( gunbirdkp )	/* (c) 1994 */
 	DRIVER( sfz3mix )	/* 29/06/1998 (c) 1998 (US) */
+<<<<<<< HEAD
 	DRIVER( samsho2nf )	/* 0063 (c) 1994 SNK */
+=======
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 
 #endif	/* DRIVER_RECURSIVE */

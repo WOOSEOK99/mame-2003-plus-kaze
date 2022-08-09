@@ -13,19 +13,39 @@ static int  sa_volume;
 static bool schedule_default_sound;
 
 
+<<<<<<< HEAD
 /* game specific variables */
 int      ost_support = OST_SUPPORT_DISABLED;
 
+=======
+/* game specific - initialized by the driver */
+bool     ddragon_playing = false;
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 int      ddragon_current_music;
 int      ddragon_stage;
 int      d_title_counter;
 
+<<<<<<< HEAD
 bool     ff_alternate_song_1;
 bool     ff_alternate_song_2;
 
 bool     moon_diddy;
 int      mj_current_music;
 
+=======
+bool     ff_playing_final_fight = false;
+bool     ff_alternate_song_1;
+bool     ff_alternate_song_2;
+
+bool     mk_playing_mortal_kombat = false;
+bool     mk_playing_mortal_kombat_t = false;
+
+bool     moonwalker_playing = false;
+bool     moon_diddy;
+int      mj_current_music;
+
+bool     nba_jam_playing = false;
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 bool     nba_jam_title_screen;
 bool     nba_jam_select_screen;
 bool     nba_jam_intermission;
@@ -35,6 +55,7 @@ bool     nba_jam_playing_title_music;
 int      m_nba_last_offset;
 int      m_nba_start_counter;
 
+<<<<<<< HEAD
 bool     outrun_start;
 bool     outrun_diddy;
 bool     outrun_title_diddy;
@@ -120,6 +141,20 @@ void init_ost_settings(int ost)
 }
 
 
+=======
+bool     outrun_playing = false;
+bool     outrun_start;
+bool     outrun_diddy;
+bool     outrun_title_diddy;
+bool     outrun_title;
+bool     outrun_lastwave;
+int      outrun_start_counter;
+
+bool     sf2_playing_street_fighter = false;
+bool     fadingMusic;
+
+
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 /* ost functions */
 static void ost_start_samples(int sa_left, int sa_right, int sa_loop);
 static void ost_stop_samples(void);
@@ -426,6 +461,7 @@ const char *const sf2_sample_set_names[] =
 	0
 };
 
+<<<<<<< HEAD
 const char *const sf1_sample_set_names[] =
 {
 	"*sf1",
@@ -470,6 +506,8 @@ const char *const sf1_sample_set_names[] =
 	0
 };
 
+=======
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 
 struct Samplesinterface ost_ddragon =
 {
@@ -513,6 +551,7 @@ struct Samplesinterface ost_outrun =
 	outrun_sample_set_names
 };
 
+<<<<<<< HEAD
 struct Samplesinterface ost_sf1 =
 {
 	2,	/* 2 channels*/
@@ -520,6 +559,8 @@ struct Samplesinterface ost_sf1 =
 	sf1_sample_set_names
 };
 
+=======
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 struct Samplesinterface ost_sf2 =
 {
 	2,	/* 2 channels*/
@@ -1714,7 +1755,11 @@ bool generate_ost_sound_outrun(int data)
 				if(outrun_start_counter > 5)
 					outrun_title_diddy = false;
 			}
+<<<<<<< HEAD
 			else if(outrun_diddy == false && outrun_title_diddy == false) {
+=======
+			else if(outrun_diddy == false && outrun_title_diddy == false && outrun_title == false) {
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 				ost_start_samples(0, 1, 1);
 				outrun_diddy = true;
 				outrun_start_counter = 1;
@@ -1773,6 +1818,7 @@ bool generate_ost_sound_outrun(int data)
 	return schedule_default_sound;
 }
 
+<<<<<<< HEAD
 bool generate_ost_sound_sf1(int data)
 {
 	/* initialize game config */
@@ -1914,6 +1960,8 @@ bool generate_ost_sound_sf1(int data)
 	return schedule_default_sound;
 }
 
+=======
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 bool generate_ost_sound_sf2(int data)
 {
 	/* initialize game config */

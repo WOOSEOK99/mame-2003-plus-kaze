@@ -4605,6 +4605,7 @@ ROM_END
 
 ROM_START( sfz3mix )
 	ROM_REGION( CODE_SIZE, REGION_CPU1, 0 )      /* 68000 code */
+<<<<<<< HEAD
 	ROM_LOAD16_WORD_SWAP( "sfz3mix.03",   0x000000, 0x80000, CRC(39b106fe) )
 	ROM_LOAD16_WORD_SWAP( "sfz3mix.04",   0x080000, 0x80000, CRC(0cde4b42) )
 	ROM_LOAD16_WORD_SWAP( "sfz3mix.05",   0x100000, 0x80000, CRC(b8b19c1f) )
@@ -4613,6 +4614,16 @@ ROM_START( sfz3mix )
 	ROM_LOAD16_WORD_SWAP( "sfz3mix.08",   0x280000, 0x80000, CRC(a85e33a5) )
 	ROM_LOAD16_WORD_SWAP( "sfz3mix.09",   0x300000, 0x80000, CRC(7A5A0D3C) )
 	ROM_LOAD16_WORD_SWAP( "sfz3mix.10",   0x380000, 0x80000, CRC(3fa5f874) )
+=======
+	ROM_LOAD16_WORD_SWAP( "sfz3mix.03",   0x000000, 0x80000, CRC(4EEE8312) )
+	ROM_LOAD16_WORD_SWAP( "sfz3mix.04",   0x080000, 0x80000, CRC(3F6BAC25) )
+	ROM_LOAD16_WORD_SWAP( "sfz3mix.05",   0x100000, 0x80000, CRC(4314B417) )
+	ROM_LOAD16_WORD_SWAP( "sfz3mix.06",   0x180000, 0x80000, CRC(B15A331C) )
+	ROM_LOAD16_WORD_SWAP( "sfz3mix.07",   0x200000, 0x80000, CRC(505EA66F) )
+	ROM_LOAD16_WORD_SWAP( "sfz3mix.08",   0x280000, 0x80000, CRC(C9661960) )
+	ROM_LOAD16_WORD_SWAP( "sfz3mix.09",   0x300000, 0x80000, CRC(7A5A0D3C) )
+	ROM_LOAD16_WORD_SWAP( "sfz3mix.10",   0x380000, 0x80000, CRC(07286674) )
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 
 	ROM_REGION16_BE( CODE_SIZE, REGION_USER1, 0 )
 	ROM_FILL( 0x000000, 0x100000, 0x00 )
@@ -4629,6 +4640,7 @@ ROM_START( sfz3mix )
 	ROMX_LOAD( "sfz3mix.20m",   0x1000006, 0x400000, CRC(A6AFDC2D) , ROM_GROUPWORD | ROM_SKIP(6) )
 
 	ROM_REGION( QSOUND_SIZE, REGION_CPU2, 0 ) /* 64k for the audio CPU (+banks) */
+<<<<<<< HEAD
 	ROM_LOAD( "sz3.01",   0x00000, 0x08000, CRC(5ac9bfe5) )
 	ROM_CONTINUE(         0x10000, 0x18000 )
 	ROM_LOAD( "sz3.02",   0x28000, 0x20000, CRC(68a17d87) )
@@ -4636,6 +4648,15 @@ ROM_START( sfz3mix )
 	ROM_REGION( 0x800000, REGION_SOUND1, 0 ) /* QSound samples */
 	ROM_LOAD16_WORD_SWAP( "sz3.11m",   0x000000, 0x400000, CRC(ab9415fb) )
 	ROM_LOAD16_WORD_SWAP( "sz3.12m",   0x400000, 0x400000, CRC(f392b13a) )
+=======
+	ROM_LOAD( "sz3.01",   0x00000, 0x08000, CRC(85143FAC) )
+	ROM_CONTINUE(         0x10000, 0x18000 )
+	ROM_LOAD( "sz3.02",   0x28000, 0x20000, CRC(B0F7DD76) )
+
+	ROM_REGION( 0x800000, REGION_SOUND1, 0 ) /* QSound samples */
+	ROM_LOAD16_WORD_SWAP( "sz3.11",   0x000000, 0x400000, CRC(1c89eed1) SHA1(649a0b0a3eb72e2e69e9fb1ac51a58b70daa39f3) )
+	ROM_LOAD16_WORD_SWAP( "sz3.12",   0x400000, 0x400000, CRC(f392b13a) SHA1(fa04ce0370144a49bd1d5acd873eef87b0dc9d15) )
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 ROM_END
 
 ROM_START( sfz3j )
@@ -6566,7 +6587,11 @@ GAMEX(1998, mvsch,    mvsc,    cps2, ssf2,    cps2, ROT0,   "Capcom", "Marvel Vs
 GAME( 1998, sfa3,     0,       cps2, ssf2,    cps2, ROT0,   "Capcom", "Street Fighter Alpha 3 (USA 980904)" )
 GAME( 1998, sfa3r1,   sfa3,    cps2, ssf2,    cps2, ROT0,   "Capcom", "Street Fighter Alpha 3 (USA 980629)" )
 GAME( 1998, sfa3ud,   sfa3,    dead_cps2, ssf2,    cps2, ROT0,   "Capcom", "Street Fighter Alpha 3 (USA 980904 Phoenix Edition) (bootleg)" )
+<<<<<<< HEAD
 GAME( 1998, sfz3mix,  sfa3,    cps2, ssf2,    cps2, ROT0,   "Capcom", "Street Fighter Alpha 3 mix 0.13" )
+=======
+GAME( 1998, sfz3mix,  sfa3,    cps2, ssf2,    cps2, ROT0,   "Capcom", "Street Fighter Alpha 3 mix 0.12" )
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 
 
 GAME( 1998, sfz3j,    sfa3,    cps2, ssf2,    cps2, ROT0,   "Capcom", "Street Fighter Zero 3 (Japan 980727)" )

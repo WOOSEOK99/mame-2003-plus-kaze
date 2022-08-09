@@ -978,10 +978,13 @@ static void set_variables(void)
          if(!options.content_flags[CONTENT_CHEAT_INPUT_PORT])
            continue;
          break;
+<<<<<<< HEAD
       case OPT_OVERRIDE_AD_STICK:
          if(!options.content_flags[CONTENT_AD_STICK])
            continue;
          break;
+=======
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
     }
 
     effective_defaults[effective_options_count] = default_options[option_index];

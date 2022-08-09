@@ -101,6 +101,7 @@ static WRITE16_HANDLER( cps1_sound_command_w )
 		log_cb(RETRO_LOG_DEBUG, LOGPRE "%X\n", data);
 	}
 	*/
+<<<<<<< HEAD
 
 	if(ACCESSING_LSB) {
 		/* We are playing Final Fight. */
@@ -115,6 +116,23 @@ static WRITE16_HANDLER( cps1_sound_command_w )
 		}
 		else
 			soundlatch_w(0,data & 0xff);
+=======
+	
+	/* We are playing Final Fight. */
+	if(ff_playing_final_fight && options.use_alt_sound) {
+		if(generate_ost_sound_ffight( data )) {
+			if(ACCESSING_LSB) soundlatch_w(0,data & 0xff);
+		}
+	}
+	/* We are playing Street Fighter 2. */
+	else if(sf2_playing_street_fighter && options.use_alt_sound) {
+		if(generate_ost_sound_sf2( data )) {
+			if(ACCESSING_LSB) soundlatch_w(0,data & 0xff);
+		}
+	}
+	else {
+		if(ACCESSING_LSB) soundlatch_w(0,data & 0xff);
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 	}
 }
 
@@ -164,7 +182,11 @@ static INTERRUPT_GEN( cps1_interrupt )
 	/* *only* game to have that. */
 	cpu_set_irq_line(0, 2, HOLD_LINE);
 
+<<<<<<< HEAD
 	if( ost_support_enabled(OST_SUPPORT_SF2) )
+=======
+	if(sf2_playing_street_fighter && options.use_alt_sound)
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 		ost_fade_volume();
 }
 
@@ -4030,7 +4052,13 @@ static MACHINE_DRIVER_START( ffight_hack )
 	/* Lets add our Final Fight music sample packs.*/
 	MDRV_SOUND_ATTRIBUTES(SOUND_SUPPORTS_STEREO)
 	MDRV_SOUND_ADD_TAG("OST Samples", SAMPLES, ost_ffight)
+<<<<<<< HEAD
 	init_ost_settings(OST_SUPPORT_FFIGHT);
+=======
+	ff_playing_final_fight = true;
+	ff_alternate_song_1 = false;
+	ff_alternate_song_2 = false;
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 MACHINE_DRIVER_END
 
 
@@ -4053,7 +4081,13 @@ static MACHINE_DRIVER_START( sf2 )
 	/* Lets add our Street Fighter 2 music sample packs.*/
 	MDRV_SOUND_ATTRIBUTES(SOUND_SUPPORTS_STEREO)
 	MDRV_SOUND_ADD_TAG("OST Samples", SAMPLES, ost_sf2)
+<<<<<<< HEAD
 	init_ost_settings(OST_SUPPORT_SF2);
+=======
+	sf2_playing_street_fighter = true;
+	fadingMusic = false;
+
+>>>>>>> 7268b4800bc1d7a47ba44483043167f3f45d77b5
 MACHINE_DRIVER_END
 
 
